@@ -20,7 +20,8 @@
     "db:validate": "pnpm --filter @repo/db run validate",
     "db:migrate": "pnpm --filter @repo/db run migrate:dev",
     "db:deploy": "pnpm --filter @repo/db run migrate:deploy",
-    "ops": "pnpm --filter @repo/worker run ops"
+    "ops": "pnpm --filter @repo/worker run ops",
+    "hs:replay": "pnpm --filter @repo/crm-hubspot run replay"
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.9",
