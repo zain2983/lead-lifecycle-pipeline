@@ -1,7 +1,8 @@
 import { createPrismaClient, type PrismaClient } from "@repo/db";
 import type { OAuthTokenStore } from "./oauth.ts";
 
-// One client per server process. Phase 3 should share this with the queue code's client (Spike A).
+// One client per server process, owned by this file for now. Phase 3 moves it to a shared
+// apps/web/lib/db.ts (Spike A added no shared web client: its route keeps its own pools).
 let client: PrismaClient | undefined;
 
 /** Upserts by portal ID: reinstalling the app replaces that portal's refresh token. */
