@@ -55,9 +55,17 @@ export const envGroups = {
   hubspotOAuth,
   /** Everything above: the web app as a whole. */
   hubspot: hubspotWebhook.extend(hubspotOAuth.shape),
+  /** Both test accounts' service keys (the daily `hs:ping` keep-alive). */
   hubspotServiceKeys: z.object({
     HUBSPOT_SERVICE_KEY_DEMO: z.string().min(1),
     HUBSPOT_SERVICE_KEY_EVAL: z.string().min(1),
+  }),
+  /** One account at a time: `pnpm hs:setup` / `hs:seed --account demo|eval`. */
+  hubspotServiceKeyDemo: z.object({ HUBSPOT_SERVICE_KEY_DEMO: z.string().min(1) }),
+  hubspotServiceKeyEval: z.object({ HUBSPOT_SERVICE_KEY_EVAL: z.string().min(1) }),
+  /** HubSpot's REST API. Override only to point a CLI at a local fake (tests, offline evidence). */
+  hubspotApi: z.object({
+    HUBSPOT_API_BASE_URL: z.url().default("https://api.hubapi.com"),
   }),
   /** The local Sim instance. Only the local worker talks to it (ADR 0003). */
   sim: z.object({

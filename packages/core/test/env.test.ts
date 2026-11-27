@@ -60,6 +60,21 @@ describe("loadEnv", () => {
   });
 });
 
+describe("HubSpot service-key groups", () => {
+  it("needs only the chosen account's key", () => {
+    expect(loadEnv(["hubspotServiceKeyDemo"], { HUBSPOT_SERVICE_KEY_DEMO: "k" })).toEqual({
+      HUBSPOT_SERVICE_KEY_DEMO: "k",
+    });
+    expect(() =>
+      loadEnv(["hubspotServiceKeyEval"], { HUBSPOT_SERVICE_KEY_DEMO: "k" }),
+    ).toThrowError(/HUBSPOT_SERVICE_KEY_EVAL/);
+  });
+
+  it("defaults the API base URL to HubSpot", () => {
+    expect(loadEnv(["hubspotApi"], {}).HUBSPOT_API_BASE_URL).toBe("https://api.hubapi.com");
+  });
+});
+
 describe("spikes group", () => {
   it("is on only for exactly 1", () => {
     expect(loadEnv(["spikes"], {}).SPIKE_ROUTES).toBe(false);
