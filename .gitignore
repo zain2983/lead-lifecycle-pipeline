@@ -16,6 +16,8 @@ packages/db/src/generated/
 !.env.example
 infra/sim/.env
 !infra/sim/.env.example
+# Sim CLI config and credentials for the local instance (SIM_CONFIG_DIR, see sim/README.md)
+infra/sim/.cli/
 *.pem
 
 # test output
