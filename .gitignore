@@ -18,6 +18,11 @@ infra/sim/.env
 !infra/sim/.env.example
 # Sim CLI config and credentials for the local instance (SIM_CONFIG_DIR, see sim/README.md)
 infra/sim/.cli/
+# Sim CLI source directories: only workflow.ts, functions/, tsconfig.json and .gitattributes are portable.
+# .sim/ holds instance IDs (lock.json: block IDs; base.json: workflow, workspace, fingerprint) and files the
+# CLI regenerates; tsconfig.full.json has an absolute path. See sim/README.md and docs/evidence/spike-b.
+sim/*/.sim/
+sim/*/tsconfig.full.json
 *.pem
 
 # test output

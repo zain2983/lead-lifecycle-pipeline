@@ -1,0 +1,36 @@
+// Written by `sim workflows source get`; remove this line to keep your own edits.
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": [
+      "ES2022"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
+    "types": [],
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "paths": {
+      "@sim/workflow-sdk": [
+        "./.sim/sdk/core.d.ts"
+      ]
+    }
+  },
+  "include": [
+    "workflow.ts",
+    ".sim/sdk/models.d.ts",
+    ".sim/sdk/workspace.d.ts",
+    ".sim/sdk/blocks/agent.d.ts",
+    ".sim/sdk/blocks/condition.d.ts",
+    ".sim/sdk/blocks/function.d.ts",
+    ".sim/sdk/blocks/human_in_the_loop_v2.d.ts",
+    ".sim/sdk/blocks/note.d.ts",
+    ".sim/sdk/blocks/response.d.ts",
+    ".sim/sdk/blocks/router_v2.d.ts",
+    ".sim/sdk/blocks/start_trigger.d.ts",
+    ".sim/sdk/blocks/variables.d.ts",
+    ".sim/sdk/blocks/workflow_input.d.ts"
+  ]
+}
