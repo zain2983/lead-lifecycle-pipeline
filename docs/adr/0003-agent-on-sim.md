@@ -22,10 +22,14 @@ It is self-hosted here from Docker images at a pinned version (`infra/sim/`). No
 Run the triage workflow on self-hosted Sim, **v0.9.66**, driven from this repo by the `sim` CLI **2.3.0** (a pinned
 root devDependency) and by `@repo/agent-runtime`, a small typed client for Sim's v2 HTTP API.
 
-- **Workflow as code.** Each workflow is a CLI source directory under `sim/<name>/` (`workflow.ts`, optional
-  `functions/`, `.sim/lock.json`). `sim workflows source check` compiles it offline with Sim's own compiler;
-  `apply --dry-run` runs every server check; `apply --yes --deploy` saves and deploys. The file is declarations
-  only (the server compiles it statically and never runs it), so a review sees exactly what will execute.
+- **Workflow as code.** Each workflow is a CLI source directory under `sim/<name>/`. The committed files are
+  `workflow.ts`, optional `functions/` and `tsconfig.json`. The CLI's `.sim/` folder holds instance IDs (block IDs
+  in `lock.json`, workflow and workspace IDs in `base.json`) and is gitignored. `sim workflows source check` compiles
+  the source offline with Sim's own compiler. A new workflow goes through `create`: `check`, then
+  `create --dry-run` (every server check, nothing saved), then `create --yes`. Later edits go through `apply`:
+  `check`, `apply --dry-run`, then `apply --yes --deploy`, which saves and deploys a new version. The file is
+  declarations only (the server compiles it statically and never runs it), so a review sees exactly what will
+  execute.
 - **Human in the loop.** A Human block named `Approval` pauses the run with no timeout. The worker finds paused runs
   with `GET /api/v2/workflows/runs/paused`, resumes one with `POST …/runs/{runId}/resume` and
   `{contextId, input: {approved, comment}}`, and cancels leftovers with `POST …/runs/{runId}/cancel`. A Condition
