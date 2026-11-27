@@ -239,6 +239,9 @@ importers:
       '@repo/core':
         specifier: workspace:*
         version: link:../core
+      '@repo/synthetic':
+        specifier: workspace:*
+        version: link:../synthetic
       zod:
         specifier: 'catalog:'
         version: 4.6.7
@@ -280,6 +283,9 @@ importers:
       prisma:
         specifier: 'catalog:'
         version: 7.10.1(@types/node@22.20.7)(@types/react-dom@19.3.0(@types/react@19.3.3))(@types/react@19.3.3)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(typescript@6.0.3)
+      tsx:
+        specifier: 'catalog:'
+        version: 4.23.15
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -397,6 +403,9 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 22.20.7
+      tsx:
+        specifier: 'catalog:'
+        version: 4.23.15
       typescript:
         specifier: 'catalog:'
         version: 6.0.3

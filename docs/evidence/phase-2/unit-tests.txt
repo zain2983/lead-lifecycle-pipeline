@@ -1,0 +1,139 @@
+# Verbose Vitest output, 2026-11-27, commit 71a7668. Node v26.5.0, pnpm 11.21.0.
+
+$ pnpm --filter @repo/db exec vitest run --reporter=verbose
+ RUN  v5.1.2 <repo>/packages/db
+ ✓ test/erd.test.ts > README ERD > matches the Prisma schema (run `pnpm --filter @repo/db erd` after a schema change) 2ms
+ ✓ test/erd.test.ts > README ERD > draws a relation from the model that holds the foreign key, with its cardinality 0ms
+ ✓ test/constraints.test.ts > lead > defaults its id and timestamps in the database (raw SQL inserts need no Prisma) 25ms
+ ✓ test/constraints.test.ts > lead > accepts reserved email domains only 15ms
+ ✓ test/constraints.test.ts > lead > rejects a mixed-case email 2ms
+ ✓ test/constraints.test.ts > lead > requires a browser event ID on web-form leads 3ms
+ ✓ test/constraints.test.ts > lead > keeps a purged lead only without its PII 4ms
+ ✓ test/constraints.test.ts > lead > stores HubSpot portal and contact IDs together, unique per portal 6ms
+ ✓ test/constraints.test.ts > crm_event > stores a retried event once (ON CONFLICT on the dedupe key) 3ms
+ ✓ test/constraints.test.ts > crm_event > rejects a dedupe key that isn't a v1 hash 2ms
+ ✓ test/constraints.test.ts > agent_run > allows only this project's statuses, including unknown 7ms
+ ✓ test/constraints.test.ts > agent_run > refuses a second run with the same proposal run ID 4ms
+ ✓ test/constraints.test.ts > agent_run > never gives a shadow run a resume run ID, and keeps confidence in 0..1 4ms
+ ✓ test/constraints.test.ts > approval > is one per run, and a decision always comes with an approver and a time 9ms
+ Test Files  2 passed (2)
+      Tests  14 passed (14)
+
+$ pnpm --filter @repo/synthetic exec vitest run --reporter=verbose
+ RUN  v5.1.2 <repo>/packages/synthetic
+ ✓ test/synthetic.test.ts > determinism > gives the same bytes for the same seed 20ms
+ ✓ test/synthetic.test.ts > determinism > gives the same bytes in a fresh process (no module state, no clock) 205ms
+ ✓ test/synthetic.test.ts > determinism > matches the pinned hash for seed 42 (bump SYNTHETIC_VERSION when a change is intended) 1ms
+ ✓ test/synthetic.test.ts > determinism > gives different people for different seeds, and the same scenarios 2ms
+ ✓ test/synthetic.test.ts > determinism > keeps forked streams independent of each other 0ms
+ ✓ test/synthetic.test.ts > reserved domains only > the checker itself rejects other domains 1ms
+ ✓ test/synthetic.test.ts > reserved domains only > every email, URL, site, company and message hostname is reserved, for every seed 16ms
+ ✓ test/synthetic.test.ts > reserved domains only > emails are lower-case and unique within each set 6ms
+ ✓ test/synthetic.test.ts > phones > are +1 201-555-01xx or empty 6ms
+ ✓ test/synthetic.test.ts > phones > are valid 10-digit NANP numbers in the fictional 555-0100 to 555-0199 block 2ms
+ ✓ test/synthetic.test.ts > phones > are unique per person, and shared only by a duplicate and its original 6ms
+ ✓ test/synthetic.test.ts > sets, verticals and labels > has 20 demo leads on the two demo sites and 10 eval fixtures 1ms
+ ✓ test/synthetic.test.ts > sets, verticals and labels > marks only the rehab vertical sensitive 0ms
+ ✓ test/synthetic.test.ts > sets, verticals and labels > covers every disposition case and every triage label, each with its intended label 1ms
+ ✓ test/synthetic.test.ts > sets, verticals and labels > labels B2B leads by the score rule 1ms
+ ✓ test/synthetic.test.ts > sets, verticals and labels > gives the no-show and partial-refund cases a sales outcome 0ms
+ ✓ test/synthetic.test.ts > sets, verticals and labels > points each duplicate at an earlier lead by the same person, with another email 0ms
+ ✓ test/synthetic.test.ts > sets, verticals and labels > includes a subsidiary and a duplicate company record 0ms
+ ✓ test/synthetic.test.ts > sets, verticals and labels > never reveals the scenario in a key (keys reach HubSpot) 0ms
+ ✓ test/synthetic.test.ts > time zones > stamps leads in Asia/Karachi, the Ads account in America/New_York, reports in UTC 1ms
+ ✓ test/synthetic.test.ts > time zones > pins the date-boundary traps in the eval set 0ms
+ ✓ test/synthetic.test.ts > time zones > puts demo leads on both sides of the US DST change 1ms
+ ✓ test/synthetic.test.ts > click IDs > carry the channel's own click ID only, labelled synthetic, in the landing URL 2ms
+ Test Files  1 passed (1)
+      Tests  23 passed (23)
+
+$ pnpm --filter @repo/crm-hubspot exec vitest run --reporter=verbose
+ RUN  v5.1.2 <repo>/packages/crm-hubspot
+ ✓ test/token-crypto.test.ts > token crypto (AES-256-GCM) > round-trips a refresh token 2ms
+ ✓ test/token-crypto.test.ts > token crypto (AES-256-GCM) > uses a fresh IV every time 0ms
+ ✓ test/token-crypto.test.ts > token crypto (AES-256-GCM) > fails on a tampered ciphertext 0ms
+ ✓ test/token-crypto.test.ts > token crypto (AES-256-GCM) > fails on a tampered auth tag or IV 0ms
+ ✓ test/token-crypto.test.ts > token crypto (AES-256-GCM) > fails with the wrong key 0ms
+ ✓ test/token-crypto.test.ts > token crypto (AES-256-GCM) > fails when the ciphertext is moved to another portal's row 0ms
+ ✓ test/token-crypto.test.ts > token crypto (AES-256-GCM) > checks the key from TOKEN_ENCRYPTION_KEY 1ms
+ ✓ test/signature.test.ts > verifySignatureV3 > accepts HubSpot's published example (Java tab of the request-validation docs) 3ms
+ ✓ test/signature.test.ts > verifySignatureV3 > accepts a valid signature 0ms
+ ✓ test/signature.test.ts > verifySignatureV3 > is base64 HMAC-SHA256 over method + uri + body + timestamp 0ms
+ ✓ test/signature.test.ts > verifySignatureV3 > rejects a signature made with another secret 0ms
+ ✓ test/signature.test.ts > verifySignatureV3 > rejects a garbage or truncated signature without throwing 0ms
+ ✓ test/signature.test.ts > verifySignatureV3 > rejects a tampered body 0ms
+ ✓ test/signature.test.ts > verifySignatureV3 > rejects a changed URI, method or timestamp 1ms
+ ✓ test/signature.test.ts > verifySignatureV3 > verifies the raw body, not a re-serialised one 0ms
+ ✓ test/signature.test.ts > verifySignatureV3 > rejects a timestamp older than 5 minutes, and accepts one exactly at the limit 0ms
+ ✓ test/signature.test.ts > verifySignatureV3 > rejects a timestamp more than 5 minutes in the future, and tolerates small clock skew 0ms
+ ✓ test/signature.test.ts > verifySignatureV3 > rejects missing or malformed headers 0ms
+ ✓ test/signature.test.ts > verifySignatureV3 > refuses to run with an empty client secret 0ms
+ ✓ test/signature.test.ts > URL-encoded query strings > decodes exactly the documented characters in the query 0ms
+ ✓ test/signature.test.ts > URL-encoded query strings > verifies a request whose URL has an encoded query string 0ms
+ ✓ test/signature.test.ts > URL-encoded query strings > leaves other escapes, lowercase escapes and the path alone 0ms
+ ✓ test/signature.test.ts > URL-encoded query strings > drops the fragment and leaves a URI without a query unchanged 0ms
+ ✓ test/signature.test.ts > signedUriFor > takes scheme and host from PUBLIC_WEBHOOK_URL, path and query from the request 0ms
+ ✓ test/signature.test.ts > signedUriFor > ignores a spoofed Host header 0ms
+ ✓ test/signature.test.ts > signedUriFor > keeps a non-default port and the encoded query as received 0ms
+ ✓ test/signature.test.ts > signedUriFor > accepts a path-only request URL 0ms
+ ✓ test/webhook-events.test.ts > parseWebhookBatch > parses every synthetic fixture 5ms
+ ✓ test/webhook-events.test.ts > parseWebhookBatch > keeps the fields the consumer needs, and unknown fields 0ms
+ ✓ test/webhook-events.test.ts > parseWebhookBatch > rejects bodies that are not a batch of events 1ms
+ ✓ test/crm-event-key.test.ts > crmEventDedupeKey > is v1 + a sha256 hex, the format crm_event.dedupe_key checks 1ms
+ ✓ test/crm-event-key.test.ts > crmEventDedupeKey > is the same for a retry (only attemptNumber differs) 0ms
+ ✓ test/crm-event-key.test.ts > crmEventDedupeKey > differs when anything that identifies the change differs, even with the same eventId 1ms
+ ✓ test/crm-event-key.test.ts > crmEventDedupeKey > gives the batch's retried lifecycle event the same key as its first delivery 0ms
+ ✓ test/api.test.ts > HubSpotClient > sends the service key as a Bearer token and never accepts a wrong one 31ms
+ ✓ test/api.test.ts > HubSpotClient > backs off on a 429 with growing, jittered delays, then succeeds 15ms
+ ✓ test/api.test.ts > HubSpotClient > retries a 429 on a write too (HubSpot refused it before processing) 5ms
+ ✓ test/api.test.ts > HubSpotClient > gives up after maxRetries and reports HubSpot's 429 body as it came 6ms
+ ✓ test/api.test.ts > HubSpotClient > does not retry the daily limit 3ms
+ ✓ test/setup-and-seed.test.ts > hs:setup (ensureContactProperties) > creates the group and every property, then a second run changes nothing 56ms
+ ✓ test/setup-and-seed.test.ts > hs:setup (ensureContactProperties) > creates the properties the plan names, in our own group 33ms
+ ✓ test/oauth.test.ts > buildAuthorizeUrl > builds HubSpot's authorize URL with %20-separated scopes 1ms
+ ✓ test/oauth.test.ts > HUBSPOT_REQUIRED_SCOPES > matches requiredScopes in the dev app's app-hsmeta.json 1ms
+ ✓ test/oauth.test.ts > exchangeAuthorizationCode (against a fake token endpoint) > posts the documented form fields and returns the tokens 22ms
+ ✓ test/oauth.test.ts > exchangeAuthorizationCode (against a fake token endpoint) > reports HubSpot's error status and body as they came back 8ms
+ ✓ test/oauth.test.ts > exchangeAuthorizationCode (against a fake token endpoint) > rejects a 200 without hub_id, naming the field but not the token values 3ms
+ ✓ test/oauth.test.ts > exchangeAuthorizationCode (against a fake token endpoint) > treats a timeout as unknown, not as failed 204ms
+ ✓ test/setup-and-seed.test.ts > hs:setup (ensureContactProperties) > repairs drift by patching only the fields that differ, and never duplicates 35ms
+ ✓ test/setup-and-seed.test.ts > hs:setup (ensureContactProperties) > reads again when a create fails because the property appeared meanwhile 12ms
+ ✓ test/setup-and-seed.test.ts > hs:setup (ensureContactProperties) > refuses to touch a HubSpot-defined property with the same name 26ms
+ ✓ test/api.test.ts > HubSpotClient > turns a timeout on a write into an unknown outcome, without retrying 203ms
+ ✓ test/api.test.ts > HubSpotClient > turns a 5xx on a write into an unknown outcome too, but retries it on a read 8ms
+ ✓ test/api.test.ts > HubSpotClient > retries a timed-out read 213ms
+ ✓ test/api.test.ts > HubSpotClient > waits for the window when its own limit is reached 24ms
+ ✓ test/api.test.ts > HubSpotClient > waits when HubSpot's headers say the window is used up 7ms
+ ✓ test/api.test.ts > HubSpotClient > never puts the token in an error message 3ms
+ ✓ test/setup-and-seed.test.ts > hs:setup (ensureContactProperties) > reports a timed-out create as unknown, and a re-run settles it 253ms
+ ✓ test/setup-and-seed.test.ts > hs:setup (ensureContactProperties) > writes nothing in a dry run 11ms
+ ✓ test/setup-and-seed.test.ts > hs:seed (upsertContactsByEmail) > demo: creates 20 contacts, then a second run sends nothing and changes nothing 74ms
+ ✓ test/setup-and-seed.test.ts > hs:seed (upsertContactsByEmail) > eval: creates 10 contacts, then a second run sends nothing and changes nothing 37ms
+ ✓ test/setup-and-seed.test.ts > hs:seed (upsertContactsByEmail) > updates only the contact someone edited, and only its changed field 68ms
+ ✓ test/setup-and-seed.test.ts > hs:seed (upsertContactsByEmail) > leaves fields it doesn't own alone (a later approved disposition survives a re-seed) 37ms
+ ✓ test/setup-and-seed.test.ts > hs:seed (upsertContactsByEmail) > reports a timed-out upsert as unknown for every contact in it, and a re-run settles it 235ms
+ ✓ test/setup-and-seed.test.ts > hs:seed (upsertContactsByEmail) > reports HubSpot's 4xx body as it came, as failed 37ms
+ ✓ test/setup-and-seed.test.ts > hs:seed (upsertContactsByEmail) > only sends properties that exist, with valid option values 40ms
+ ✓ test/setup-and-seed.test.ts > hs:seed (upsertContactsByEmail) > dry run reads and writes nothing 37ms
+ ✓ test/setup-and-seed.test.ts > seed mapping > never writes the fields the agent or a person owns 8ms
+ ✓ test/setup-and-seed.test.ts > the CLIs, end to end against the fake > hs:setup twice, then hs:seed twice: the second runs report no changes 1015ms
+ ✓ test/setup-and-seed.test.ts > the CLIs, end to end against the fake > refuses to run without the chosen account's key 173ms
+ Test Files  7 passed (7)
+      Tests  69 passed (69)
+
+$ pnpm --filter @repo/core exec vitest run --reporter=verbose
+ RUN  v5.1.2 <repo>/packages/core
+ ✓ test/ids.test.ts > uuidV5 > matches the reference implementation 1ms
+ ✓ test/ids.test.ts > uuidV5 > rejects a namespace that is not a UUID 0ms
+ ✓ test/ids.test.ts > deterministicJobId > is stable per key and differs across keys 0ms
+ ✓ test/ids.test.ts > deterministicJobId > refuses an empty key 0ms
+ ✓ test/env.test.ts > loadEnv > returns typed values for the requested groups 2ms
+ ✓ test/env.test.ts > loadEnv > lists every missing variable at once 1ms
+ ✓ test/env.test.ts > loadEnv > rejects an encryption key that is not 32 bytes 1ms
+ ✓ test/env.test.ts > loadEnv > lets the webhook receiver start with only the secret and the public URL 1ms
+ ✓ test/env.test.ts > loadEnv > defaults the token endpoint to HubSpot's v3 endpoint 0ms
+ ✓ test/env.test.ts > HubSpot service-key groups > needs only the chosen account's key 1ms
+ ✓ test/env.test.ts > HubSpot service-key groups > defaults the API base URL to HubSpot 0ms
+ ✓ test/env.test.ts > spikes group > is on only for exactly 1 0ms
+ Test Files  2 passed (2)
+      Tests  12 passed (12)

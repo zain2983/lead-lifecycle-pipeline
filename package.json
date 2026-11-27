@@ -21,7 +21,9 @@
     "db:migrate": "pnpm --filter @repo/db run migrate:dev",
     "db:deploy": "pnpm --filter @repo/db run migrate:deploy",
     "ops": "pnpm --filter @repo/worker run ops",
-    "hs:replay": "pnpm --filter @repo/crm-hubspot run replay"
+    "hs:replay": "pnpm --filter @repo/crm-hubspot run replay",
+    "hs:setup": "pnpm --filter @repo/crm-hubspot run setup",
+    "hs:seed": "pnpm --filter @repo/crm-hubspot run seed"
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.9",

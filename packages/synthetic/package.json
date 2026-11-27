@@ -9,13 +9,15 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit -p .",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run --passWithNoTests",
+    "generate": "tsx src/cli/generate.ts"
   },
   "dependencies": {
     "@repo/core": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:",
+    "tsx": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   }

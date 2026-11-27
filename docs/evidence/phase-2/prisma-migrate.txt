@@ -1,0 +1,80 @@
+# Phase 2.1: migration against the local database phase2 (localhost:5433, Postgres 17), 2026-11-27
+
+$ pnpm db:migrate --create-only --name domain_model   # then CHECK constraints appended by hand
+(output not kept: the first create-only folder was deleted and re-created after the ID defaults moved to the database)
+
+$ pnpm db:migrate
+$ pnpm --filter @repo/db run migrate:dev
+$ prisma migrate dev
+Loaded Prisma config from prisma.config.ts.
+Prisma schema loaded from prisma/schema.prisma.
+Datasource "db": PostgreSQL database "phase2", schema "public" at "localhost:5433"
+Applying migration `20261127214257_domain_model`
+The following migration(s) have been applied:
+migrations/
+Your database is now in sync with your schema.
+
+$ pnpm db:migrate    # again: CHECK constraints don't show up as drift
+$ pnpm --filter @repo/db run migrate:dev
+$ prisma migrate dev
+Loaded Prisma config from prisma.config.ts.
+Prisma schema loaded from prisma/schema.prisma.
+Datasource "db": PostgreSQL database "phase2", schema "public" at "localhost:5433"
+Already in sync, no schema change or pending migration was found.
+
+$ pnpm --filter @repo/db exec prisma migrate status
+Loaded Prisma config from prisma.config.ts.
+Prisma schema loaded from prisma/schema.prisma.
+Datasource "db": PostgreSQL database "phase2", schema "public" at "localhost:5433"
+3 migrations found in prisma/migrations
+Database schema is up to date!
+
+$ docker exec llp-postgres-1 psql -U app -d phase2 -c '\dt public.*' -c '\dT' -c "select conrelid::regclass, conname from pg_constraint where contype='c' and connamespace='public'::regnamespace order by 1,2"
+              List of relations
+ Schema |        Name        | Type  | Owner 
+--------+--------------------+-------+-------
+ public | _prisma_migrations | table | app
+ public | agent_run          | table | app
+ public | approval           | table | app
+ public | crm_event          | table | app
+ public | eval_case          | table | app
+ public | eval_result        | table | app
+ public | eval_run           | table | app
+ public | heartbeat          | table | app
+ public | lead               | table | app
+ public | oauth_token        | table | app
+ public | site               | table | app
+(11 rows)
+
+            List of data types
+ Schema |        Name        | Description 
+--------+--------------------+-------------
+ public | agent_run_mode     | 
+ public | approval_decision  | 
+ public | eval_split         | 
+ public | lead_source        | 
+ public | triage_disposition | 
+ public | vertical           | 
+(6 rows)
+
+    table    |             conname             
+-------------+---------------------------------
+ lead        | lead_disposition_dated
+ lead        | lead_email_lowercase
+ lead        | lead_email_reserved_domain
+ lead        | lead_hubspot_ids_together
+ lead        | lead_pii_purged
+ lead        | lead_web_form_has_event_id
+ crm_event   | crm_event_attempt_nonnegative
+ crm_event   | crm_event_dedupe_key_format
+ agent_run   | agent_run_confidence_range
+ agent_run   | agent_run_shadow_never_resumes
+ agent_run   | agent_run_status_known
+ agent_run   | agent_run_version_positive
+ approval    | approval_decided_together
+ approval    | approval_resumed_after_decision
+ eval_run    | eval_run_status_known
+ eval_run    | eval_run_version_positive
+ eval_result | eval_result_status_known
+(17 rows)
+
