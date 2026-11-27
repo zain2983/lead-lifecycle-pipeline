@@ -44,3 +44,12 @@ describe("loadEnv", () => {
     ).toBe(key);
   });
 });
+
+describe("spikes group", () => {
+  it("is on only for exactly 1", () => {
+    expect(loadEnv(["spikes"], {}).SPIKE_ROUTES).toBe(false);
+    expect(loadEnv(["spikes"], { SPIKE_ROUTES: "0" }).SPIKE_ROUTES).toBe(false);
+    expect(loadEnv(["spikes"], { SPIKE_ROUTES: "true" }).SPIKE_ROUTES).toBe(false);
+    expect(loadEnv(["spikes"], { SPIKE_ROUTES: "1" }).SPIKE_ROUTES).toBe(true);
+  });
+});
