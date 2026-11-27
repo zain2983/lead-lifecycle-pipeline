@@ -3,11 +3,11 @@
 The developer-platform project for the development app. Written by hand from HubSpot's docs (platform version
 `2026.09`, the newest on 2026-11-27), not generated with `hs project create`. `hs project upload` sends only `src/`.
 
-| File | What it sets |
-|---|---|
-| `hsproject.json` | project name, `srcDir`, `platformVersion: "2026.09"` |
-| `src/app/app-hsmeta.json` | the app: `distribution: "private"`, `auth.type: "oauth"` (installs only into allowlisted accounts, at most 10), redirect URLs, required scopes |
-| `src/app/webhooks/webhooks-hsmeta.json` | `targetUrl`, `maxConcurrentRequests` (must be more than 5) and the subscriptions |
+| File                                    | What it sets                                                                                                                                   |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `hsproject.json`                        | project name, `srcDir`, `platformVersion: "2026.09"`                                                                                           |
+| `src/app/app-hsmeta.json`               | the app: `distribution: "private"`, `auth.type: "oauth"` (installs only into allowlisted accounts, at most 10), redirect URLs, required scopes |
+| `src/app/webhooks/webhooks-hsmeta.json` | `targetUrl`, `maxConcurrentRequests` (must be more than 5) and the subscriptions                                                               |
 
 Subscriptions (PLAN Phase 3 step 4):
 
