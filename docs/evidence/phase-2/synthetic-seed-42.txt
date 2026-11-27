@@ -1,7 +1,7 @@
 # @repo/synthetic, seed 42: keys, sites, scenarios, intended labels, local submit time, click channel
 
 $ pnpm --filter @repo/synthetic generate --seed 42 --summary
-seed 42  version 1  sha256 14fdebd96f7a9ce02f30b809845da47703b759c552bd5ccac25b77766e2cc198
+seed 42  version 2  sha256 759acaa657114064a1301f9cc79c7e1089af7f9a041ed5d7f36dbcc44ca79ac7
 s42-demo-01    saas             spam             spam           2026-10-26T22:28:20+05:00  meta
 s42-demo-02    saas             qualified        qualified      2026-10-27T10:37:10+05:00  google
 s42-demo-03    saas             no_show          qualified      2026-10-27T14:02:45+05:00  google
@@ -34,8 +34,12 @@ s42-eval-09    local_services   partial_refund   qualified      2026-11-07T09:30
 s42-eval-10    rehab            qualified        qualified      2026-11-07T16:20:00+05:00  google
 
 $ pnpm --filter @repo/synthetic generate --seed 42 | shasum -a 256   # twice
-14fdebd96f7a9ce02f30b809845da47703b759c552bd5ccac25b77766e2cc198  -
-14fdebd96f7a9ce02f30b809845da47703b759c552bd5ccac25b77766e2cc198  -
+759acaa657114064a1301f9cc79c7e1089af7f9a041ed5d7f36dbcc44ca79ac7  -
+759acaa657114064a1301f9cc79c7e1089af7f9a041ed5d7f36dbcc44ca79ac7  -
 
 $ TZ=Pacific/Chatham LANG=tr_TR.UTF-8 pnpm --filter @repo/synthetic generate --seed 42 | shasum -a 256
-14fdebd96f7a9ce02f30b809845da47703b759c552bd5ccac25b77766e2cc198  -
+759acaa657114064a1301f9cc79c7e1089af7f9a041ed5d7f36dbcc44ca79ac7  -
+
+$ pnpm --filter @repo/synthetic generate --seed 42 --set eval | grep '"phone"' | sed -E 's/555-01[0-9]{2}/555-01xx/' | sort | uniq -c   # format only, numbers redacted
+   8       "phone": "+1 201-555-01xx",
+   2       "phone": null,

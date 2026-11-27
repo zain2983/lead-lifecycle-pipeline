@@ -14,9 +14,9 @@
 | File                                | What it is                                                                                                                                                                                                                                                     |
 | ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `prisma-migrate.txt`                | `pnpm db:migrate` applying `20261127214257_domain_model` to `phase2`; a second run that finds no drift; `migrate status`; the tables, enums and the 17 CHECK constraints as Postgres reports them                                                              |
-| `synthetic-seed-42.txt`             | `generate --seed 42 --summary` (every key, scenario and intended label), then the output's sha256 three times, the third under `TZ=Pacific/Chatham LANG=tr_TR.UTF-8`                                                                                           |
+| `synthetic-seed-42.txt`             | `generate --seed 42 --summary` (every key, scenario and intended label), then the output's sha256 three times, the third under `TZ=Pacific/Chatham LANG=tr_TR.UTF-8`, and the eval phones' format (numbers redacted)                                           |
 | `offline-run.ts`, `offline-run.txt` | the real root commands `pnpm hs:setup` / `pnpm hs:seed` for both accounts against two fakes, twice each; then drift, two 429s, a hung upsert and a missing key. After each step: exit code, the fake's request and write counts, and a hash of its whole state |
-| `unit-tests.txt`                    | verbose Vitest output for `db` (14), `synthetic` (22), `crm-hubspot` (69) and `core` (12)                                                                                                                                                                      |
+| `unit-tests.txt`                    | verbose Vitest output for `db` (14), `synthetic` (23), `crm-hubspot` (69) and `core` (12)                                                                                                                                                                      |
 
 ## How it was produced
 
@@ -43,12 +43,13 @@ pnpm --filter @repo/crm-hubspot exec tsx ../../docs/evidence/phase-2/offline-run
    - a shadow run never gets a resume run ID;
    - IDs and `updated_at` default in the database, so raw SQL inserts work.
 2. **The ERD is generated, and a test fails when it's stale** (`packages/db/test/erd.test.ts`).
-3. **Same seed, same bytes.** Three runs of seed 42 give the sha256 `14fdebd9…2cc198`, including one in a fresh
-   process under another time zone and locale. A test pins that hash.
+3. **Same seed, same bytes.** Three runs of seed 42 (`SYNTHETIC_VERSION` 2) give the sha256 `759acaa6…ca79ac7`,
+   including one in a fresh process under another time zone and locale. A test pins that hash.
 4. **Reserved domains and phone format.** The tests scan every email, URL, `domain` field and hostname in message
    text, over five seeds, and fail on anything outside `example.com/org/net` and `*.test`. They also check that the
    checker itself rejects lookalikes (`example.co`, `notexample.com`, `*.invalid`). Every phone is
-   `+1 555-01xx`, and only a duplicate shares its original's phone.
+   `+1 201-555-01xx`: a valid 10-digit NANP number in the block reserved as fictional in every area code (a test
+   checks the digits are `1-NXX-NXX-XXXX`). Only a duplicate shares its original's phone.
 5. **Labels.** The eval set covers all 7 disposition cases and all 5 triage labels. Every B2B label matches the
    score rule. Keys never reveal the scenario.
 6. **Clock traps.** The eval set holds:
@@ -67,7 +68,7 @@ pnpm --filter @repo/crm-hubspot exec tsx ../../docs/evidence/phase-2/offline-run
    one upsert, and its row says `updated (firstname)`. A `triage_disposition` written later survives a re-seed,
    because the seed never writes `triage_disposition`, `triage_confidence`, `lifecyclestage` or `hs_lead_status`.
 9. **Honest outcomes.**
-   - Two 429s on the batch read were retried after 418 ms and 843 ms (capped exponential backoff with jitter).
+   - Two 429s on the batch read were retried after 293 ms and 827 ms (capped exponential backoff with jitter).
    - A hung upsert gave `unknown 20` and exit 2, with nothing reported as created or failed. A re-run settled
      it.
    - A missing key exits 1 before any request is sent.
@@ -84,7 +85,7 @@ pnpm --filter @repo/crm-hubspot exec tsx ../../docs/evidence/phase-2/offline-run
 3. **HubSpot stores the seed's values verbatim**, so a second live seed reads back equal strings. If it normalises
    one of them, every re-run will say `updated (<that field>)`. The fix is then to compare normalised values. The
    likely candidates:
-   - `phone` (`+1 555-01xx` isn't a full NANP number);
+   - `phone` (`+1 201-555-01xx` is a valid NANP number, but HubSpot may reformat it, e.g. to `+1201555xxxx`);
    - the bool `consent_gpc`;
    - the message text.
 4. **Bool options round-trip.** `consent_gpc` is created with options `Yes/true` and `No/false`. If HubSpot rewrites
