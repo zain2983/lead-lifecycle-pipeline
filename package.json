@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.9",
+    "@hubspot/cli": "8.19.0",
     "@types/node": "catalog:",
     "tsx": "catalog:",
     "turbo": "2.11.13",

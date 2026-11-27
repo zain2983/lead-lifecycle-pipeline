@@ -12,10 +12,12 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@repo/core": "workspace:*"
+    "@repo/core": "workspace:*",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@types/node": "catalog:",
+    "tsx": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   }
