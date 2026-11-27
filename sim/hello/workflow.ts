@@ -8,7 +8,7 @@ export default workflow(
   () => {
     const start = trigger.start('Start', { inputFormat: { name: 'string' } })
     const echo = fn('Echo', {
-      code: js`return { echo: ${start.name}, version: 'v1', at: new Date().toISOString() }`,
+      code: js`return { echo: ${start.name}, version: 'v2', greeting: 'Hello, ' + ${start.name}, at: new Date().toISOString() }`,
     })
     const reply = response('Respond', {
       body: {
