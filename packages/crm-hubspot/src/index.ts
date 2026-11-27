@@ -13,3 +13,11 @@ export {
   type VerifySignatureV3Input,
   verifySignatureV3,
 } from "./signature.ts";
+export {
+  decryptSecret,
+  type EncryptedSecret,
+  encryptSecret,
+  parseEncryptionKey,
+  refreshTokenAad,
+  TokenCryptoError,
+} from "./token-crypto.ts";
