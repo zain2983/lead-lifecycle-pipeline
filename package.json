@@ -27,6 +27,7 @@
     "@biomejs/biome": "2.6.9",
     "@hubspot/cli": "8.19.0",
     "@types/node": "catalog:",
+    "sim": "2.3.0",
     "tsx": "catalog:",
     "turbo": "2.11.13",
     "typescript": "catalog:",
