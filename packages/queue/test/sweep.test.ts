@@ -65,13 +65,20 @@ describe("sweepOnce", () => {
       await expect(
         sweepOnce(boss, { [TRIAGE_QUEUE]: spikeEchoHandler("sweeper") }, { budgetSeconds: 5 }),
       ).rejects.toThrow(/local worker/);
-      await boss.createQueue(TRIAGE_QUEUE); // idempotent; Phase 4 owns its real options
-      const summary = await sweepOnce(boss, {}, { budgetSeconds: 5 });
-      expect(summary.skipped).toContainEqual({
-        name: TRIAGE_QUEUE,
-        reason: "triage: local worker only",
-      });
-      expect(summary.worked).not.toContain(TRIAGE_QUEUE);
+      // Phase 4 owns triage's real options, and createQueue never updates an existing queue, so
+      // only a triage queue this test created is removed again.
+      const created = (await boss.getQueue(TRIAGE_QUEUE)) === null;
+      if (created) await boss.createQueue(TRIAGE_QUEUE);
+      try {
+        const summary = await sweepOnce(boss, {}, { budgetSeconds: 5 });
+        expect(summary.skipped).toContainEqual({
+          name: TRIAGE_QUEUE,
+          reason: "triage: local worker only",
+        });
+        expect(summary.worked).not.toContain(TRIAGE_QUEUE);
+      } finally {
+        if (created) await boss.deleteQueue(TRIAGE_QUEUE);
+      }
     } finally {
       await boss.stop();
     }
