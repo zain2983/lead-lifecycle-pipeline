@@ -1,0 +1,47 @@
+$ SIM_CONFIG_DIR=$PWD/infra/sim/.cli DO_NOT_TRACK=1 SIM_NO_UPDATE_CHECK=1 pnpm exec sim login --profile local --endpoint http://localhost:3000 --method api-key --no-browser
+Signing in to http://localhost:3000 as profile local
+
+Pairing code: [redacted]
+Confirm this code matches what the browser shows before approving.
+
+http://localhost:3000/cli/auth?request=[redacted]&challenge=[redacted]&pairing=[redacted]&scope=platform
+
+Waiting for approval…
+
+✓ Logged in. Key stored in <repo>/infra/sim/.cli/credentials
+  Full-access key. Never expires.
+  Personal key, defaulting to 363f1b14-11a4-4fa8-872f-4b3cb927dfe9. Override per command with --workspace.
+exit=0
+
+# The approval URL was approved as the synthetic local user with POST /api/cli/auth/approve
+# {request, challenge, scope:"platform", workspaceId} and a session cookie from /api/auth/sign-in/email: {"ok":true}, HTTP 200.
+
+$ pnpm exec sim whoami --profile local --output json
+{
+  "profile": "local",
+  "endpoint": "http://localhost:3000",
+  "workspaceId": "363f1b14-11a4-4fa8-872f-4b3cb927dfe9",
+  "output": "json",
+  "authenticated": true,
+  "sources": {
+    "endpoint": "config",
+    "authentication": "credentials",
+    "workspaceId": "config",
+    "output": "flag"
+  },
+  "verification": {
+    "status": "verified",
+    "workspace": {
+      "id": "363f1b14-11a4-4fa8-872f-4b3cb927dfe9",
+      "name": "Local dev",
+      "memberCount": 1
+    },
+    "keyType": "personal",
+    "expiresAt": null,
+    "boundWorkspaceId": null,
+    "detail": null
+  }
+}
+
+$ pnpm exec sim --version
+2.3.0

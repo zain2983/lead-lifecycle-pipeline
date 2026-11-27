@@ -1,0 +1,19 @@
+# docker compose -f infra/sim/docker-compose.yml up -d --wait  (2026-11-27 22:43 PKT, images already pulled)
+# exit 0 after 22 s
+
+NAME                  IMAGE                                   STATUS                    PORTS
+llp-sim-cron-1        ghcr.io/simstudioai/cron:v0.9.66        Up 25 seconds             
+llp-sim-db-1          pgvector/pgvector:pg17                  Up 44 seconds (healthy)   5432/tcp
+llp-sim-realtime-1    ghcr.io/simstudioai/realtime:v0.9.66    Up 36 seconds (healthy)   127.0.0.1:3002->3002/tcp
+llp-sim-redis-1       redis:7-alpine                          Up 44 seconds (healthy)   6379/tcp
+llp-sim-simstudio-1   ghcr.io/simstudioai/simstudio:v0.9.66   Up 30 seconds (healthy)   127.0.0.1:3000->3000/tcp
+
+# migrations exit code: 0
+# curl http://localhost:3000/  -> 307
+# curl http://localhost:3002/health -> 200
+
+# image sizes as `docker image inspect .Size` reports them (containerd image store: the compressed content size)
+ghcr.io/simstudioai/simstudio:v0.9.66 1119481357 bytes sha256:96ae081556d38fefd47419f2c79c1232f657f3228bee453874b67c55b4357411
+ghcr.io/simstudioai/realtime:v0.9.66 121224265 bytes sha256:bed50aa09418c370bbcfc8ed5e40e2313bc305f3748f1c783cfe12bb1e55b1f6
+ghcr.io/simstudioai/migrations:v0.9.66 106196080 bytes sha256:ce35c97b66344b49ded36ce093bffb3a9e687775ea79c04c315d781938a0b6f9
+ghcr.io/simstudioai/cron:v0.9.66 13698005 bytes sha256:6549d7277214e465a1500a1ef886d00597ac494298aa3334b1cb7f56d590e4a0

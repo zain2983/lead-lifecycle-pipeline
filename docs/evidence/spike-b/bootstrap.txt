@@ -1,0 +1,9 @@
+# infra/sim/bootstrap.sh against http://localhost:3000, 2026-11-27 22:45 PKT. The key is never printed; only its prefix and length.
+== sign up [redacted-email]
+   HTTP 200
+== create workspace
+   HTTP 200
+   workspace 363f1b14-11a4-4fa8-872f-4b3cb927dfe9
+== create personal API key
+   HTTP 200
+   saved to infra/sim/.env (sk-sim…, 39 chars)
