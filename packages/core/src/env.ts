@@ -14,6 +14,11 @@ const hubspotWebhook = z.object({
   HUBSPOT_CLIENT_SECRET: z.string().min(1),
   /** The exact URL HubSpot calls. Signature v3 is checked against this, never against the Host header. */
   PUBLIC_WEBHOOK_URL: z.url(),
+  /**
+   * Local live tests only: an absolute directory outside the repo where every delivery is written as
+   * received (headers, raw body, verdict). Never set on Vercel.
+   */
+  HUBSPOT_WEBHOOK_CAPTURE_DIR: z.string().min(1).optional(),
 });
 
 /** OAuth install and token refresh (web, Actions, local worker). */

@@ -1,8 +1,11 @@
 import { readFileSync } from "node:fs";
+import { mkdtemp, readdir, readFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { signatureV3 } from "@repo/crm-hubspot";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { handleHubSpotWebhook } from "../lib/hubspot/webhook.ts";
+import { fileCapture } from "../lib/hubspot/capture.ts";
+import { handleHubSpotWebhook, type WebhookCapture } from "../lib/hubspot/webhook.ts";
 
 const fixtures = path.resolve(import.meta.dirname, "../../../packages/crm-hubspot/fixtures");
 const fixture = (name: string) =>
@@ -164,5 +167,62 @@ describe("the route module", () => {
     );
     expect(response.status).toBe(200);
     vi.unstubAllEnvs();
+  });
+});
+
+describe("delivery capture (HUBSPOT_WEBHOOK_CAPTURE_DIR)", () => {
+  it("keeps accepted and rejected deliveries exactly as received", async () => {
+    vi.spyOn(console, "info").mockImplementation(() => {});
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    const captured: WebhookCapture[] = [];
+    const capture = async (delivery: WebhookCapture) => void captured.push(delivery);
+    const body = fixture("contact-creation.json");
+    await handleHubSpotWebhook(delivery({ body }), { ...config, capture });
+    await handleHubSpotWebhook(delivery({ body, tamper: (b) => `${b} ` }), { ...config, capture });
+
+    expect(captured.map((c) => c.status)).toEqual([200, 401]);
+    expect(captured[0]).toMatchObject({
+      method: "POST",
+      requestUrl: "http://localhost:3100/api/webhooks/hubspot",
+      signedUri: publicWebhookUrl,
+      rawBody: body,
+      response: { ok: true, received: 1 },
+    });
+    expect(captured[0]?.headers["x-hubspot-request-timestamp"]).toBeDefined();
+    expect(captured[1]?.rawBody).toBe(`${body} `);
+  });
+
+  it("answers normally when the capture fails", async () => {
+    vi.spyOn(console, "info").mockImplementation(() => {});
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const response = await handleHubSpotWebhook(
+      delivery({ body: fixture("contact-creation.json") }),
+      {
+        ...config,
+        capture: async () => {
+          throw new Error("disk full");
+        },
+      },
+    );
+    expect(response.status).toBe(200);
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining("capture failed"));
+  });
+
+  it("writes one JSON file per delivery", async () => {
+    vi.spyOn(console, "info").mockImplementation(() => {});
+    const dir = await mkdtemp(path.join(tmpdir(), "hubspot-capture-"));
+    try {
+      await handleHubSpotWebhook(delivery({ body: fixture("contact-creation.json") }), {
+        ...config,
+        capture: fileCapture(dir),
+      });
+      const files = await readdir(dir);
+      expect(files).toHaveLength(1);
+      expect(files[0]).toMatch(/-200-[0-9a-f]{8}\.json$/);
+      const saved = JSON.parse(await readFile(path.join(dir, files[0] ?? ""), "utf8"));
+      expect(saved.rawBody).toBe(fixture("contact-creation.json"));
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
   });
 });
