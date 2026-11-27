@@ -10,7 +10,9 @@ import type { AddressInfo } from "node:net";
  * - a batch read answers 207 with an `OBJECT_NOT_FOUND` error listing missing emails;
  * - a batch upsert with any invalid input rejects the whole batch with 400 `VALIDATION_ERROR` (one
  *   reading of "partial upserts are not supported when using email as the idProperty");
- * - `updatedAt` changes only when a value actually changes.
+ * - `updatedAt` changes only when a value actually changes;
+ * - `GET …/contacts/{id}` answers 404 with an `OBJECT_NOT_FOUND` body for a missing or deleted contact,
+ *   and returns the requested properties plus `createdate`, `hs_object_id` and `lastmodifieddate`.
  * Every response carries `x-fake-hubspot: 1`, so it can't be mistaken for the real API in a transcript.
  */
 
@@ -39,8 +41,12 @@ export interface FakeContact {
 export interface FakeRequest {
   method: string;
   path: string;
+  /** The raw query string without `?` (empty when there was none). */
+  query: string;
   body: unknown;
   authorized: boolean;
+  /** The bearer token sent, for asserting which credential a request used. */
+  bearer: string | null;
 }
 
 export type FakeAnswer =
@@ -57,6 +63,8 @@ interface Fault {
 export interface FakeHubSpotOptions {
   /** The service key the fake accepts as `Authorization: Bearer <token>`. */
   token: string;
+  /** Other bearer tokens to accept, e.g. OAuth access tokens a fake token server issued. */
+  acceptToken?: (token: string) => boolean;
   /** Burst limit the fake enforces itself (default 100 per 10 s, the lowest documented tier). */
   rateLimit?: { maxRequests: number; windowMs: number };
   /** Clock for timestamps (default: a fixed start that ticks 1 s per write, so state is reproducible). */
@@ -213,8 +221,37 @@ export async function startFakeHubSpot(options: FakeHubSpotOptions) {
     };
   }
 
-  function route(method: string, path: string, body: unknown): { status: number; body: unknown } {
+  function route(
+    method: string,
+    path: string,
+    body: unknown,
+    query: URLSearchParams,
+  ): { status: number; body: unknown } {
     const b = (body ?? {}) as Record<string, unknown>;
+
+    // --- One contact by record ID ---
+    const contactMatch = new RegExp(`^${OBJECTS}/(\\d+)$`).exec(path);
+    if (contactMatch && method === "GET") {
+      const contact = contacts.get(contactMatch[1] ?? "");
+      if (!contact) {
+        return error(404, "OBJECT_NOT_FOUND", "resource not found", {
+          context: { id: [contactMatch[1]] },
+        });
+      }
+      const names = (query.get("properties") ?? "").split(",").filter(Boolean);
+      const view = contactView(contact, null);
+      const props: Record<string, string | null> = {
+        createdate: contact.createdAt,
+        hs_object_id: contact.id,
+        lastmodifieddate: contact.updatedAt,
+      };
+      // Like the docs: requested properties the record doesn't have are left out, not null.
+      for (const name of names) {
+        const value = contact.properties[name];
+        if (value !== undefined) props[name] = value;
+      }
+      return { status: 200, body: { ...view, properties: props } };
+    }
 
     // --- Property groups ---
     if (path === `${PROPS}/groups` && method === "POST") {
@@ -396,15 +433,17 @@ export async function startFakeHubSpot(options: FakeHubSpotOptions) {
     for await (const chunk of req) chunks.push(chunk as Buffer);
     const raw = Buffer.concat(chunks).toString("utf8");
     const method = req.method ?? "";
-    const path = (req.url ?? "").split("?")[0] ?? "";
+    const [path = "", rawQuery = ""] = (req.url ?? "").split("?");
     let body: unknown = null;
     try {
       body = raw ? JSON.parse(raw) : null;
     } catch {
       body = raw;
     }
-    const authorized = req.headers.authorization === `Bearer ${options.token}`;
-    requests.push({ method, path, body, authorized });
+    const bearer = /^Bearer (.+)$/.exec(req.headers.authorization ?? "")?.[1] ?? null;
+    const authorized =
+      bearer !== null && (bearer === options.token || (options.acceptToken?.(bearer) ?? false));
+    requests.push({ method, path, query: rawQuery, body, authorized, bearer });
 
     const nowMs = Date.now();
     while (sent.length > 0 && (sent[0] ?? 0) <= nowMs - rateLimit.windowMs) sent.shift();
@@ -456,7 +495,7 @@ export async function startFakeHubSpot(options: FakeHubSpotOptions) {
       return;
     }
     sent.push(nowMs);
-    reply(route(method, path, body));
+    reply(route(method, path, body, new URLSearchParams(rawQuery)));
   });
   await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
   const { port } = server.address() as AddressInfo;
@@ -482,6 +521,22 @@ export async function startFakeHubSpot(options: FakeHubSpotOptions) {
       },
       addProperty(property: Omit<FakeProperty, "createdAt" | "updatedAt">) {
         properties.set(property.name, { ...property, createdAt: start, updatedAt: start });
+      },
+      /** A contact typed into HubSpot directly (no validation). Returns its record ID. */
+      addContact(values: Record<string, string>): string {
+        const at = now().toISOString();
+        const contact: FakeContact = {
+          id: String(nextId++),
+          properties: { ...values },
+          createdAt: at,
+          updatedAt: at,
+        };
+        contacts.set(contact.id, contact);
+        return contact.id;
+      },
+      /** A contact deleted in HubSpot (a privacy deletion, or a merge). */
+      deleteContact(id: string) {
+        contacts.delete(id);
       },
     },
     /** Everything the fake holds, as plain JSON (deep-equal two of these to compare end states). */

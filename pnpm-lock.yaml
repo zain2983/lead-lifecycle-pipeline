@@ -239,6 +239,9 @@ importers:
       '@repo/core':
         specifier: workspace:*
         version: link:../core
+      '@repo/db':
+        specifier: workspace:*
+        version: link:../db
       '@repo/synthetic':
         specifier: workspace:*
         version: link:../synthetic
