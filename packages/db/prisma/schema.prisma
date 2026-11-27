@@ -1,0 +1,24 @@
+// Prisma 7 schema. The connection URL lives in prisma.config.ts, not here.
+// Never run `prisma db pull`: pg-boss owns the `pgboss` schema in the same database, and Prisma only
+// manages the default `public` schema. Phase 2 adds the domain tables; see PLAN.md section 6.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// Written by every runtime that touches the database (sweeper, worker, web). Keeps the free Postgres
+/// project from pausing, and shows when each runtime last ran.
+model Heartbeat {
+  id        BigInt   @id @default(autoincrement())
+  source    String
+  detail    String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([source, createdAt])
+  @@map("heartbeat")
+}

@@ -1,0 +1,22 @@
+{
+  "name": "@repo/corrections",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Dispositions to keep / restate / retract / hold, with approval",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p .",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@repo/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

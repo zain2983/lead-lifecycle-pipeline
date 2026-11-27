@@ -1,0 +1,22 @@
+{
+  "name": "@repo/crm-hubspot",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "HubSpot OAuth, token refresh, rate-limited client, property setup, webhook verification, signed replay",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p .",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@repo/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

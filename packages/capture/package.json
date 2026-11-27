@@ -1,0 +1,20 @@
+{
+  "name": "@repo/capture",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Browser library: click IDs, UTMs, session, consent, dataLayer, browser event ID",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p .",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

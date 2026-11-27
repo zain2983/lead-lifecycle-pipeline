@@ -1,0 +1,33 @@
+{
+  "name": "lead-lifecycle-pipeline",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.21.0",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "lint": "biome ci .",
+    "lint:fix": "biome check --write .",
+    "check": "pnpm lint && pnpm typecheck && pnpm test",
+    "db:up": "docker compose -f infra/docker-compose.yml --profile core up -d --wait",
+    "db:down": "docker compose -f infra/docker-compose.yml --profile core down",
+    "db:generate": "pnpm --filter @repo/db run generate",
+    "db:validate": "pnpm --filter @repo/db run validate",
+    "db:migrate": "pnpm --filter @repo/db run migrate:dev",
+    "db:deploy": "pnpm --filter @repo/db run migrate:deploy",
+    "ops": "pnpm --filter @repo/worker run ops"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.6.9",
+    "@types/node": "catalog:",
+    "tsx": "catalog:",
+    "turbo": "2.11.13",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

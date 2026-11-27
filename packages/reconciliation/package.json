@@ -1,0 +1,22 @@
+{
+  "name": "@repo/reconciliation",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Report by click date x action x destination x hop; policy exclusions vs losses; record trace",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p .",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@repo/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

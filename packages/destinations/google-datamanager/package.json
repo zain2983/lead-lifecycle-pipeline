@@ -1,0 +1,22 @@
+{
+  "name": "@repo/dest-google-datamanager",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Conversion destination: google-datamanager",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p .",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@repo/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

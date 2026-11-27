@@ -1,0 +1,29 @@
+node_modules/
+.pnpm-store/
+.turbo/
+.next/
+dist/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# generated
+packages/db/src/generated/
+
+# env and secrets: only the .example files are committed
+.env
+.env.*
+!.env.example
+infra/sim/.env
+!infra/sim/.env.example
+*.pem
+
+# test output
+playwright-report/
+test-results/
+blob-report/
+
+# local tools
+.vercel/
+.DS_Store
+*.log

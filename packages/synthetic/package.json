@@ -1,0 +1,22 @@
+{
+  "name": "@repo/synthetic",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Seeded personas, verticals, dispositions, sales simulator, broken-install scenarios",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p .",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@repo/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}
