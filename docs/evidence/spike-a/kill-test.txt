@@ -1,0 +1,18 @@
+
+== 16:47:10  1. victim: enqueue a spike-kill job (expireInSeconds=5), fetch it, hang
+FETCHED ddc6c7af-0a94-450d-83ff-71e37df2059b pid=70679 expireInSeconds=5
+
+== 16:47:11  2. kill -9 70679 (no shutdown hooks run, the job is never settled)
+victim exit status: 137 (137 = SIGKILL)
+
+== 16:47:11  3. job row right after the kill
+{"id":"ddc6c7af-0a94-450d-83ff-71e37df2059b","name":"spike-kill","state":"active","retry_count":0,"retry_limit":2,"expire_seconds":5,"started_on":"16:47:11.214","completed_on":null,"db_now":"16:47:11.605","output":null}
+
+== 16:47:11  4. sleep 7 s, past the expiry. No pg-boss supervisor runs anywhere, so nothing moves it
+{"id":"ddc6c7af-0a94-450d-83ff-71e37df2059b","name":"spike-kill","state":"active","retry_count":0,"retry_limit":2,"expire_seconds":5,"started_on":"16:47:11.214","completed_on":null,"db_now":"16:47:18.874","output":null}
+
+== 16:47:18  5. pnpm ops sweep --once --budget 30
+{"sweep":{"ok":true,"supervisedMs":38,"worked":["spike-echo","spike-kill"],"skipped":[{"name":"triage","reason":"triage: local worker only"}],"processed":1,"failed":0,"timedOut":false,"durationMs":47},"heartbeatId":"16"}
+
+== 16:47:20  6. job row after the sweep
+{"id":"ddc6c7af-0a94-450d-83ff-71e37df2059b","name":"spike-kill","state":"completed","retry_count":1,"retry_limit":2,"expire_seconds":5,"started_on":"16:47:20.132","completed_on":"16:47:20.135","db_now":"16:47:20.413","output":{"echoed":{"from":"kill-test","sentAt":"2026-11-27T16:47:11.211Z"},"handledAt":"2026-11-27T16:47:20.136Z","handledBy":"sweeper","retryCount":1}}

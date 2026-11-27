@@ -45,6 +45,13 @@ export const envGroups = {
     /** Shared secret the Human block's notification webhook sends to /api/sim/approvals. */
     SIM_APPROVAL_SECRET: z.string().min(24),
   }),
+  /** Spike-only routes under /api/spikes/*. On only when exactly "1"; anything else, or unset, is off. */
+  spikes: z.object({
+    SPIKE_ROUTES: z
+      .string()
+      .optional()
+      .transform((value) => value === "1"),
+  }),
 } as const;
 
 export type EnvGroup = keyof typeof envGroups;

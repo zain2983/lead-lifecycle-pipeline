@@ -1,0 +1,47 @@
+
+== 16:55:30  next build
+▲ Next.js 16.4.6 (Turbopack)
+✓ Compiled successfully in 238ms
+└ ƒ /api/spikes/queue
+
+== 16:55:34  1. SPIKE_ROUTES unset: the route must not exist
+Not Found HTTP 404
+GET HTTP 404
+
+== 16:55:34  2. SPIKE_ROUTES=1: POST enqueues in one transaction, after() drains
+{"jobId":"db85031f-cadb-501e-806a-d26c8c7bd683","key":"proof-1795798535","enqueued":true,"heartbeatId":"28","drainSeconds":20,"bossStartMs":33} HTTP 202
+
+== 16:55:37  3. the job after the response was sent
+{"id":"db85031f-cadb-501e-806a-d26c8c7bd683","state":"completed","retryCount":0,"createdOn":"2026-11-27T16:55:35.534Z","startedOn":"2026-11-27T16:55:35.569Z","completedOn":"2026-11-27T16:55:35.576Z","output":{"echoed":{"key":"proof-1795798535","heartbeatId":"28"},"handledAt":"2026-11-27T16:55:35.576Z","handledBy":"after()","retryCount":0}} HTTP 200
+
+== 16:55:37  4. same key again: same deterministic job id, no second job
+{"jobId":"db85031f-cadb-501e-806a-d26c8c7bd683","key":"proof-1795798535","enqueued":false,"heartbeatId":"29","drainSeconds":20,"bossStartMs":3} HTTP 202
+{"id":"db85031f-cadb-501e-806a-d26c8c7bd683","state":"completed","retryCount":0,"createdOn":"2026-11-27T16:55:35.534Z","startedOn":"2026-11-27T16:55:35.569Z","completedOn":"2026-11-27T16:55:35.576Z","output":{"echoed":{"key":"proof-1795798535","heartbeatId":"28"},"handledAt":"2026-11-27T16:55:35.576Z","handledBy":"after()","retryCount":0}} HTTP 200
+
+== 16:55:38  5. five concurrent POSTs (each request: its own pg-boss instance on the shared 2-connection pool)
+{"jobId":"07cb43e8-280b-5f79-8650-f4f16060deb9","key":"proof-1795798535-c1","enqueued":true,"heartbeatId":"34","drainSeconds":20,"bossStartMs":20} HTTP 202
+{"jobId":"9f0f0784-30b5-5ebf-bf0e-57f81263e35d","key":"proof-1795798535-c2","enqueued":true,"heartbeatId":"30","drainSeconds":20,"bossStartMs":14} HTTP 202
+{"jobId":"a24f555a-ee55-5b23-a22b-eb7cd9f7ab96","key":"proof-1795798535-c3","enqueued":true,"heartbeatId":"31","drainSeconds":20,"bossStartMs":16} HTTP 202
+{"jobId":"31e332bc-8670-5497-bc8e-dfb5886484cc","key":"proof-1795798535-c4","enqueued":true,"heartbeatId":"33","drainSeconds":20,"bossStartMs":12} HTTP 202
+{"jobId":"67cd1da6-ecf6-5ede-83e3-88b65d0c2eb8","key":"proof-1795798535-c5","enqueued":true,"heartbeatId":"32","drainSeconds":20,"bossStartMs":12} HTTP 202
+{"id":"07cb43e8-280b-5f79-8650-f4f16060deb9","state":"completed","retryCount":0,"createdOn":"2026-11-27T16:55:38.712Z","startedOn":"2026-11-27T16:55:38.719Z","completedOn":"2026-11-27T16:55:38.722Z","output":{"echoed":{"key":"proof-1795798535-c1","heartbeatId":"34"},"handledAt":"2026-11-27T16:55:38.721Z","handledBy":"after()","retryCount":0}} HTTP 200
+{"id":"9f0f0784-30b5-5ebf-bf0e-57f81263e35d","state":"completed","retryCount":0,"createdOn":"2026-11-27T16:55:38.694Z","startedOn":"2026-11-27T16:55:38.701Z","completedOn":"2026-11-27T16:55:38.707Z","output":{"echoed":{"key":"proof-1795798535-c2","heartbeatId":"30"},"handledAt":"2026-11-27T16:55:38.707Z","handledBy":"after()","retryCount":0}} HTTP 200
+{"id":"a24f555a-ee55-5b23-a22b-eb7cd9f7ab96","state":"completed","retryCount":0,"createdOn":"2026-11-27T16:55:38.701Z","startedOn":"2026-11-27T16:55:38.706Z","completedOn":"2026-11-27T16:55:38.707Z","output":{"echoed":{"key":"proof-1795798535-c3","heartbeatId":"31"},"handledAt":"2026-11-27T16:55:38.708Z","handledBy":"after()","retryCount":0}} HTTP 200
+{"id":"31e332bc-8670-5497-bc8e-dfb5886484cc","state":"completed","retryCount":0,"createdOn":"2026-11-27T16:55:38.704Z","startedOn":"2026-11-27T16:55:38.713Z","completedOn":"2026-11-27T16:55:38.717Z","output":{"echoed":{"key":"proof-1795798535-c4","heartbeatId":"33"},"handledAt":"2026-11-27T16:55:38.716Z","handledBy":"after()","retryCount":0}} HTTP 200
+{"id":"67cd1da6-ecf6-5ede-83e3-88b65d0c2eb8","state":"completed","retryCount":0,"createdOn":"2026-11-27T16:55:38.705Z","startedOn":"2026-11-27T16:55:38.711Z","completedOn":"2026-11-27T16:55:38.714Z","output":{"echoed":{"key":"proof-1795798535-c5","heartbeatId":"32"},"handledAt":"2026-11-27T16:55:38.714Z","handledBy":"after()","retryCount":0}} HTTP 200
+
+== 16:55:41  6. server log (spike lines)
+{"spike":"queue","phase":"enqueued","jobId":"db85031f-cadb-501e-806a-d26c8c7bd683","enqueued":true,"heartbeatId":"28","bossStartMs":33}
+{"spike":"queue","phase":"after-drain","jobId":"db85031f-cadb-501e-806a-d26c8c7bd683","queues":["spike-echo"],"processed":1,"failed":0,"timedOut":false,"durationMs":15}
+{"spike":"queue","phase":"enqueued","jobId":"db85031f-cadb-501e-806a-d26c8c7bd683","enqueued":false,"heartbeatId":"29","bossStartMs":3}
+{"spike":"queue","phase":"after-drain","jobId":"db85031f-cadb-501e-806a-d26c8c7bd683","queues":["spike-echo"],"processed":0,"failed":0,"timedOut":false,"durationMs":2}
+{"spike":"queue","phase":"enqueued","jobId":"9f0f0784-30b5-5ebf-bf0e-57f81263e35d","enqueued":true,"heartbeatId":"30","bossStartMs":14}
+{"spike":"queue","phase":"enqueued","jobId":"a24f555a-ee55-5b23-a22b-eb7cd9f7ab96","enqueued":true,"heartbeatId":"31","bossStartMs":16}
+{"spike":"queue","phase":"enqueued","jobId":"67cd1da6-ecf6-5ede-83e3-88b65d0c2eb8","enqueued":true,"heartbeatId":"32","bossStartMs":12}
+{"spike":"queue","phase":"enqueued","jobId":"31e332bc-8670-5497-bc8e-dfb5886484cc","enqueued":true,"heartbeatId":"33","bossStartMs":12}
+{"spike":"queue","phase":"after-drain","jobId":"a24f555a-ee55-5b23-a22b-eb7cd9f7ab96","queues":["spike-echo"],"processed":1,"failed":0,"timedOut":false,"durationMs":12}
+{"spike":"queue","phase":"enqueued","jobId":"07cb43e8-280b-5f79-8650-f4f16060deb9","enqueued":true,"heartbeatId":"34","bossStartMs":20}
+{"spike":"queue","phase":"after-drain","jobId":"9f0f0784-30b5-5ebf-bf0e-57f81263e35d","queues":["spike-echo"],"processed":2,"failed":0,"timedOut":false,"durationMs":24}
+{"spike":"queue","phase":"after-drain","jobId":"67cd1da6-ecf6-5ede-83e3-88b65d0c2eb8","queues":["spike-echo"],"processed":1,"failed":0,"timedOut":false,"durationMs":14}
+{"spike":"queue","phase":"after-drain","jobId":"07cb43e8-280b-5f79-8650-f4f16060deb9","queues":["spike-echo"],"processed":0,"failed":0,"timedOut":false,"durationMs":6}
+{"spike":"queue","phase":"after-drain","jobId":"31e332bc-8670-5497-bc8e-dfb5886484cc","queues":["spike-echo"],"processed":1,"failed":0,"timedOut":false,"durationMs":15}

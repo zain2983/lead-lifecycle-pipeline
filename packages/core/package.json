@@ -5,7 +5,8 @@
   "type": "module",
   "description": "Env validation, contracts, IDs, idempotency keys, error classes, routing policy",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./dotenv": "./src/dotenv.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit -p .",

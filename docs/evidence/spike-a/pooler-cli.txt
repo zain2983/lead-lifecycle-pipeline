@@ -1,0 +1,7 @@
+$ DIRECT_URL=<pooler :6433> pnpm --filter @repo/queue pgboss version
+Current schema version: 48
+Latest schema version: 48
+Schema is up to date
+$ DIRECT_URL=<pooler :6433> pnpm --filter @repo/queue migrate
+pg-boss schema "pgboss" is already at version 48 (latest: 48)
+exit 0

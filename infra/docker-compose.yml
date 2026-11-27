@@ -2,7 +2,11 @@
 #   core         Postgres for the app and the queue (port 5433, so it never clashes with Sim's database)
 #   conversions  core + later the worker, without Sim (Part C)
 #   full         everything, with Sim started separately from infra/sim (needs Docker at 12 GB)
-# Ports in use on this machine: Sim 3000/3002, web app 3100, app Postgres 5433.
+#   pooler       PgBouncer in transaction mode on 127.0.0.1:6433, in front of the app Postgres. It stands in
+#                for Supabase's transaction pooler (:6543) in local tests; see docs/evidence/spike-a.
+#                Start it next to core: docker compose -f infra/docker-compose.yml --profile core
+#                --profile pooler up -d --wait
+# Ports in use on this machine: Sim 3000/3002, web app 3100, app Postgres 5433, PgBouncer 6433.
 name: llp
 
 services:
@@ -19,6 +23,34 @@ services:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U app -d app"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  pgbouncer:
+    image: edoburu/pgbouncer:v1.26.1-p0 # PgBouncer 1.26.1
+    profiles: ["pooler"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_USER: app
+      DB_PASSWORD: app
+      AUTH_TYPE: scram-sha-256
+      POOL_MODE: transaction
+      DEFAULT_POOL_SIZE: "5"
+      MAX_CLIENT_CONN: "200"
+      # 0 = no protocol-level prepared statements, the strictest transaction pooler. Unset it
+      # (PGBOUNCER_MAX_PREPARED_STATEMENTS= ) to get PgBouncer's own default.
+      MAX_PREPARED_STATEMENTS: ${PGBOUNCER_MAX_PREPARED_STATEMENTS-0}
+      # Local only: lets `SHOW CONFIG` run on the admin console from inside the compose network.
+      ADMIN_USERS: app
+    ports:
+      - "127.0.0.1:6433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z 127.0.0.1 5432"]
       interval: 3s
       timeout: 3s
       retries: 20

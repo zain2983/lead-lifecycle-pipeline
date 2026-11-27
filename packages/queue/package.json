@@ -9,8 +9,9 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit -p .",
-    "test": "vitest run --passWithNoTests",
-    "migrate": "node -e \"console.error('pg-boss migrate: not implemented yet (Spike A)');process.exit(1)\""
+    "test": "vitest run",
+    "migrate": "tsx src/cli/pgboss.ts migrate",
+    "pgboss": "tsx src/cli/pgboss.ts"
   },
   "dependencies": {
     "@repo/core": "workspace:*",
@@ -19,6 +20,7 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
+    "tsx": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   }

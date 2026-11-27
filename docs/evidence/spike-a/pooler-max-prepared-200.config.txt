@@ -1,0 +1,2 @@
+max_prepared_statements|200|200|yes
+pool_mode|transaction|session|yes

@@ -9,7 +9,7 @@
     "start": "tsx src/index.ts",
     "ops": "tsx src/cli/ops.ts",
     "typecheck": "tsc --noEmit -p .",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run"
   },
   "dependencies": {
     "@repo/agent-runtime": "workspace:*",
