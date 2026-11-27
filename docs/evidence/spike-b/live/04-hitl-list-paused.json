@@ -1,0 +1,78 @@
+{
+  "step": "04-hitl-list-paused",
+  "notes": {
+    "runId": "spikeb_hitl_a_20261127211306",
+    "listed": true,
+    "count": 1
+  },
+  "exchanges": [
+    {
+      "at": "2026-11-27T21:13:10.982Z",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3000/api/v2/workflows/runs/paused?workspaceId=363f1b14-11a4-4fa8-872f-4b3cb927dfe9&includeOutput=true",
+        "headers": {
+          "accept": "application/json",
+          "x-api-key": "[redacted]"
+        },
+        "body": null
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json;charset=utf-8",
+          "x-request-id": "a3298d33"
+        },
+        "body": {
+          "data": [
+            {
+              "runId": "spikeb_hitl_a_20261127211306",
+              "workflowId": "4425a5b3-e99a-46d5-86ce-829b6a47908b",
+              "workflowName": "hello-approval",
+              "pausedAt": "2026-11-27T21:13:09.972Z",
+              "points": [
+                {
+                  "contextId": "1d716a64-cf7c-43d9-89f7-7f321080640c",
+                  "blockId": "1d716a64-cf7c-43d9-89f7-7f321080640c",
+                  "blockName": "Approval",
+                  "kind": "human",
+                  "status": "paused",
+                  "registeredAt": "2026-11-27T21:13:09.919Z",
+                  "resumeAt": null,
+                  "parallel": null,
+                  "loop": null,
+                  "inputFields": [
+                    {
+                      "name": "approved",
+                      "label": "approved",
+                      "type": "boolean",
+                      "required": true
+                    },
+                    {
+                      "name": "comment",
+                      "label": "comment",
+                      "type": "string",
+                      "required": false
+                    }
+                  ],
+                  "display": {
+                    "responseStructure": [
+                      {
+                        "name": "item",
+                        "type": "string",
+                        "value": "synthetic lead 001"
+                      }
+                    ]
+                  },
+                  "queuePosition": null
+                }
+              ]
+            }
+          ],
+          "nextCursor": null
+        },
+        "elapsedMs": 37
+      }
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+$ pnpm exec sim credentials providers list --output json   (HubSpot entries only; no HUBSPOT_CLIENT_ID/SECRET in Sim env)
+[
+  {
+    "type": "oauth",
+    "serviceId": "hubspot",
+    "name": "HubSpot",
+    "description": "Access and manage your HubSpot CRM data.",
+    "providerFamily": "hubspot",
+    "available": false,
+    "supportsReconnect": true,
+    "authorizationOptions": [
+      {
+        "providerId": "hubspot",
+        "label": "HubSpot"
+      }
+    ],
+    "fields": []
+  },
+  {
+    "type": "service_account",
+    "serviceId": "hubspot-service-account",
+    "name": "HubSpot service key",
+    "description": "Connect HubSpot with a service key or private app access token.",
+    "providerFamily": "hubspot",
+    "available": true,
+    "providerId": "hubspot-service-account",
+    "docsUrl": "https://docs.sim.ai/integrations/hubspot-service-account",
+    "helpText": "Create a service key in HubSpot under Development > Keys > Service keys (or Settings > Integrations > Service keys, depending on your account); new legacy private apps can no longer be created, but existing private app tokens keep working. If the key rotates automatically, paste the new key here after each rotation.",
+    "requiresClientGeneratedCredentialId": false,
+    "fields": [
+      {
+        "id": "apiToken",
+        "label": "Service key or private app token",
+        "placeholder": "pat-na1-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+        "required": true,
+        "secret": true,
+        "multiline": false,
+        "hint": "HubSpot service keys and private app tokens usually start with pat-."
+      }
+    ]
+  }
+]

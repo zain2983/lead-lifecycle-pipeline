@@ -1,0 +1,62 @@
+# Edit: the Echo function returns version 'v2' and a greeting (git diff sim/hello/workflow.ts)
+$ pnpm exec sim workflows source check --dir sim/hello --output text
+checked	compile
+errors	0
+warnings	0
+catalogHash	bc436876845e94afad8e15227fee5ce2221ababc584da8ab97597748d4fb4f3a
+exit=0
+
+$ pnpm exec sim workflows source diff --dir sim/hello
+{
+  "dir": "<repo>/sim/hello",
+  "against": "base",
+  "files": [
+    {
+      "path": "workflow.ts",
+      "change": "edited",
+      "unavailable": "the server changed it since the directory was read, so its base text is gone; compare with --server"
+    }
+  ]
+}
+exit=0
+
+$ pnpm exec sim workflows source apply --dir sim/hello --dry-run --output text
+workflowId	8344ecdd-ac91-439e-b6c8-ad21ed6b5a38
+applied	false
+dryRun	true
+noop	false
+blocksAdded	0
+blocksRemoved	0
+blocksModified	1
+modified	[{"block":"echo","fields":["code"]}]
+edgesAdded	0
+edgesRemoved	0
+errors	0
+warnings	0
+notes	0
+fingerprint	sf1:473634439c8eecc00ab4b60354d5cee26c026fe896d978cf1a16fa9f4a59ac28
+needsRedeployment	true
+exit=0
+
+$ pnpm exec sim workflows source apply --dir sim/hello --yes --deploy --output text
+Blocks: 0 added, 0 removed, 0 renamed, 1 modified. Connections: +0 -0.
+Modified: echo (code)
+workflowId	8344ecdd-ac91-439e-b6c8-ad21ed6b5a38
+applied	true
+dryRun	false
+noop	false
+blocksAdded	0
+blocksRemoved	0
+blocksModified	1
+modified	[{"block":"echo","fields":["code"]}]
+edgesAdded	0
+edgesRemoved	0
+errors	0
+warnings	0
+notes	0
+fingerprint	sf1:473634439c8eecc00ab4b60354d5cee26c026fe896d978cf1a16fa9f4a59ac28
+needsRedeployment	false
+deployed	version 2
+urls	
+exit=0
+

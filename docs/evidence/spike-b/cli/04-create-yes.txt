@@ -1,0 +1,21 @@
+$ pnpm exec sim workflows source create --dir sim/hello --yes --output text
+Blocks: 3 added, 0 removed, 0 renamed, 0 modified. Connections: +2 -0.
+Added: start (start_trigger); echo (function); respond (response)
+workflowId	8344ecdd-ac91-439e-b6c8-ad21ed6b5a38
+applied	true
+dryRun	false
+noop	false
+created	workflow (8344ecdd-ac91-439e-b6c8-ad21ed6b5a38), block start (524d13b4-34df-4230-a316-e3994d940648), block echo (495a92c6-7e99-43e2-ad78-fa1fb5e99c2e), block respond (c6293044-51b5-4613-9ef0-80c71943fe93)
+blocksAdded	3
+added	[{"block":"start","type":"start_trigger"},{"block":"echo","type":"function"},{"block":"respond","type":"response"}]
+blocksRemoved	0
+blocksModified	0
+edgesAdded	2
+edgesRemoved	0
+errors	0
+warnings	0
+notes	0
+fingerprint	sf1:e7a1398a166f09b638171967e803d7904fd0d3de4963e5992ff0019e8cf945c8
+needsRedeployment	false
+guide	.sim/AGENTS.md
+exit=0

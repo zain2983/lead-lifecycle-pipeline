@@ -1,0 +1,9 @@
+# docker stats --no-stream, Sim idle ~1 min after start, before any account or run (2026-11-27 22:44 PKT)
+# Docker Desktop memory: 12526370816 bytes, 10 CPUs
+NAME                  CPU %     MEM USAGE / LIMIT     MEM %
+llp-sim-cron-1        0.00%     20.13MiB / 11.67GiB   0.17%
+llp-sim-simstudio-1   3.14%     1.214GiB / 8GiB       15.18%
+llp-sim-realtime-1    0.25%     79.71MiB / 1GiB       7.78%
+llp-sim-redis-1       0.71%     10.41MiB / 11.67GiB   0.09%
+llp-sim-db-1          0.06%     90.45MiB / 11.67GiB   0.76%
+llp-postgres-1        0.00%     60.78MiB / 11.67GiB   0.51%

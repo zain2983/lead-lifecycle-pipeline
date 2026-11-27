@@ -1,0 +1,105 @@
+$ pnpm exec sim workflows source create --dir sim/hello-approval --workspace 363f1b14-11a4-4fa8-872f-4b3cb927dfe9 --output text
+<repo>/sim/hello-approval had no workflow.ts, so a starter, the SDK types for workspace 363f1b14-11a4-4fa8-872f-4b3cb927dfe9, tsconfig.json, .sim/AGENTS.md and the examples in .sim/examples/ were written and nothing was created. Edit workflow.ts, check it, then create it. Next: sim workflows source create --dir <repo>/sim/hello-approval --workspace 363f1b14-11a4-4fa8-872f-4b3cb927dfe9 --yes
+created	false
+scaffolded	true
+files	25
+workspaceTypes	true
+guide	.sim/AGENTS.md
+
+# Sim workflow source: primer
+
+`workflow.ts` is a Sim workflow as TypeScript; the server compiles it statically and nothing in it runs. Commands read the workflow id from `.sim/base.json`; run them from this directory.
+
+**Edit loop**: edit `workflow.ts` (and `functions/*`) → `sim workflows source check --dir .` (offline; it also adds new blocks to `tsconfig.json`) → `bunx -p typescript@7.0.2 tsc -p .` → `sim workflows source apply --dir . --dry-run` → `--yes`. Rerun each step until it exits 0. Apply saves the draft in canonical form: read `workflow.ts` again before the next edit.
+
+- **Deletes**: removing a block or a variable needs `apply --allow-delete` (`E_APPLY_BLOCK_DELETE` / `E_APPLY_VARIABLE_DELETE`).
+- **Deploy**: apply saves a draft; `apply --deploy` also deploys it, or `sim workflows deploy <workflowId>` publishes the saved draft later.
+- **Identity**: a block is its entry in `.sim/lock.json`, which binds it by its const name or its display name. Change the display name (first argument) freely: references through the const follow it, and the apply rewrites every `$ref.<old key>` and `<old key.…>` to the new key and reprints the files (don't hand-edit them). Renaming the const too keeps it when settings, neighbours or references still tie it to the old block; otherwise the apply refuses a delete (`E_APPLY_BLOCK_DELETE`). Safest: keep the const.
+- **References**: in `workflow.ts` read an output as `x.content`, a loop or parallel item as `p.currentItem` (`p.index`), text as `` t`…` ``, env as `env.NAME`. In a function code file (`codeFile('./functions/x.js')`) read an output as `$ref.<key>.<path>`, the key being the display name lowercased, whitespace and dots removed ("Triage Agent" → `$ref.triageagent.content`); in a loop body `$ref.loop.currentItem` / `$ref.loop.index`, in a parallel `$ref.parallel.currentItem` / `$ref.parallel.index`; env as `$env.NAME`. In `.py`/`.sh` files write `<key.path>` and `{{NAME}}`, not `$ref`/`$env`. Read an index or item only inside its container (`E_APPLY_REF_OUT_OF_SCOPE`), after it its `.results`. A `$ref` naming no block is an error in a function file you edited (`E_APPLY_UNRESOLVED_REF`).
+- **Renames**: one variable per apply (two at once read as a delete and an add).
+- **Look up a builder**: `sim workflows source params <builder>` (`agent`, `trigger.schedule`; a namespace like `gmail` lists its builders), offline.
+- **Credentials**: `sim credentials connect <provider> --name "<Name>"`, give the owner its link, then `credential('<key>')` (`sim workflows source resources`).
+- **Failures**: `x.onError(y)` runs `y` when `x` fails, reading the message as `x.error`. A retry is block meta, the third argument: `agent('Name', {…}, { retry: { enabled: true, maxTries: 3, waitBetweenTriesMs: 2000 } })`. Branches that each reply: a `response` per branch.
+- **Run and debug**: `sim workflows run <workflowId> --manual --input '{…}'` runs the saved draft, no deploy needed (without `--manual` it runs the deployed version). Runs write real data (rows, emails): test on test resources. With `--dir <the workflow's folder>`, a failed run names the file and line that failed; then `sim logs get <runId> --trace --no-include-workflow-state` (spans hold resolved inputs).
+- **Exit codes**: 0 ok, 1 errors, 5 stale (`sim workflows source get --dir <fresh dir>`, redo the edit there), 9 rate limited, 10 busy, 11/12 `status`: your edits / the server changed. Every code: `.sim/AGENTS.md`.
+
+## Builders this source uses
+
+- `trigger.start` (Start): `const x = trigger.start('Name', {})`
+  optional: inputFormat, runMetadata
+  outputs: input, conversationId, files
+- `response` (Response): `const x = response('Name', {})`
+  dataMode (default "structured") picks the rest: "structured"; "json"
+  optional: status, headers
+  outputs: data, status, headers
+
+exit=0
+
+# (workflow.ts replaced with the hello-approval source)
+$ pnpm exec sim workflows source check --dir sim/hello-approval --output text
+checked	compile
+errors	0
+warnings	0
+catalogHash	bc436876845e94afad8e15227fee5ce2221ababc584da8ab97597748d4fb4f3a
+exit=0
+
+$ pnpm exec sim workflows source create --dir sim/hello-approval --dry-run --output text
+applied	false
+dryRun	true
+noop	false
+created	workflow, block start, block approval, block approved, block respondapproved, and 1 more
+blocksAdded	5
+added	[{"block":"start","type":"start_trigger"},{"block":"approval","type":"human_in_the_loop_v2"},{"block":"approved","type":"condition"},{"block":"respondapproved","type":"response"},{"block":"respondrejected","type":"response"}]
+blocksRemoved	0
+blocksModified	0
+edgesAdded	4
+edgesRemoved	0
+errors	0
+warnings	0
+notes	0
+fingerprint	sf1:51765a5568f06bca1a5f517dace3b62eb0b21d4b5a49f24c255dd1952f3adfd5
+needsRedeployment	false
+exit=0
+
+$ pnpm exec sim workflows source create --dir sim/hello-approval --yes --output text
+Blocks: 5 added, 0 removed, 0 renamed, 0 modified. Connections: +4 -0.
+Added: start (start_trigger); approval (human_in_the_loop_v2); approved (condition); respondapproved (response); respondrejected (response)
+workflowId	4425a5b3-e99a-46d5-86ce-829b6a47908b
+applied	true
+dryRun	false
+noop	false
+created	workflow (4425a5b3-e99a-46d5-86ce-829b6a47908b), block start (50879705-998a-42bd-86b1-116ddaf51cd5), block approval (1d716a64-cf7c-43d9-89f7-7f321080640c), block approved (d080e493-97c8-487b-8ff0-33e7200aeb26), block respondapproved (e34935d0-2889-4826-91b8-fdc3dbaa91a7), and 1 more
+blocksAdded	5
+added	[{"block":"start","type":"start_trigger"},{"block":"approval","type":"human_in_the_loop_v2"},{"block":"approved","type":"condition"},{"block":"respondapproved","type":"response"},{"block":"respondrejected","type":"response"}]
+blocksRemoved	0
+blocksModified	0
+edgesAdded	4
+edgesRemoved	0
+errors	0
+warnings	0
+notes	0
+fingerprint	sf1:7b169af3122e2a775060094eab770a377acd44109ca890219e929b0c9db275ab
+needsRedeployment	false
+guide	.sim/AGENTS.md
+exit=0
+
+$ pnpm exec sim workflows source apply --dir sim/hello-approval --yes --deploy --output text
+No graph changes (names, order or comments may still be saved).
+workflowId	4425a5b3-e99a-46d5-86ce-829b6a47908b
+applied	false
+dryRun	false
+noop	true
+blocksAdded	0
+blocksRemoved	0
+blocksModified	0
+edgesAdded	0
+edgesRemoved	0
+errors	0
+warnings	0
+notes	0
+fingerprint	sf1:7b169af3122e2a775060094eab770a377acd44109ca890219e929b0c9db275ab
+needsRedeployment	false
+deployed	version 1
+urls	
+exit=0
+

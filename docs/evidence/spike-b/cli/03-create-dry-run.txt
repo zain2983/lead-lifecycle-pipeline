@@ -1,0 +1,17 @@
+$ pnpm exec sim workflows source create --dir sim/hello --dry-run --output text
+applied	false
+dryRun	true
+noop	false
+created	workflow, block start, block echo, block respond
+blocksAdded	3
+added	[{"block":"start","type":"start_trigger"},{"block":"echo","type":"function"},{"block":"respond","type":"response"}]
+blocksRemoved	0
+blocksModified	0
+edgesAdded	2
+edgesRemoved	0
+errors	0
+warnings	0
+notes	0
+fingerprint	sf1:efdb28f99722f20f9f788eb886952fd4590afff42ea32769276141e2fab32ec8
+needsRedeployment	false
+exit=0

@@ -1,0 +1,57 @@
+$ pnpm exec sim workflows source create --dir <fresh copy: workflow.ts + .sim/lock.json> --workspace <ws> --name hello-recreate-with-lock --dry-run --output text
+applied	false
+dryRun	true
+noop	false
+created	workflow, block start, block echo, block respond
+blocksAdded	3
+added	[{"block":"start","type":"start_trigger"},{"block":"echo","type":"function"},{"block":"respond","type":"response"}]
+blocksRemoved	0
+blocksModified	0
+edgesAdded	2
+edgesRemoved	0
+errors	0
+warnings	0
+notes	0
+fingerprint	sf1:bae691d3cbd4ff27f237ebbfce1b0c888c40ada2d9c4ab850f446f1549073361
+needsRedeployment	false
+exit=0
+
+$ pnpm exec sim workflows source create --dir <fresh copy: workflow.ts> --workspace <ws> --name hello-recreate-no-lock --dry-run --output text
+applied	false
+dryRun	true
+noop	false
+created	workflow, block start, block echo, block respond
+blocksAdded	3
+added	[{"block":"start","type":"start_trigger"},{"block":"echo","type":"function"},{"block":"respond","type":"response"}]
+blocksRemoved	0
+blocksModified	0
+edgesAdded	2
+edgesRemoved	0
+errors	0
+warnings	0
+notes	0
+fingerprint	sf1:47c8ad8ce20b52349b44a6e4b4ce41510fc9aa41e5fb651f9667899a4ee4187a
+needsRedeployment	false
+exit=0
+
+$ pnpm exec sim workflows source create --dir <fresh copy: workflow.ts + .sim/lock.json> --workspace <ws> --name hello-recreate-with-lock --yes --output text
+workflowId	dd700e47-16ba-4253-b39b-c46ef7b32039
+created	workflow (dd700e47-16ba-4253-b39b-c46ef7b32039), block start (b71dd86e-b82e-42d1-bd1a-f95d9034578d), block echo (52ae34c3-4f31-449a-9218-fd81039fd9b6), block respond (20cfb113-7233-4fd2-a229-b060a268b7a6)
+errors	0
+warnings	0
+exit=0
+# block IDs in the copy's lock after create vs. the original sim/hello lock:
+echo new id
+respond new id
+start new id
+
+$ pnpm exec sim workflows delete dd700e47-16ba-4253-b39b-c46ef7b32039 --yes --output text   (remove the test copy)
+id	dd700e47-16ba-4253-b39b-c46ef7b32039
+deleted	true
+archived	true
+exit=0
+
+$ pnpm exec sim workflows list --output text
+4425a5b3-e99a-46d5-86ce-829b6a47908b	hello-approval	/	yes	2	2026-11-27 21:13:51
+8344ecdd-ac91-439e-b6c8-ad21ed6b5a38	hello	/	yes	33	2026-11-27 21:14:05
+6cf4acd8-e9af-4577-b1ac-a928f05930cf	default-agent	/	no	0	

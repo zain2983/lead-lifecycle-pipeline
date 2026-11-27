@@ -1,0 +1,363 @@
+{
+  "step": "02-versions",
+  "notes": {
+    "versions": {
+      "data": [
+        {
+          "id": "1f0d3396-437a-481b-9ab5-bf0c73c30518",
+          "version": 2,
+          "name": null,
+          "description": null,
+          "isActive": true,
+          "createdAt": "2026-11-27T21:12:56.175Z",
+          "deployedBy": "Builder",
+          "latestOperationStatus": "active"
+        },
+        {
+          "id": "04141e9f-bc3e-4ed6-a9c4-9fd26380dec2",
+          "version": 1,
+          "name": null,
+          "description": null,
+          "isActive": false,
+          "createdAt": "2026-11-27T21:12:29.131Z",
+          "deployedBy": "Builder",
+          "latestOperationStatus": null
+        }
+      ],
+      "nextCursor": null
+    },
+    "active": {
+      "runId": "spikeb_active_20261127211306",
+      "version": 2,
+      "output": {
+        "data": {
+          "echo": "Spike B",
+          "version": "v2",
+          "at": "2026-11-27T21:13:08.696Z"
+        },
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    "pinnedV1": {
+      "runId": "spikeb_v1_20261127211306",
+      "version": 1,
+      "output": {
+        "data": {
+          "echo": "Spike B",
+          "version": "v1",
+          "at": "2026-11-27T21:13:08.715Z"
+        },
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    "unknownVersion": {
+      "status": 404,
+      "code": "NOT_FOUND",
+      "detailCode": null,
+      "message": "POST /api/v2/workflows/8344ecdd-ac91-439e-b6c8-ad21ed6b5a38/execute -> 404 NOT_FOUND: Version not found"
+    }
+  },
+  "exchanges": [
+    {
+      "at": "2026-11-27T21:13:08.663Z",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3000/api/v2/workflows/8344ecdd-ac91-439e-b6c8-ad21ed6b5a38/versions",
+        "headers": {
+          "accept": "application/json",
+          "x-api-key": "[redacted]"
+        },
+        "body": null
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json;charset=utf-8",
+          "x-request-id": "c1421f2f"
+        },
+        "body": {
+          "data": [
+            {
+              "id": "1f0d3396-437a-481b-9ab5-bf0c73c30518",
+              "version": 2,
+              "name": null,
+              "description": null,
+              "isActive": true,
+              "createdAt": "2026-11-27T21:12:56.175Z",
+              "deployedBy": "Builder",
+              "latestOperationStatus": "active"
+            },
+            {
+              "id": "04141e9f-bc3e-4ed6-a9c4-9fd26380dec2",
+              "version": 1,
+              "name": null,
+              "description": null,
+              "isActive": false,
+              "createdAt": "2026-11-27T21:12:29.131Z",
+              "deployedBy": "Builder",
+              "latestOperationStatus": null
+            }
+          ],
+          "nextCursor": null
+        },
+        "elapsedMs": 27
+      }
+    },
+    {
+      "at": "2026-11-27T21:13:08.677Z",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:3000/api/v2/workflows/8344ecdd-ac91-439e-b6c8-ad21ed6b5a38/execute",
+        "headers": {
+          "accept": "application/json",
+          "content-type": "application/json",
+          "x-api-key": "[redacted]",
+          "x-run-id": "spikeb_active_20261127211306"
+        },
+        "body": {
+          "input": {
+            "name": "Spike B"
+          },
+          "async": true
+        }
+      },
+      "response": {
+        "status": 202,
+        "headers": {
+          "content-type": "application/json;charset=utf-8",
+          "x-request-id": "4a2d28e7",
+          "x-run-id": "spikeb_active_20261127211306"
+        },
+        "body": {
+          "data": {
+            "runId": "spikeb_active_20261127211306",
+            "statusUrl": "http://localhost:3000/api/v2/workflows/8344ecdd-ac91-439e-b6c8-ad21ed6b5a38/runs/spikeb_active_20261127211306",
+            "executionTimeoutSeconds": null
+          }
+        },
+        "elapsedMs": 13
+      }
+    },
+    {
+      "at": "2026-11-27T21:13:08.697Z",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:3000/api/v2/workflows/8344ecdd-ac91-439e-b6c8-ad21ed6b5a38/execute",
+        "headers": {
+          "accept": "application/json",
+          "content-type": "application/json",
+          "x-api-key": "[redacted]",
+          "x-run-id": "spikeb_v1_20261127211306"
+        },
+        "body": {
+          "input": {
+            "name": "Spike B"
+          },
+          "async": true,
+          "run": {
+            "source": "deployment",
+            "version": 1
+          }
+        }
+      },
+      "response": {
+        "status": 202,
+        "headers": {
+          "content-type": "application/json;charset=utf-8",
+          "x-request-id": "b0186958",
+          "x-run-id": "spikeb_v1_20261127211306"
+        },
+        "body": {
+          "data": {
+            "runId": "spikeb_v1_20261127211306",
+            "statusUrl": "http://localhost:3000/api/v2/workflows/8344ecdd-ac91-439e-b6c8-ad21ed6b5a38/runs/spikeb_v1_20261127211306",
+            "executionTimeoutSeconds": null
+          }
+        },
+        "elapsedMs": 20
+      }
+    },
+    {
+      "at": "2026-11-27T21:13:08.712Z",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3000/api/v2/workflows/8344ecdd-ac91-439e-b6c8-ad21ed6b5a38/runs/spikeb_active_20261127211306?includeOutput=true",
+        "headers": {
+          "accept": "application/json",
+          "x-api-key": "[redacted]"
+        },
+        "body": null
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json;charset=utf-8",
+          "x-request-id": "04b9213e"
+        },
+        "body": {
+          "data": {
+            "runId": "spikeb_active_20261127211306",
+            "workflowId": "8344ecdd-ac91-439e-b6c8-ad21ed6b5a38",
+            "status": "running",
+            "trigger": "api",
+            "startedAt": "2026-11-27T21:13:08.681Z",
+            "endedAt": null,
+            "durationMs": null,
+            "version": 2,
+            "paused": null,
+            "cost": null,
+            "error": null,
+            "output": null,
+            "blockOutputs": null,
+            "files": []
+          }
+        },
+        "elapsedMs": 15
+      }
+    },
+    {
+      "at": "2026-11-27T21:13:09.788Z",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3000/api/v2/workflows/8344ecdd-ac91-439e-b6c8-ad21ed6b5a38/runs/spikeb_active_20261127211306?includeOutput=true",
+        "headers": {
+          "accept": "application/json",
+          "x-api-key": "[redacted]"
+        },
+        "body": null
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json;charset=utf-8",
+          "x-request-id": "6e428832"
+        },
+        "body": {
+          "data": {
+            "runId": "spikeb_active_20261127211306",
+            "workflowId": "8344ecdd-ac91-439e-b6c8-ad21ed6b5a38",
+            "status": "completed",
+            "trigger": "api",
+            "startedAt": "2026-11-27T21:13:08.681Z",
+            "endedAt": "2026-11-27T21:13:08.700Z",
+            "durationMs": 16,
+            "version": 2,
+            "paused": null,
+            "cost": {
+              "total": 0.005
+            },
+            "error": null,
+            "output": {
+              "data": {
+                "echo": "Spike B",
+                "version": "v2",
+                "at": "2026-11-27T21:13:08.696Z"
+              },
+              "status": 200,
+              "headers": {
+                "Content-Type": "application/json"
+              }
+            },
+            "blockOutputs": null,
+            "files": []
+          }
+        },
+        "elapsedMs": 76
+      }
+    },
+    {
+      "at": "2026-11-27T21:13:09.824Z",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3000/api/v2/workflows/8344ecdd-ac91-439e-b6c8-ad21ed6b5a38/runs/spikeb_v1_20261127211306?includeOutput=true",
+        "headers": {
+          "accept": "application/json",
+          "x-api-key": "[redacted]"
+        },
+        "body": null
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json;charset=utf-8",
+          "x-request-id": "d190c1fb"
+        },
+        "body": {
+          "data": {
+            "runId": "spikeb_v1_20261127211306",
+            "workflowId": "8344ecdd-ac91-439e-b6c8-ad21ed6b5a38",
+            "status": "completed",
+            "trigger": "api",
+            "startedAt": "2026-11-27T21:13:08.705Z",
+            "endedAt": "2026-11-27T21:13:08.717Z",
+            "durationMs": 11,
+            "version": 1,
+            "paused": null,
+            "cost": {
+              "total": 0.005
+            },
+            "error": null,
+            "output": {
+              "data": {
+                "echo": "Spike B",
+                "version": "v1",
+                "at": "2026-11-27T21:13:08.715Z"
+              },
+              "status": 200,
+              "headers": {
+                "Content-Type": "application/json"
+              }
+            },
+            "blockOutputs": null,
+            "files": []
+          }
+        },
+        "elapsedMs": 35
+      }
+    },
+    {
+      "at": "2026-11-27T21:13:09.853Z",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:3000/api/v2/workflows/8344ecdd-ac91-439e-b6c8-ad21ed6b5a38/execute",
+        "headers": {
+          "accept": "application/json",
+          "content-type": "application/json",
+          "x-api-key": "[redacted]",
+          "x-run-id": "spikeb_v99_20261127211306"
+        },
+        "body": {
+          "input": {
+            "name": "Spike B"
+          },
+          "async": true,
+          "run": {
+            "source": "deployment",
+            "version": 99
+          }
+        }
+      },
+      "response": {
+        "status": 404,
+        "headers": {
+          "content-type": "application/json;charset=utf-8",
+          "x-request-id": "cd3f2e94"
+        },
+        "body": {
+          "error": {
+            "code": "NOT_FOUND",
+            "message": "Version not found",
+            "requestId": "cd3f2e94"
+          }
+        },
+        "elapsedMs": 29
+      }
+    }
+  ]
+}

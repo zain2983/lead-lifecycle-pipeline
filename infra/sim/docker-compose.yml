@@ -1,0 +1,170 @@
+# Self-hosted Sim for local development of the triage workflow.
+#
+# Source: https://github.com/simstudioai/sim/blob/v0.9.66/docker-compose.prod.yml
+#         (tag v0.9.66, commit 1814ccd70e21906216bca2a08f95d6a2841db406)
+# Licence: Apache-2.0, Copyright Sim (simstudioai). See https://github.com/simstudioai/sim/blob/v0.9.66/LICENSE
+#
+# Changes from the original (Apache-2.0 section 4(b)):
+#   - Project name `llp-sim`, so containers and the volume don't clash with other stacks on this machine.
+#   - Every image is pinned to ${SIM_VERSION} and the stack refuses to start without it (upstream defaults to
+#     `latest`). The cron image is pinned to the same tag too; upstream leaves it on `latest`.
+#   - Ports 3000 and 3002 are published on 127.0.0.1 only (upstream binds every interface). Only the local
+#     worker on this Mac talks to Sim.
+#   - Comments shortened. Service definitions, environment, health checks and limits are otherwise unchanged.
+#
+# Usage (from the repo root):
+#   cp infra/sim/.env.example infra/sim/.env      # then fill the secrets, see the commands in that file
+#   docker compose -f infra/sim/docker-compose.yml up -d --wait
+#   docker compose -f infra/sim/docker-compose.yml down       # keeps the postgres_data volume
+#
+# Ports: 3000 (app) and 3002 (realtime). Never 3100 (web app) or 5433 (app Postgres). Sim's own Postgres and
+# Redis are not published to the host.
+name: llp-sim
+
+services:
+  simstudio:
+    env_file:
+      - path: .env
+        required: false
+    # app, realtime and migrations share a database schema and must move together.
+    image: ghcr.io/simstudioai/simstudio:${SIM_VERSION:?is required. Set SIM_VERSION in infra/sim/.env (see .env.example)}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+    environment:
+      - NODE_ENV=production
+      - "DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:?is required. Set it in infra/sim/.env to the output of: openssl rand -hex 24}@db:5432/${POSTGRES_DB:-simstudio}"
+      - BETTER_AUTH_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+      - TRUSTED_ORIGINS=${TRUSTED_ORIGINS:-}
+      - AUTH_TRUSTED_PROXIES=${AUTH_TRUSTED_PROXIES:-}
+      # Required. Compose aborts rather than starting the app with an empty secret.
+      - "BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET:?is required. Set it in infra/sim/.env to the output of: openssl rand -hex 32}"
+      - "ENCRYPTION_KEY=${ENCRYPTION_KEY:?is required. Set it in infra/sim/.env to the output of: openssl rand -hex 32. It cannot be changed later without losing stored credentials.}"
+      - "INTERNAL_API_SECRET=${INTERNAL_API_SECRET:?is required. Set it in infra/sim/.env to the output of: openssl rand -hex 32}"
+      - API_ENCRYPTION_KEY=${API_ENCRYPTION_KEY:-}
+      # Authenticates the cron service against the background job endpoints.
+      - CRON_SECRET=${CRON_SECRET:-}
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379}
+      - COPILOT_API_KEY=${COPILOT_API_KEY:-}
+      - MSHIP_SYSPROMPT_OVERRIDE=${MSHIP_SYSPROMPT_OVERRIDE:-}
+      - NEXT_PUBLIC_CHAT_DISABLED=${NEXT_PUBLIC_CHAT_DISABLED:-}
+      - SIM_AGENT_API_URL=${SIM_AGENT_API_URL:-}
+      - OLLAMA_URL=${OLLAMA_URL:-http://localhost:11434}
+      - SOCKET_SERVER_URL=${SOCKET_SERVER_URL:-http://realtime:3002}
+      # Read by the browser. Leave unset: a localhost page falls back to localhost:3002.
+      - NEXT_PUBLIC_SOCKET_URL=${NEXT_PUBLIC_SOCKET_URL:-}
+      - ADMISSION_GATE_MAX_INFLIGHT=${ADMISSION_GATE_MAX_INFLIGHT:-500}
+    # Lets a workflow reach a service on the Docker host (it must also be named in EGRESS_ALLOWED_HOSTS).
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
+      realtime:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:3000"]
+      interval: 90s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  realtime:
+    env_file:
+      - path: .env
+        required: false
+    image: ghcr.io/simstudioai/realtime:${SIM_VERSION:?is required. Set SIM_VERSION in infra/sim/.env (see .env.example)}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3002:3002"
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+    environment:
+      - NODE_ENV=production
+      - "DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:?is required. Set it in infra/sim/.env to the output of: openssl rand -hex 24}@db:5432/${POSTGRES_DB:-simstudio}"
+      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+      - BETTER_AUTH_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+      - "BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET:?is required and must match the value used by the simstudio service}"
+      - "INTERNAL_API_SECRET=${INTERNAL_API_SECRET:?is required and must match the value used by the simstudio service}"
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:3002/health"]
+      interval: 90s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  migrations:
+    image: ghcr.io/simstudioai/migrations:${SIM_VERSION:?is required. Set SIM_VERSION in infra/sim/.env (see .env.example)}
+    working_dir: /app/packages/db
+    environment:
+      - "DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:?is required. Set it in infra/sim/.env to the output of: openssl rand -hex 24}@db:5432/${POSTGRES_DB:-simstudio}"
+      # Seals account tokens stored before sealing was on; a no-op until ENCRYPTION_KEY is 64 hex characters.
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY:-}
+      - ENCRYPT_ACCOUNT_TOKENS=${ENCRYPT_ACCOUNT_TOKENS:-}
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["bun", "run", "db:migrate"]
+    restart: "no"
+
+  # Required by the app and realtime. Not published to the host.
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Background jobs: schedules, polling triggers, time-based resume, the transactional outbox. Without
+  # CRON_SECRET the container explains why and exits 0.
+  cron:
+    image: ghcr.io/simstudioai/cron:${SIM_VERSION:?is required. Set SIM_VERSION in infra/sim/.env (see .env.example)}
+    restart: on-failure
+    environment:
+      - SIM_URL=http://simstudio:3000
+      - CRON_SECRET=${CRON_SECRET:-}
+      - TZ=${TZ:-UTC}
+    depends_on:
+      simstudio:
+        condition: service_healthy
+
+  # Not published to the host. For psql: docker compose -f infra/sim/docker-compose.yml exec db psql -U postgres simstudio
+  db:
+    image: pgvector/pgvector:pg17
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      # Applied only when the data volume is created; later changes are ignored.
+      - "POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?is required. Set it in infra/sim/.env to the output of: openssl rand -hex 24}"
+      - POSTGRES_DB=${POSTGRES_DB:-simstudio}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
