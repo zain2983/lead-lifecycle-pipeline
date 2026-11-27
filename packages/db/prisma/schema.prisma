@@ -50,6 +50,20 @@ model OAuthToken {
   accessTokenExpiresAt   DateTime? @map("access_token_expires_at")
   createdAt              DateTime  @default(now()) @map("created_at")
   updatedAt              DateTime  @updatedAt @map("updated_at")
+  /// How the portal was installed (checked in SQL): `app_start` (began at /api/hubspot/oauth/start, state
+  /// checked) or `hubspot_initiated` (HubSpot's own Install button, no state, accepted only for a known
+  /// portal; docs/adr/0006-hubspot-initiated-installs.md).
+  installedVia           String    @default("app_start") @map("installed_via")
+  /// Token refresh bookkeeping (Phase 3.1). The access token itself is kept in memory only.
+  lastRefreshedAt        DateTime? @map("last_refreshed_at") @db.Timestamptz(3)
+  /// When HubSpot last answered a refresh with a refresh token different from the stored one (the new
+  /// one replaced it, encrypted).
+  refreshTokenRotatedAt  DateTime? @map("refresh_token_rotated_at") @db.Timestamptz(3)
+  /// The last failed refresh, never a token: `{kind, status?, hubspotStatus?, error?}`. `kind` is
+  /// `rejected` (HubSpot answered, e.g. 400 BAD_REFRESH_TOKEN), `invalid_response` or `unknown` (no answer:
+  /// HubSpot may or may not have issued a token). Cleared by the next successful refresh.
+  lastRefreshError       Json?     @map("last_refresh_error")
+  lastRefreshErrorAt     DateTime? @map("last_refresh_error_at") @db.Timestamptz(3)
 
   @@map("oauth_token")
 }

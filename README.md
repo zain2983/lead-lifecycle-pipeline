@@ -51,6 +51,11 @@ erDiagram
     DateTime accessTokenExpiresAt "nullable"
     DateTime createdAt
     DateTime updatedAt
+    String installedVia
+    DateTime lastRefreshedAt "nullable"
+    DateTime refreshTokenRotatedAt "nullable"
+    Json lastRefreshError "nullable"
+    DateTime lastRefreshErrorAt "nullable"
   }
   Site {
     String id PK
