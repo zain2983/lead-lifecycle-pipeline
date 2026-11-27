@@ -17,12 +17,13 @@
     },
     "test": {
       "dependsOn": ["^generate", "generate"],
-      "env": ["DATABASE_URL", "DIRECT_URL", "TEST_*"]
+      "env": ["TEST_*"]
     },
     "dev": {
       "dependsOn": ["^generate"],
       "cache": false,
       "persistent": true
     }
-  }
+  },
+  "globalPassThroughEnv": ["DATABASE_URL", "DIRECT_URL"]
 }

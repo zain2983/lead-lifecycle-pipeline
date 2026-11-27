@@ -20,6 +20,9 @@ permissions:
 
 jobs:
   migrate:
+    # Skipped (not failed) until the Supabase project exists: set the repository variable DEPLOY_ENABLED=true
+    # and the production secret DIRECT_URL. A skipped run means nothing was migrated.
+    if: vars.DEPLOY_ENABLED == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     environment: production
