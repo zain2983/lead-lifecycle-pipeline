@@ -1,4 +1,4 @@
-# 2026-11-27T16:51:32Z, next start --port 3100 (production build). HUBSPOT_OAUTH_TOKEN_URL=http://127.0.0.1:3199/oauth/v3/token is a LOCAL FAKE (fake-token-endpoint.mjs), not HubSpot. Built at commit 1ade86b; the OAuth code has not changed since.
+# 2026-11-27T16:51:32Z, next start --port 3100 (production build). HUBSPOT_OAUTH_TOKEN_URL=http://127.0.0.1:3199/oauth/v3/token is a LOCAL FAKE (fake-token-endpoint.mjs), not HubSpot. Built at commit 18caf3e (before the rebase onto main); the OAuth code has not changed since.
 
 $ curl -sS -i http://localhost:3100/api/hubspot/oauth/start
 HTTP/1.1 302 Found

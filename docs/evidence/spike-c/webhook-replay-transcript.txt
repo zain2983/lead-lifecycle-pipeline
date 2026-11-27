@@ -1,4 +1,4 @@
-# 2026-11-27T16:56:40Z, commit 2c47470: next build, then next start --port 3100. HUBSPOT_CLIENT_SECRET is a synthetic local value (no HubSpot app exists yet).
+# 2026-11-27T16:56:40Z, commit bb281da (run before the rebase onto main, which changed no HubSpot file): next build, then next start --port 3100. HUBSPOT_CLIENT_SECRET is a synthetic local value (no HubSpot app exists yet).
 
 # 1-3. Signed fixtures: expect 200 with the event count
 $ pnpm hs:replay packages/crm-hubspot/fixtures/contact-creation.json

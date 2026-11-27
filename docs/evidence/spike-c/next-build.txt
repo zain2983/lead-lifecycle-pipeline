@@ -1,14 +1,14 @@
-$ cd apps/web && pnpm exec next build   # at commit 2c47470
+$ cd apps/web && pnpm exec next build   # at commit 8cbd9fd, with no .env file anywhere (as in CI)
 ▲ Next.js 16.4.6 (Turbopack)
-✓ Running next.config.ts took 85ms
+✓ Running next.config.ts took 84ms
 
   Creating an optimized production build ...
-✓ Compiled successfully in 467ms
+✓ Compiled successfully in 300ms
   Running TypeScript ...
-  Finished TypeScript in 1352ms ...
-  Collecting page data using 8 workers ...
-  Generating static pages using 8 workers (0/3) ...
-✓ Generating static pages using 8 workers (3/3) in 345ms
+  Finished TypeScript in 1324ms ...
+  Collecting page data using 9 workers ...
+  Generating static pages using 9 workers (0/3) ...
+✓ Generating static pages using 9 workers (3/3) in 235ms
   Finalizing page optimization ...
 
 Route (app)
@@ -17,9 +17,9 @@ Route (app)
 ├ ƒ /api/health
 ├ ƒ /api/hubspot/oauth/callback
 ├ ƒ /api/hubspot/oauth/start
+├ ƒ /api/spikes/queue
 └ ƒ /api/webhooks/hubspot
 
 
 ○  (Static)   prerendered as static content
 ƒ  (Dynamic)  server-rendered on demand
-

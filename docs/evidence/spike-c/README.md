@@ -1,6 +1,7 @@
 # Spike C: HubSpot, offline half (PLAN Phase 1, step 6)
 
-- **Date:** 2026-11-27. **Branch:** `spike/hubspot`. **Machine:** macOS, Node 26.5.0 locally (CI uses 24), pnpm 11.21.0.
+- **Date:** 2026-11-27, rebased onto `main` (after Spike A) on 2026-11-28. **Branch:** `spike/hubspot`.
+  **Machine:** macOS, Node 26.5.0 locally (CI uses 24), pnpm 11.21.0.
 - **Scope:** everything that doesn't need a HubSpot account. No HubSpot account exists yet, so **no request in this
   folder came from or went to HubSpot.** The client secret, client ID and encryption key used here are synthetic local
   values in the git-ignored `.env`. The token endpoint in the OAuth run is a local fake (`fake-token-endpoint.mjs`).
@@ -10,15 +11,19 @@
 
 | File                                            | What it is                                                                                                                                       |
 | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `webhook-replay-transcript.txt`                 | `pnpm hs:replay` and one `curl` against `next start --port 3100` (production build, commit `2c47470`): 8 cases                                   |
+| `webhook-replay-transcript.txt`                 | `pnpm hs:replay` and one `curl` against `next start --port 3100` (production build, commit `bb281da`): 8 cases                                   |
 | `oauth-transcript.txt`                          | `/api/hubspot/oauth/start` and `/callback` against the production build with a local fake token endpoint; the stored row; an independent decrypt |
 | `server-logs.txt`                               | the server's own log lines for both runs, plus the fake endpoint's request log (LAN IP redacted)                                                 |
 | `capture-example-forged-401.json`               | one delivery saved by `HUBSPOT_WEBHOOK_CAPTURE_DIR` (signature redacted)                                                                         |
-| `next-build.txt`                                | `next build` output (built without any HubSpot variable set)                                                                                     |
+| `next-build.txt`                                | `next build` output at `8cbd9fd` with no `.env` file anywhere (as in CI)                                                                         |
 | `prisma-migrate.txt`                            | `prisma migrate dev --name oauth_token` and `prisma migrate status` against `spike_hubspot`                                                      |
 | `parse-project-output.txt`, `parse-project.mjs` | the HubSpot CLI's own parser reading `integrations/hubspot-app/dev` offline                                                                      |
-| `unit-tests.txt`                                | verbose Vitest output: 36 tests in `crm-hubspot`, 20 in `web`, 5 in `core`                                                                       |
+| `unit-tests.txt`                                | verbose Vitest output at `8cbd9fd`: 36 tests in `crm-hubspot`, 24 in `web` (4 are Spike A's), 10 in `core` (5 are Spike A's)                     |
 | `fake-token-endpoint.mjs`                       | the local stand-in for `https://api.hubapi.com/oauth/v3/token` used in the OAuth run                                                             |
+
+Commit hashes are post-rebase. The webhook and OAuth runs were made before `spike/hubspot` was rebased onto `main`;
+the rebase changed no HubSpot file, only Spike A's shared files under it. `unit-tests.txt` and `next-build.txt` were
+re-run after the rebase.
 
 ## How it was produced
 
@@ -80,7 +85,8 @@ curl -i -H 'Cookie: hs_oauth_state=<state>' 'http://localhost:3100/api/hubspot/o
 8. **The HubSpot CLI's parser reads the project offline** (`parse-project-output.txt`): `hsproject.json` validates,
    `2026.09` is a known platform version, and both components (`APPLICATION`, `WEBHOOKS` depending on the app) parse
    into the intermediate representation that `hs project upload` sends. Schema validation was skipped (next section).
-9. **`next build` needs no HubSpot variables**: every route reads env at request time.
+9. **`next build` needs no HubSpot variables**: every route reads env at request time. Re-checked after the rebase
+   with no `.env` file at all.
 
 ## Assumed, not verified (the live run must confirm)
 

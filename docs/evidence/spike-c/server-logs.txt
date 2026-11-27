@@ -1,4 +1,4 @@
-# Webhook run (commit 2c47470): next start --port 3100 with HUBSPOT_WEBHOOK_CAPTURE_DIR set
+# Webhook run (commit bb281da, run before the rebase onto main on the same HubSpot code): next start --port 3100 with HUBSPOT_WEBHOOK_CAPTURE_DIR set
 ▲ Next.js 16.4.6
 - Local:         http://localhost:3100
 - Network:       http://<lan-ip>:3100
@@ -13,7 +13,7 @@
 {"msg":"hubspot webhook accepted","received":1,"types":{"object.creation":1}}
 {"msg":"hubspot webhook rejected","reason":"signature_mismatch"}
 
-# OAuth run (commit 1ade86b; the OAuth code is unchanged since): HUBSPOT_OAUTH_TOKEN_URL -> local fake
+# OAuth run (commit 18caf3e, run before the rebase onto main; the OAuth code is unchanged since): HUBSPOT_OAUTH_TOKEN_URL -> local fake
 ▲ Next.js 16.4.6
 - Local:         http://localhost:3100
 - Network:       http://<lan-ip>:3100
