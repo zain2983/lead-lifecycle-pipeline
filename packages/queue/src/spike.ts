@@ -2,11 +2,15 @@
 import type { JobHandler } from "./drain.ts";
 import type { QueueDefinition } from "./queues.ts";
 
+/** The `after()` drain spike: POST /api/spikes/queue enqueues here. */
 export const SPIKE_ECHO_QUEUE = "spike-echo";
+/** The kill test's own queue, so it never fetches a job some other spike left behind. */
+export const SPIKE_KILL_QUEUE = "spike-kill";
 
 /** No backoff, so a job that expires is ready again at once and a sweep or drain picks it up. */
 export const SPIKE_QUEUES: readonly QueueDefinition[] = [
   { name: SPIKE_ECHO_QUEUE, options: { retryLimit: 2, retryDelay: 0, expireInSeconds: 60 } },
+  { name: SPIKE_KILL_QUEUE, options: { retryLimit: 2, retryDelay: 0, expireInSeconds: 60 } },
 ];
 
 /** Completes the job with its own data plus which runtime handled it and on which attempt. */
