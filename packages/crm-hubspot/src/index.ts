@@ -1,5 +1,18 @@
-// HubSpot OAuth, webhook verification, token crypto and signed replay. Phase 3 adds the rate-limited
-// client, token refresh and property setup.
+// HubSpot OAuth, webhook verification, token crypto, signed replay and the service-key REST client.
+// Phase 3 adds token refresh and the typed client.
+export {
+  type ClientStats,
+  DEFAULT_RATE_LIMIT,
+  HUBSPOT_API_BASE_URL,
+  HUBSPOT_API_VERSION,
+  HubSpotApiError,
+  HubSpotClient,
+  type HubSpotClientOptions,
+  HubSpotOutcomeUnknownError,
+  type HubSpotRequest,
+  type HubSpotResponse,
+} from "./api.ts";
+export { crmEventDedupeKey } from "./crm-event-key.ts";
 export {
   type AuthorizeUrlInput,
   buildAuthorizeUrl,
