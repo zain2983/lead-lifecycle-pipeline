@@ -2,7 +2,8 @@
 // test-only expiry, fetches it the way a Vercel function would (vercel mode: no supervisor), prints
 // its id and then hangs without ever settling it, until the test SIGKILLs it.
 // Run with `node --import tsx` (not the tsx CLI, which forks a child the kill would miss).
-import { loadEnv, loadRootEnvFile } from "@repo/core";
+import { loadEnv } from "@repo/core";
+import { loadRootEnvFile } from "@repo/core/dotenv";
 import { createBoss, ensureQueues, SPIKE_KILL_QUEUE, SPIKE_QUEUES } from "@repo/queue";
 
 loadRootEnvFile();

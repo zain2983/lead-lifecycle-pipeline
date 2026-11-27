@@ -1,5 +1,6 @@
 import { parseArgs } from "node:util";
-import { loadEnv, loadRootEnvFile } from "@repo/core";
+import { loadEnv } from "@repo/core";
+import { loadRootEnvFile } from "@repo/core/dotenv";
 import { createPrismaClient } from "@repo/db";
 import { createBoss, ensureQueues, SPIKE_QUEUES, type SweepSummary, sweepOnce } from "@repo/queue";
 import { sweeperHandlers } from "../handlers.ts";

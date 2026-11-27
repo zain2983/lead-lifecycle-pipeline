@@ -1,3 +1,4 @@
+export type { Job, PgBoss } from "pg-boss";
 export { type BossMode, type CreateBossOptions, createBoss, MODE_OPTIONS, poolDb } from "./boss.ts";
 export { type DrainSummary, drainQueues, type JobHandler, type QueueHandlers } from "./drain.ts";
 export { runPgBossCli } from "./pgboss-cli.ts";

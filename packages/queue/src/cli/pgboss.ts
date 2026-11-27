@@ -2,7 +2,8 @@
 // the schema if it's missing and applies pending migrations otherwise. `pnpm --filter @repo/queue pgboss
 // <command>` passes any other command through (version, doctor, plans). The connection is DIRECT_URL: the
 // session pooler in production, as migrate.yml sets it. Locally it comes from the repo-root .env.
-import { loadEnv, loadRootEnvFile } from "@repo/core";
+import { loadEnv } from "@repo/core";
+import { loadRootEnvFile } from "@repo/core/dotenv";
 import { runPgBossCli } from "../pgboss-cli.ts";
 
 loadRootEnvFile();

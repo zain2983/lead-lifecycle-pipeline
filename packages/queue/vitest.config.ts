@@ -1,4 +1,4 @@
-import { loadRootEnvFile } from "@repo/core";
+import { loadRootEnvFile } from "@repo/core/dotenv";
 import { defineConfig } from "vitest/config";
 
 // Tests run against a real Postgres: the local one (`pnpm db:up`, URL from the repo-root .env) or CI's

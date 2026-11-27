@@ -1,5 +1,6 @@
 // Spike A: print a pg-boss job row straight from pgboss.job (no pg-boss code in the read path).
-import { loadEnv, loadRootEnvFile } from "@repo/core";
+import { loadEnv } from "@repo/core";
+import { loadRootEnvFile } from "@repo/core/dotenv";
 import { createPgPool } from "@repo/db";
 
 loadRootEnvFile();
