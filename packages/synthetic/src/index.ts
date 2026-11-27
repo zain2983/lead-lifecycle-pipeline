@@ -25,6 +25,7 @@ export {
   DEMO_WINDOW,
   demoLeads,
   evalFixtures,
+  FICTIONAL_AREA_CODE,
   formatPhone,
   type LeadSet,
   type SyntheticClick,

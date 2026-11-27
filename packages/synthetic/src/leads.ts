@@ -34,7 +34,7 @@ export interface SyntheticPerson {
   lastName: string;
   /** Lower-case, on a reserved domain. */
   email: string;
-  /** `+1 555-01xx`, or null when the form left it empty. */
+  /** `+1 201-555-01xx`, or null when the form left it empty. */
   phone: string | null;
   jobTitle: string | null;
   city: string | null;
@@ -337,7 +337,7 @@ class People {
 
   phone(): string {
     const n = this.#phones.shift();
-    if (n === undefined) throw new Error("synthetic: ran out of +1 555-01xx numbers");
+    if (n === undefined) throw new Error("synthetic: ran out of +1 201-555-01xx numbers");
     return formatPhone(n);
   }
 
@@ -351,10 +351,17 @@ class People {
   }
 }
 
-/** The fictional-use range: `+1 555-0100` to `+1 555-0199`. */
+/** Area code of every synthetic phone. */
+export const FICTIONAL_AREA_CODE = "201";
+
+/**
+ * NANP reserves 555-0100 to 555-0199 for fictional use in every area code. One area code (201) keeps the
+ * numbers valid 10-digit NANP numbers (E.164 `+1201555xxxx`) that no one can own: `+1 201-555-0100` to
+ * `+1 201-555-0199`.
+ */
 export function formatPhone(n: number): string {
   if (!Number.isInteger(n) || n < 0 || n > 99) throw new RangeError(`phone index ${n}`);
-  return `+1 555-01${String(n).padStart(2, "0")}`;
+  return `+1 ${FICTIONAL_AREA_CODE}-555-01${String(n).padStart(2, "0")}`;
 }
 
 function instantBetween(rng: Rng, startUtc: string, endUtc: string): Date {

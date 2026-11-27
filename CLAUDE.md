@@ -5,7 +5,8 @@ The build plan lives outside this repo (the author's private notes). Work one ph
 ## Hard rules
 
 1. **Synthetic data only.** No real people, no real PII, no client or employer data, ever. Emails use reserved
-   domains (`example.com`, `*.test`); phones use `+1 555-01xx`.
+   domains (`example.com`, `*.test`); phones use `+1 201-555-01xx` (555-0100 to 555-0199 is reserved as fictional in
+   every NANP area code, so these are valid 10-digit numbers that belong to no one).
 2. **Tools, not targets.** HubSpot, Meta, Google, Microsoft and Sim appear only as tools this project
    uses. Never name a company as a target, customer or audience in code, docs, commits or the README.
 3. **Never fake success.** Show test events, `validateOnly` results and the platforms' real errors exactly as they

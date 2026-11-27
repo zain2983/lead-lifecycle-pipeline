@@ -149,7 +149,7 @@ model Lead {
   email             String?
   firstName         String?            @map("first_name")
   lastName          String?            @map("last_name")
-  /// As submitted (synthetic data uses `+1 555-01xx`). Normalised and hashed per destination in Phase 8.
+  /// As submitted (synthetic data uses `+1 201-555-01xx`). Normalised and hashed per destination in Phase 8.
   phone             String?
   companyName       String?            @map("company_name")
   jobTitle          String?            @map("job_title")

@@ -7,6 +7,7 @@ import {
   datasetHash,
   demoLeads,
   evalFixtures,
+  formatPhone,
   generateDataset,
   SITES,
   type SyntheticLead,
@@ -41,7 +42,7 @@ describe("determinism", () => {
 
   it("matches the pinned hash for seed 42 (bump SYNTHETIC_VERSION when a change is intended)", () => {
     expect(datasetHash(generateDataset(42))).toBe(
-      "14fdebd96f7a9ce02f30b809845da47703b759c552bd5ccac25b77766e2cc198",
+      "759acaa657114064a1301f9cc79c7e1089af7f9a041ed5d7f36dbcc44ca79ac7",
     );
   });
 
@@ -133,11 +134,24 @@ describe("reserved domains only", () => {
 });
 
 describe("phones", () => {
-  it("are +1 555-01xx or empty", () => {
+  it("are +1 201-555-01xx or empty", () => {
     for (const seed of SEEDS) {
       for (const lead of all(seed)) {
-        if (lead.person.phone !== null) expect(lead.person.phone).toMatch(/^\+1 555-01\d{2}$/);
+        if (lead.person.phone !== null) expect(lead.person.phone).toMatch(/^\+1 201-555-01\d{2}$/);
       }
+    }
+  });
+
+  it("are valid 10-digit NANP numbers in the fictional 555-0100 to 555-0199 block", () => {
+    expect(formatPhone(0)).toBe("+1 201-555-0100");
+    expect(formatPhone(99)).toBe("+1 201-555-0199");
+    expect(() => formatPhone(100)).toThrowError(RangeError);
+    for (const lead of all(42)) {
+      const digits = lead.person.phone?.replace(/\D/g, "");
+      if (digits === undefined) continue;
+      // E.164 for NANP: country code 1, then NXX-NXX-XXXX (area code and exchange start with 2-9).
+      expect(digits).toMatch(/^1[2-9]\d{2}[2-9]\d{2}\d{4}$/);
+      expect(digits.slice(4, 9)).toMatch(/^55501$/);
     }
   });
 

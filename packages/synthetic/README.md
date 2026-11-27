@@ -2,7 +2,8 @@
 
 Seeded, deterministic synthetic data: the same seed gives the same bytes on any machine. Every name in it is
 invented. Every domain is reserved: `*.test` for sites and companies, `example.com` and `example.org` for
-personal mail. Every phone number is `+1 555-01xx`. Tests fail on any other domain or phone format.
+personal mail. Every phone number is `+1 201-555-01xx` (NANP's fictional 555-0100 to 555-0199 block, under one area
+code, so each is a valid 10-digit number nobody owns). Tests fail on any other domain or phone format.
 
 ```sh
 pnpm --filter @repo/synthetic generate --seed 42 --summary   # keys, scenarios, intended labels, sha256
