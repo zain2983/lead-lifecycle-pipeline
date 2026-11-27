@@ -1,0 +1,18 @@
+
+ RUN  v5.1.2 /Users/dev/Desktop/Personal/H1B/TNT-Sim/.worktrees/spike-queue/packages/queue
+
+pg-boss schema "pgboss" is already at version 48 (latest: 48)
+ ✓ test/fifo-dead-letter.test.ts > key_strict_fifo after a dead-letter (pg-boss 12.40.0) > holds the key's next job until the failed one is deleted or retried 26ms
+ ✓ test/prisma-tx.test.ts > transactional enqueue through a Prisma interactive transaction > rollback leaves no job and no heartbeat 92ms
+ ✓ test/prisma-tx.test.ts > transactional enqueue through a Prisma interactive transaction > commit leaves exactly one job and the app's row 7ms
+ ✓ test/prisma-tx.test.ts > transactional enqueue through a Prisma interactive transaction > the same deterministic job id sent twice leaves one job 8ms
+ ✓ test/prisma-tx.test.ts > transactional enqueue through a Prisma interactive transaction > refuses the root client, which would auto-commit the job outside the transaction 0ms
+ ✓ test/sweep.test.ts > sweepOnce > expires a job a dead process left active, then retries and completes it 1646ms
+ ✓ test/sweep.test.ts > sweepOnce > refuses a triage handler and skips the triage queue 62ms
+ ✓ test/sweep.test.ts > drainQueues > works every ready job, then removes its workers 46ms
+
+ Test Files  3 passed (3)
+      Tests  8 passed (8)
+   Start at  22:04:16
+   Duration  2.13s (tests 86%, import 12%, transform 1%)
+

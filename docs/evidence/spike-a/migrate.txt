@@ -1,0 +1,26 @@
+$ pnpm --filter @repo/queue pgboss version --schema pgboss_evidence
+pg-boss is not installed in schema "pgboss_evidence"
+(exit 0)
+$ pnpm --filter @repo/queue migrate --schema pgboss_evidence
+pg-boss is not installed. Creating schema "pgboss_evidence"...
+Successfully created pg-boss schema "pgboss_evidence" at version 48
+(exit 0)
+$ pnpm --filter @repo/queue migrate --schema pgboss_evidence   # second run
+pg-boss schema "pgboss_evidence" is already at version 48 (latest: 48)
+(exit 0)
+$ pnpm --filter @repo/queue pgboss doctor --schema pgboss_evidence
+Schema "pgboss_evidence" version 48 (latest: 48)
+
+✓ No drift detected
+(exit 0)
+
+# Fresh install through PgBouncer transaction mode (:6433, max_prepared_statements=200)
+$ DIRECT_URL=<pooler :6433> pnpm --filter @repo/queue migrate --schema pgboss_evidence_pooler
+pg-boss is not installed. Creating schema "pgboss_evidence_pooler"...
+Successfully created pg-boss schema "pgboss_evidence_pooler" at version 48
+(exit 0)
+$ DIRECT_URL=<pooler :6433> pnpm --filter @repo/queue pgboss doctor --schema pgboss_evidence_pooler
+Schema "pgboss_evidence_pooler" version 48 (latest: 48)
+
+✓ No drift detected
+(exit 0)

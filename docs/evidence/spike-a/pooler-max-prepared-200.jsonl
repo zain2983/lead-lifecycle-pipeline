@@ -1,0 +1,14 @@
+{"target":"pooler","check":"pg: 40 unnamed parameterised queries, 8 at a time","ok":true,"ms":48,"result":{"queries":40}}
+{"target":"pooler","check":"pg: named prepared statements (what a statementNameGenerator turns on)","ok":true,"ms":6,"result":{"queries":40}}
+{"target":"pooler","check":"prisma (adapter-pg): 40 queries, 8 at a time","ok":true,"ms":93,"result":{"queries":40}}
+{"target":"pooler","check":"pg-boss vercel mode: start, createQueue, send, fetch, complete","ok":true,"ms":41,"result":{"sent":"478fa348-3ffb-494d-bf1c-4f530f213b74","fetched":true,"state":"completed"}}
+{"target":"pooler","check":"prisma interactive tx + pg-boss send (prismaTxDb): commit, then rollback","ok":true,"ms":40,"result":{"committedJob":true,"rolledBack":"rollback on purpose","rollbackJobs":0,"heartbeatRows":1}}
+{"target":"pooler","check":"pg-boss sweeper mode: start, supervise() (maintenance), stop","ok":true,"ms":39,"result":{"superviseMs":23}}
+{"target":"pooler","check":"pg-boss LISTEN/NOTIFY: seconds from send to handler (notify queue, 30 s poll backstop)","ok":true,"ms":30082,"result":{"latencySeconds":28.518,"warnings":[]}}
+{"target":"pooler-pgbouncer","check":"pg: 40 unnamed parameterised queries, 8 at a time","ok":true,"ms":18,"result":{"queries":40}}
+{"target":"pooler-pgbouncer","check":"pg: named prepared statements (what a statementNameGenerator turns on)","ok":true,"ms":10,"result":{"queries":40}}
+{"target":"pooler-pgbouncer","check":"prisma (adapter-pg): 40 queries, 8 at a time","ok":true,"ms":23,"result":{"queries":40}}
+{"target":"pooler-pgbouncer","check":"pg-boss vercel mode: start, createQueue, send, fetch, complete","ok":true,"ms":23,"result":{"sent":"1a1f3209-48b4-460b-9ca1-b3d2dc9e18bc","fetched":true,"state":"completed"}}
+{"target":"pooler-pgbouncer","check":"prisma interactive tx + pg-boss send (prismaTxDb): commit, then rollback","ok":true,"ms":34,"result":{"committedJob":true,"rolledBack":"rollback on purpose","rollbackJobs":0,"heartbeatRows":1}}
+{"target":"pooler-pgbouncer","check":"pg-boss sweeper mode: start, supervise() (maintenance), stop","ok":true,"ms":38,"result":{"superviseMs":17}}
+{"target":"pooler-pgbouncer","check":"pg-boss LISTEN/NOTIFY: seconds from send to handler (notify queue, 30 s poll backstop)","ok":true,"ms":11089,"result":{"latencySeconds":9.522,"warnings":[]}}
