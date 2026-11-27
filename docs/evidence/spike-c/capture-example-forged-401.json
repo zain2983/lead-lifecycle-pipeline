@@ -1,0 +1,26 @@
+{
+  "receivedAt": "2026-11-27T16:56:46.101Z",
+  "method": "POST",
+  "requestUrl": "http://localhost:3100/api/webhooks/hubspot",
+  "signedUri": "http://localhost:3100/api/webhooks/hubspot",
+  "headers": {
+    "accept": "*/*",
+    "content-length": "266",
+    "content-type": "application/json",
+    "host": "attacker.example.test",
+    "user-agent": "curl/8.7.1",
+    "x-forwarded-for": "::1",
+    "x-forwarded-host": "attacker.example.test",
+    "x-forwarded-port": "3100",
+    "x-forwarded-proto": "http",
+    "x-hubspot-request-timestamp": "1795798606085",
+    "x-hubspot-signature-v3": "LnpwY3…(redacted)"
+  },
+  "rawBody": "[{\"eventId\":4100000001,\"subscriptionId\":5100001,\"portalId\":900000001,\"appId\":7100001,\"occurredAt\":1795791845120,\"subscriptionType\":\"object.creation\",\"attemptNumber\":0,\"objectId\":610000000001,\"objectTypeId\":\"0-1\",\"changeSource\":\"CRM_UI\",\"sourceId\":\"userId:81000001\"}]",
+  "status": 401,
+  "response": {
+    "ok": false,
+    "error": "invalid_signature",
+    "reason": "signature_mismatch"
+  }
+}

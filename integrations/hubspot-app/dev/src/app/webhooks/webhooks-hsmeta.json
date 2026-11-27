@@ -1,0 +1,34 @@
+{
+  "uid": "llp_dev_webhooks",
+  "type": "webhooks",
+  "config": {
+    "settings": {
+      "targetUrl": "https://replace-with-quick-tunnel.example.com/api/webhooks/hubspot",
+      "maxConcurrentRequests": 10
+    },
+    "subscriptions": {
+      "crmObjects": [
+        { "subscriptionType": "object.creation", "objectType": "contact", "active": true }
+      ],
+      "legacyCrmObjects": [
+        {
+          "subscriptionType": "contact.propertyChange",
+          "propertyName": "lifecyclestage",
+          "active": true
+        },
+        {
+          "subscriptionType": "contact.propertyChange",
+          "propertyName": "hs_lead_status",
+          "active": true
+        },
+        {
+          "subscriptionType": "contact.propertyChange",
+          "propertyName": "triage_disposition",
+          "active": true
+        },
+        { "subscriptionType": "deal.propertyChange", "propertyName": "dealstage", "active": true }
+      ],
+      "hubEvents": [{ "subscriptionType": "contact.privacyDeletion", "active": true }]
+    }
+  }
+}

@@ -9,6 +9,35 @@ const postgresUrl = z
   .string()
   .regex(/^postgres(ql)?:\/\//, "must be a postgres:// or postgresql:// connection string");
 
+/** HubSpot webhook receiver (web) and `pnpm hs:replay`: just what signature v3 needs. */
+const hubspotWebhook = z.object({
+  HUBSPOT_CLIENT_SECRET: z.string().min(1),
+  /** The exact URL HubSpot calls. Signature v3 is checked against this, never against the Host header. */
+  PUBLIC_WEBHOOK_URL: z.url(),
+  /**
+   * Local live tests only: an absolute directory outside the repo where every delivery is written as
+   * received (headers, raw body, verdict). Never set on Vercel.
+   */
+  HUBSPOT_WEBHOOK_CAPTURE_DIR: z.string().min(1).optional(),
+});
+
+/** OAuth install and token refresh (web, Actions, local worker). */
+const hubspotOAuth = z.object({
+  HUBSPOT_CLIENT_ID: z.string().min(1),
+  HUBSPOT_CLIENT_SECRET: z.string().min(1),
+  /**
+   * Sent as `redirect_uri` to the authorize URL and again to the token endpoint, so it must be one of the
+   * app's `redirectUrls` exactly: http://localhost:3100/api/hubspot/oauth/callback locally.
+   */
+  HUBSPOT_REDIRECT_URI: z.url(),
+  /** Optional override of HubSpot's token endpoint, for offline tests against a local fake. */
+  HUBSPOT_OAUTH_TOKEN_URL: z.url().default("https://api.hubapi.com/oauth/v3/token"),
+  /** 32 bytes, base64. Encrypts the stored OAuth refresh token (AES-256-GCM). */
+  TOKEN_ENCRYPTION_KEY: z.base64().refine((v) => Buffer.from(v, "base64").length === 32, {
+    message: "must decode to exactly 32 bytes",
+  }),
+});
+
 export const envGroups = {
   /** Runtime connection (Vercel, local worker): the transaction pooler in production. */
   database: z.object({
@@ -22,16 +51,10 @@ export const envGroups = {
     NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
     PUBLIC_BASE_URL: z.url(),
   }),
-  hubspot: z.object({
-    HUBSPOT_CLIENT_ID: z.string().min(1),
-    HUBSPOT_CLIENT_SECRET: z.string().min(1),
-    /** The exact URL HubSpot calls. Signature v3 is checked against this, never against the Host header. */
-    PUBLIC_WEBHOOK_URL: z.url(),
-    /** 32 bytes, base64. Encrypts the stored OAuth refresh token (AES-256-GCM). */
-    TOKEN_ENCRYPTION_KEY: z.base64().refine((v) => Buffer.from(v, "base64").length === 32, {
-      message: "must decode to exactly 32 bytes",
-    }),
-  }),
+  hubspotWebhook,
+  hubspotOAuth,
+  /** Everything above: the web app as a whole. */
+  hubspot: hubspotWebhook.extend(hubspotOAuth.shape),
   hubspotServiceKeys: z.object({
     HUBSPOT_SERVICE_KEY_DEMO: z.string().min(1),
     HUBSPOT_SERVICE_KEY_EVAL: z.string().min(1),

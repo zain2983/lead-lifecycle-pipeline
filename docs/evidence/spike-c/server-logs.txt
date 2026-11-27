@@ -1,0 +1,28 @@
+# Webhook run (commit bb281da, run before the rebase onto main on the same HubSpot code): next start --port 3100 with HUBSPOT_WEBHOOK_CAPTURE_DIR set
+▲ Next.js 16.4.6
+- Local:         http://localhost:3100
+- Network:       http://<lan-ip>:3100
+✓ Ready in 138ms
+✓ Running next.config.ts took 113ms
+{"msg":"hubspot webhook accepted","received":1,"types":{"object.creation":1}}
+{"msg":"hubspot webhook accepted","received":1,"types":{"contact.propertyChange":1}}
+{"msg":"hubspot webhook accepted","received":4,"types":{"contact.propertyChange":2,"deal.propertyChange":1,"contact.privacyDeletion":1}}
+{"msg":"hubspot webhook rejected","reason":"signature_mismatch"}
+{"msg":"hubspot webhook rejected","reason":"timestamp_too_old"}
+{"msg":"hubspot webhook accepted","received":1,"types":{"object.creation":1}}
+{"msg":"hubspot webhook accepted","received":1,"types":{"object.creation":1}}
+{"msg":"hubspot webhook rejected","reason":"signature_mismatch"}
+
+# OAuth run (commit 18caf3e, run before the rebase onto main; the OAuth code is unchanged since): HUBSPOT_OAUTH_TOKEN_URL -> local fake
+▲ Next.js 16.4.6
+- Local:         http://localhost:3100
+- Network:       http://<lan-ip>:3100
+✓ Ready in 117ms
+✓ Running next.config.ts took 89ms
+{"msg":"hubspot installed","portalId":"900000001"}
+{"msg":"hubspot token exchange","kind":"rejected","status":400}
+
+# fake-token-endpoint.mjs log (a local fake, not HubSpot)
+fake-token listening on 127.0.0.1:3199
+fake-token POST /oauth/v3/token content-type=application/x-www-form-urlencoded fields=grant_type,client_id,client_secret,redirect_uri,code grant_type=authorization_code code=synthetic-code-0001 redirect_uri=http://localhost:3100/api/hubspot/oauth/callback
+fake-token POST /oauth/v3/token content-type=application/x-www-form-urlencoded fields=grant_type,client_id,client_secret,redirect_uri,code grant_type=authorization_code code=unknown-code redirect_uri=http://localhost:3100/api/hubspot/oauth/callback

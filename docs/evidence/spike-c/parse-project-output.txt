@@ -1,0 +1,103 @@
+$ node docs/evidence/spike-c/parse-project.mjs node_modules/.pnpm/@hubspot+project-parsing-lib@0.23.7_debug@4.4.3/node_modules/@hubspot/project-parsing-lib
+parseProjectConfig: {
+  "name": "lead-lifecycle-pipeline-dev",
+  "srcDir": "src",
+  "platformVersion": "2026.09"
+}
+validateProjectConfig: ok
+isKnownPlatformVersion(2026.09): true
+translate (skipValidation): {
+  "intermediateRepresentation": {
+    "intermediateNodesIndexedByUid": {
+      "llp_dev_app": {
+        "uid": "llp_dev_app",
+        "config": {
+          "name": "lead-lifecycle-pipeline (dev)",
+          "description": "Development app for lead-lifecycle-pipeline. Installs by OAuth into allowlisted developer test accounts and receives contact and deal webhooks. Synthetic data only.",
+          "distribution": "private",
+          "auth": {
+            "type": "oauth",
+            "redirectUrls": [
+              "http://localhost:3100/api/hubspot/oauth/callback",
+              "https://web-placeholder.example.com/api/hubspot/oauth/callback"
+            ],
+            "requiredScopes": [
+              "oauth",
+              "crm.objects.contacts.read",
+              "crm.objects.contacts.write",
+              "crm.schemas.contacts.read",
+              "crm.schemas.contacts.write",
+              "crm.objects.deals.read",
+              "crm.objects.deals.write"
+            ],
+            "optionalScopes": [],
+            "conditionallyRequiredScopes": []
+          }
+        },
+        "componentType": "APPLICATION",
+        "componentDeps": {},
+        "metaFilePath": "app/app-hsmeta.json",
+        "files": {}
+      },
+      "llp_dev_webhooks": {
+        "uid": "llp_dev_webhooks",
+        "config": {
+          "settings": {
+            "targetUrl": "https://replace-with-quick-tunnel.example.com/api/webhooks/hubspot",
+            "maxConcurrentRequests": 10
+          },
+          "subscriptions": {
+            "crmObjects": [
+              {
+                "subscriptionType": "object.creation",
+                "objectType": "contact",
+                "active": true
+              }
+            ],
+            "legacyCrmObjects": [
+              {
+                "subscriptionType": "contact.propertyChange",
+                "propertyName": "lifecyclestage",
+                "active": true
+              },
+              {
+                "subscriptionType": "contact.propertyChange",
+                "propertyName": "hs_lead_status",
+                "active": true
+              },
+              {
+                "subscriptionType": "contact.propertyChange",
+                "propertyName": "triage_disposition",
+                "active": true
+              },
+              {
+                "subscriptionType": "deal.propertyChange",
+                "propertyName": "dealstage",
+                "active": true
+              }
+            ],
+            "hubEvents": [
+              {
+                "subscriptionType": "contact.privacyDeletion",
+                "active": true
+              }
+            ]
+          }
+        },
+        "componentType": "WEBHOOKS",
+        "componentDeps": {
+          "app": "llp_dev_app",
+          "allAppObjects": []
+        },
+        "metaFilePath": "app/webhooks/webhooks-hsmeta.json",
+        "files": {}
+      }
+    },
+    "profileData": {
+      "vars": {
+        "profileVariables": {}
+      }
+    }
+  },
+  "skippedHsMetaFiles": []
+}

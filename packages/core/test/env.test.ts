@@ -2,6 +2,13 @@ import { describe, expect, it } from "vitest";
 import { EnvError, loadEnv } from "../src/env.ts";
 
 const key = Buffer.alloc(32, 7).toString("base64");
+const hubspot = {
+  HUBSPOT_CLIENT_ID: "id",
+  HUBSPOT_CLIENT_SECRET: "secret",
+  HUBSPOT_REDIRECT_URI: "http://localhost:3100/api/hubspot/oauth/callback",
+  PUBLIC_WEBHOOK_URL: "https://example.test/api/webhooks/hubspot",
+  TOKEN_ENCRYPTION_KEY: key,
+};
 
 describe("loadEnv", () => {
   it("returns typed values for the requested groups", () => {
@@ -28,20 +35,28 @@ describe("loadEnv", () => {
   it("rejects an encryption key that is not 32 bytes", () => {
     expect(() =>
       loadEnv(["hubspot"], {
-        HUBSPOT_CLIENT_ID: "id",
-        HUBSPOT_CLIENT_SECRET: "secret",
-        PUBLIC_WEBHOOK_URL: "https://example.test/api/webhooks/hubspot",
+        ...hubspot,
         TOKEN_ENCRYPTION_KEY: Buffer.alloc(16).toString("base64"),
       }),
     ).toThrowError(/32 bytes/);
-    expect(
-      loadEnv(["hubspot"], {
-        HUBSPOT_CLIENT_ID: "id",
-        HUBSPOT_CLIENT_SECRET: "secret",
-        PUBLIC_WEBHOOK_URL: "https://example.test/api/webhooks/hubspot",
-        TOKEN_ENCRYPTION_KEY: key,
-      }).TOKEN_ENCRYPTION_KEY,
-    ).toBe(key);
+    expect(loadEnv(["hubspot"], hubspot).TOKEN_ENCRYPTION_KEY).toBe(key);
+  });
+
+  it("lets the webhook receiver start with only the secret and the public URL", () => {
+    const env = loadEnv(["hubspotWebhook"], {
+      HUBSPOT_CLIENT_SECRET: "secret",
+      PUBLIC_WEBHOOK_URL: "https://example.test/api/webhooks/hubspot",
+    });
+    expect(env.PUBLIC_WEBHOOK_URL).toBe("https://example.test/api/webhooks/hubspot");
+    expect(() => loadEnv(["hubspotOAuth"], { HUBSPOT_CLIENT_SECRET: "secret" })).toThrowError(
+      /HUBSPOT_REDIRECT_URI/,
+    );
+  });
+
+  it("defaults the token endpoint to HubSpot's v3 endpoint", () => {
+    expect(loadEnv(["hubspotOAuth"], hubspot).HUBSPOT_OAUTH_TOKEN_URL).toBe(
+      "https://api.hubapi.com/oauth/v3/token",
+    );
   });
 });
 

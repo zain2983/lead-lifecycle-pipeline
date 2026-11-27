@@ -22,3 +22,22 @@ model Heartbeat {
   @@index([source, createdAt])
   @@map("heartbeat")
 }
+
+/// One HubSpot install (OAuth) per portal. The refresh token is encrypted with AES-256-GCM
+/// (TOKEN_ENCRYPTION_KEY, associated data bound to the portal ID; see @repo/crm-hubspot token-crypto).
+/// The access token is not stored: it lives 30 minutes and is fetched again with the refresh token.
+model OAuthToken {
+  id                     BigInt    @id @default(autoincrement())
+  /// HubSpot `hub_id` from the token response.
+  portalId               BigInt    @unique @map("portal_id")
+  refreshTokenCiphertext Bytes     @map("refresh_token_ciphertext")
+  refreshTokenIv         Bytes     @map("refresh_token_iv")
+  refreshTokenAuthTag    Bytes     @map("refresh_token_auth_tag")
+  /// Scopes HubSpot granted, as returned by the token endpoint.
+  scopes                 String[]
+  accessTokenExpiresAt   DateTime? @map("access_token_expires_at")
+  createdAt              DateTime  @default(now()) @map("created_at")
+  updatedAt              DateTime  @updatedAt @map("updated_at")
+
+  @@map("oauth_token")
+}
