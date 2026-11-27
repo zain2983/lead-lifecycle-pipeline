@@ -1,0 +1,6 @@
+$ pnpm exec sim workflows source check --dir sim/hello --output text
+checked	compile
+errors	0
+warnings	0
+catalogHash	bc436876845e94afad8e15227fee5ce2221ababc584da8ab97597748d4fb4f3a
+exit=0

@@ -1,0 +1,20 @@
+# docker stats --no-stream ~1 s after firing 30 concurrent async executes of sim/hello (2026-11-28 02:14 PKT)
+NAME                  CPU %     MEM USAGE / LIMIT     MEM %
+llp-sim-cron-1        0.00%     20.64MiB / 11.67GiB   0.17%
+llp-sim-simstudio-1   1.21%     1.546GiB / 8GiB       19.33%
+llp-sim-realtime-1    0.38%     73.93MiB / 1GiB       7.22%
+llp-sim-redis-1       1.01%     11.16MiB / 11.67GiB   0.09%
+llp-sim-db-1          0.04%     108.6MiB / 11.67GiB   0.91%
+llp-postgres-1        0.00%     60.35MiB / 11.67GiB   0.51%
+
+# 6 s later
+NAME                  CPU %     MEM USAGE / LIMIT     MEM %
+llp-sim-cron-1        0.00%     20.64MiB / 11.67GiB   0.17%
+llp-sim-simstudio-1   1.21%     1.536GiB / 8GiB       19.20%
+llp-sim-realtime-1    0.41%     74.42MiB / 1GiB       7.27%
+llp-sim-redis-1       1.16%     11.37MiB / 11.67GiB   0.10%
+llp-sim-db-1          0.79%     109MiB / 11.67GiB     0.91%
+llp-postgres-1        0.00%     60.41MiB / 11.67GiB   0.51%
+
+# run statuses (GET .../runs/{runId}) for the 30 load runs:
+  30 completed

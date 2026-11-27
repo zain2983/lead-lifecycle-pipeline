@@ -1,0 +1,19 @@
+$ pnpm exec sim workflows source apply --yes --deploy --dir sim/hello --output text
+No graph changes (names, order or comments may still be saved).
+workflowId	8344ecdd-ac91-439e-b6c8-ad21ed6b5a38
+applied	false
+dryRun	false
+noop	true
+blocksAdded	0
+blocksRemoved	0
+blocksModified	0
+edgesAdded	0
+edgesRemoved	0
+errors	0
+warnings	0
+notes	0
+fingerprint	sf1:e7a1398a166f09b638171967e803d7904fd0d3de4963e5992ff0019e8cf945c8
+needsRedeployment	false
+deployed	version 1
+urls	
+exit=0

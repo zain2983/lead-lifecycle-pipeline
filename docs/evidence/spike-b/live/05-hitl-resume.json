@@ -1,0 +1,199 @@
+{
+  "step": "05-hitl-resume",
+  "notes": {
+    "pausedRunId": "spikeb_hitl_a_20261127211306",
+    "contextId": "1d716a64-cf7c-43d9-89f7-7f321080640c",
+    "resume": {
+      "httpStatus": 202,
+      "kind": "queued",
+      "newRunId": "047131ad-f018-4831-b806-4a7438545ada"
+    },
+    "resumedRun": {
+      "status": "completed",
+      "output": {
+        "data": {
+          "decision": "approved",
+          "item": "synthetic lead 001"
+        },
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    "originalRunAfter": {
+      "status": "completed"
+    }
+  },
+  "exchanges": [
+    {
+      "at": "2026-11-27T21:13:11.019Z",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:3000/api/v2/workflows/4425a5b3-e99a-46d5-86ce-829b6a47908b/runs/spikeb_hitl_a_20261127211306/resume",
+        "headers": {
+          "accept": "application/json",
+          "content-type": "application/json",
+          "x-api-key": "[redacted]"
+        },
+        "body": {
+          "contextId": "1d716a64-cf7c-43d9-89f7-7f321080640c",
+          "input": {
+            "approved": true
+          }
+        }
+      },
+      "response": {
+        "status": 202,
+        "headers": {
+          "content-type": "application/json;charset=utf-8",
+          "x-request-id": "3d350c63",
+          "x-run-id": "047131ad-f018-4831-b806-4a7438545ada"
+        },
+        "body": {
+          "data": {
+            "runId": "047131ad-f018-4831-b806-4a7438545ada",
+            "statusUrl": "http://localhost:3000/api/v2/workflows/4425a5b3-e99a-46d5-86ce-829b6a47908b/runs/047131ad-f018-4831-b806-4a7438545ada"
+          }
+        },
+        "elapsedMs": 35
+      }
+    },
+    {
+      "at": "2026-11-27T21:13:11.036Z",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3000/api/v2/workflows/4425a5b3-e99a-46d5-86ce-829b6a47908b/runs/047131ad-f018-4831-b806-4a7438545ada?includeOutput=true",
+        "headers": {
+          "accept": "application/json",
+          "x-api-key": "[redacted]"
+        },
+        "body": null
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json;charset=utf-8",
+          "x-request-id": "1c64055e"
+        },
+        "body": {
+          "data": {
+            "runId": "047131ad-f018-4831-b806-4a7438545ada",
+            "workflowId": "4425a5b3-e99a-46d5-86ce-829b6a47908b",
+            "status": "running",
+            "trigger": "resume",
+            "startedAt": "2026-11-27T21:13:11.015Z",
+            "endedAt": null,
+            "durationMs": null,
+            "version": 1,
+            "paused": null,
+            "cost": null,
+            "error": null,
+            "output": null,
+            "blockOutputs": null,
+            "files": []
+          }
+        },
+        "elapsedMs": 17
+      }
+    },
+    {
+      "at": "2026-11-27T21:13:12.075Z",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3000/api/v2/workflows/4425a5b3-e99a-46d5-86ce-829b6a47908b/runs/047131ad-f018-4831-b806-4a7438545ada?includeOutput=true",
+        "headers": {
+          "accept": "application/json",
+          "x-api-key": "[redacted]"
+        },
+        "body": null
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json;charset=utf-8",
+          "x-request-id": "6fd9794a"
+        },
+        "body": {
+          "data": {
+            "runId": "047131ad-f018-4831-b806-4a7438545ada",
+            "workflowId": "4425a5b3-e99a-46d5-86ce-829b6a47908b",
+            "status": "completed",
+            "trigger": "api",
+            "startedAt": "2026-11-27T21:13:11.013Z",
+            "endedAt": "2026-11-27T21:13:11.076Z",
+            "durationMs": 63,
+            "version": 1,
+            "paused": null,
+            "cost": {
+              "total": 0.005
+            },
+            "error": null,
+            "output": {
+              "data": {
+                "decision": "approved",
+                "item": "synthetic lead 001"
+              },
+              "status": 200,
+              "headers": {
+                "Content-Type": "application/json"
+              }
+            },
+            "blockOutputs": null,
+            "files": []
+          }
+        },
+        "elapsedMs": 37
+      }
+    },
+    {
+      "at": "2026-11-27T21:13:12.094Z",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3000/api/v2/workflows/4425a5b3-e99a-46d5-86ce-829b6a47908b/runs/spikeb_hitl_a_20261127211306?includeOutput=true",
+        "headers": {
+          "accept": "application/json",
+          "x-api-key": "[redacted]"
+        },
+        "body": null
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json;charset=utf-8",
+          "x-request-id": "c4f13ab5"
+        },
+        "body": {
+          "data": {
+            "runId": "spikeb_hitl_a_20261127211306",
+            "workflowId": "4425a5b3-e99a-46d5-86ce-829b6a47908b",
+            "status": "completed",
+            "trigger": "api",
+            "startedAt": "2026-11-27T21:13:09.910Z",
+            "endedAt": "2026-11-27T21:13:11.057Z",
+            "durationMs": 1147,
+            "version": 1,
+            "paused": null,
+            "cost": {
+              "total": 0.005
+            },
+            "error": null,
+            "output": {
+              "data": {
+                "decision": "approved",
+                "item": "synthetic lead 001"
+              },
+              "status": 200,
+              "headers": {
+                "Content-Type": "application/json"
+              }
+            },
+            "blockOutputs": null,
+            "files": []
+          }
+        },
+        "elapsedMs": 18
+      }
+    }
+  ]
+}

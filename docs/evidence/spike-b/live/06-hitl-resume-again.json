@@ -1,0 +1,48 @@
+{
+  "step": "06-hitl-resume-again",
+  "notes": {
+    "pausedRunId": "spikeb_hitl_a_20261127211306",
+    "contextId": "1d716a64-cf7c-43d9-89f7-7f321080640c",
+    "second": {
+      "status": 409,
+      "code": "CONFLICT",
+      "detailCode": null,
+      "message": "POST /api/v2/workflows/4425a5b3-e99a-46d5-86ce-829b6a47908b/runs/spikeb_hitl_a_20261127211306/resume -> 409 CONFLICT: Paused execution is not resumable"
+    }
+  },
+  "exchanges": [
+    {
+      "at": "2026-11-27T21:13:12.116Z",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:3000/api/v2/workflows/4425a5b3-e99a-46d5-86ce-829b6a47908b/runs/spikeb_hitl_a_20261127211306/resume",
+        "headers": {
+          "accept": "application/json",
+          "content-type": "application/json",
+          "x-api-key": "[redacted]"
+        },
+        "body": {
+          "contextId": "1d716a64-cf7c-43d9-89f7-7f321080640c",
+          "input": {
+            "approved": true
+          }
+        }
+      },
+      "response": {
+        "status": 409,
+        "headers": {
+          "content-type": "application/json;charset=utf-8",
+          "x-request-id": "7dbcc21f"
+        },
+        "body": {
+          "error": {
+            "code": "CONFLICT",
+            "message": "Paused execution is not resumable",
+            "requestId": "7dbcc21f"
+          }
+        },
+        "elapsedMs": 20
+      }
+    }
+  ]
+}

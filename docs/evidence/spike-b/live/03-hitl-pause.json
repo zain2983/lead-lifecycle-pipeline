@@ -1,0 +1,215 @@
+{
+  "step": "03-hitl-pause",
+  "notes": {
+    "runId": "spikeb_hitl_a_20261127211306",
+    "status": "paused",
+    "paused": {
+      "contextId": "1d716a64-cf7c-43d9-89f7-7f321080640c",
+      "pausedAt": "2026-11-27T21:13:09.972Z",
+      "pauseKind": "human",
+      "blockedOnBlockId": "1d716a64-cf7c-43d9-89f7-7f321080640c",
+      "pausePointCount": 1,
+      "resumedCount": 0,
+      "points": [
+        {
+          "contextId": "1d716a64-cf7c-43d9-89f7-7f321080640c",
+          "blockId": "1d716a64-cf7c-43d9-89f7-7f321080640c",
+          "blockName": "Approval",
+          "kind": "human",
+          "status": "paused",
+          "registeredAt": "2026-11-27T21:13:09.919Z",
+          "resumeAt": null,
+          "inputFields": [
+            {
+              "name": "approved",
+              "label": "approved",
+              "type": "boolean",
+              "required": true
+            },
+            {
+              "name": "comment",
+              "label": "comment",
+              "type": "string",
+              "required": false
+            }
+          ],
+          "display": {
+            "responseStructure": [
+              {
+                "name": "item",
+                "type": "string",
+                "value": "synthetic lead 001"
+              }
+            ]
+          },
+          "queuePosition": null,
+          "parallel": null,
+          "loop": null
+        }
+      ],
+      "resumeAt": null,
+      "automaticResumeWaitingReason": null
+    }
+  },
+  "exchanges": [
+    {
+      "at": "2026-11-27T21:13:09.894Z",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:3000/api/v2/workflows/4425a5b3-e99a-46d5-86ce-829b6a47908b/execute",
+        "headers": {
+          "accept": "application/json",
+          "content-type": "application/json",
+          "x-api-key": "[redacted]",
+          "x-run-id": "spikeb_hitl_a_20261127211306"
+        },
+        "body": {
+          "input": {
+            "item": "synthetic lead 001"
+          },
+          "async": true
+        }
+      },
+      "response": {
+        "status": 202,
+        "headers": {
+          "content-type": "application/json;charset=utf-8",
+          "x-request-id": "ac679724",
+          "x-run-id": "spikeb_hitl_a_20261127211306"
+        },
+        "body": {
+          "data": {
+            "runId": "spikeb_hitl_a_20261127211306",
+            "statusUrl": "http://localhost:3000/api/v2/workflows/4425a5b3-e99a-46d5-86ce-829b6a47908b/runs/spikeb_hitl_a_20261127211306",
+            "executionTimeoutSeconds": null
+          }
+        },
+        "elapsedMs": 39
+      }
+    },
+    {
+      "at": "2026-11-27T21:13:09.927Z",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3000/api/v2/workflows/4425a5b3-e99a-46d5-86ce-829b6a47908b/runs/spikeb_hitl_a_20261127211306?includeOutput=true",
+        "headers": {
+          "accept": "application/json",
+          "x-api-key": "[redacted]"
+        },
+        "body": null
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json;charset=utf-8",
+          "x-request-id": "72448393"
+        },
+        "body": {
+          "data": {
+            "runId": "spikeb_hitl_a_20261127211306",
+            "workflowId": "4425a5b3-e99a-46d5-86ce-829b6a47908b",
+            "status": "running",
+            "trigger": "api",
+            "startedAt": "2026-11-27T21:13:09.887Z",
+            "endedAt": null,
+            "durationMs": null,
+            "version": null,
+            "paused": null,
+            "cost": null,
+            "error": null,
+            "output": null,
+            "blockOutputs": null,
+            "files": []
+          }
+        },
+        "elapsedMs": 33
+      }
+    },
+    {
+      "at": "2026-11-27T21:13:10.944Z",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3000/api/v2/workflows/4425a5b3-e99a-46d5-86ce-829b6a47908b/runs/spikeb_hitl_a_20261127211306?includeOutput=true",
+        "headers": {
+          "accept": "application/json",
+          "x-api-key": "[redacted]"
+        },
+        "body": null
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json;charset=utf-8",
+          "x-request-id": "d245f703"
+        },
+        "body": {
+          "data": {
+            "runId": "spikeb_hitl_a_20261127211306",
+            "workflowId": "4425a5b3-e99a-46d5-86ce-829b6a47908b",
+            "status": "paused",
+            "trigger": "api",
+            "startedAt": "2026-11-27T21:13:09.910Z",
+            "endedAt": "2026-11-27T21:13:09.923Z",
+            "durationMs": 6,
+            "version": 1,
+            "paused": {
+              "contextId": "1d716a64-cf7c-43d9-89f7-7f321080640c",
+              "pausedAt": "2026-11-27T21:13:09.972Z",
+              "resumeAt": null,
+              "pauseKind": "human",
+              "blockedOnBlockId": "1d716a64-cf7c-43d9-89f7-7f321080640c",
+              "automaticResumeWaitingReason": null,
+              "pausePointCount": 1,
+              "resumedCount": 0,
+              "points": [
+                {
+                  "contextId": "1d716a64-cf7c-43d9-89f7-7f321080640c",
+                  "blockId": "1d716a64-cf7c-43d9-89f7-7f321080640c",
+                  "blockName": "Approval",
+                  "kind": "human",
+                  "status": "paused",
+                  "registeredAt": "2026-11-27T21:13:09.919Z",
+                  "resumeAt": null,
+                  "parallel": null,
+                  "loop": null,
+                  "inputFields": [
+                    {
+                      "name": "approved",
+                      "label": "approved",
+                      "type": "boolean",
+                      "required": true
+                    },
+                    {
+                      "name": "comment",
+                      "label": "comment",
+                      "type": "string",
+                      "required": false
+                    }
+                  ],
+                  "display": {
+                    "responseStructure": [
+                      {
+                        "name": "item",
+                        "type": "string",
+                        "value": "synthetic lead 001"
+                      }
+                    ]
+                  },
+                  "queuePosition": null
+                }
+              ]
+            },
+            "cost": {
+              "total": 0.005
+            },
+            "error": null,
+            "output": null,
+            "blockOutputs": null,
+            "files": []
+          }
+        },
+        "elapsedMs": 15
+      }
+    }
+  ]
+}

@@ -1,0 +1,378 @@
+{
+  "step": "01-idempotency",
+  "notes": {
+    "runId": "spikeb_dup_20261127211306",
+    "first": {
+      "httpStatus": 202,
+      "kind": "queued"
+    },
+    "second": {
+      "status": 409,
+      "code": "CONFLICT",
+      "detailCode": "RUN_ID_CONFLICT",
+      "message": "POST /api/v2/workflows/8344ecdd-ac91-439e-b6c8-ad21ed6b5a38/execute -> 409 CONFLICT: Run ID has already been used",
+      "isRunIdConflict": true
+    },
+    "final": {
+      "status": "completed",
+      "version": 2,
+      "output": {
+        "data": {
+          "echo": "Spike B",
+          "version": "v2",
+          "at": "2026-11-27T21:13:08.054Z"
+        },
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    "log": {
+      "status": "completed",
+      "spans": [
+        "Workflow Execution"
+      ]
+    }
+  },
+  "exchanges": [
+    {
+      "at": "2026-11-27T21:13:06.570Z",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:3000/api/v2/workflows/8344ecdd-ac91-439e-b6c8-ad21ed6b5a38/execute",
+        "headers": {
+          "accept": "application/json",
+          "content-type": "application/json",
+          "x-api-key": "[redacted]",
+          "x-run-id": "spikeb_dup_20261127211306"
+        },
+        "body": {
+          "input": {
+            "name": "Spike B"
+          },
+          "async": true
+        }
+      },
+      "response": {
+        "status": 202,
+        "headers": {
+          "content-type": "application/json;charset=utf-8",
+          "x-request-id": "addaa92d",
+          "x-run-id": "spikeb_dup_20261127211306"
+        },
+        "body": {
+          "data": {
+            "runId": "spikeb_dup_20261127211306",
+            "statusUrl": "http://localhost:3000/api/v2/workflows/8344ecdd-ac91-439e-b6c8-ad21ed6b5a38/runs/spikeb_dup_20261127211306",
+            "executionTimeoutSeconds": null
+          }
+        },
+        "elapsedMs": 248
+      }
+    },
+    {
+      "at": "2026-11-27T21:13:06.649Z",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:3000/api/v2/workflows/8344ecdd-ac91-439e-b6c8-ad21ed6b5a38/execute",
+        "headers": {
+          "accept": "application/json",
+          "content-type": "application/json",
+          "x-api-key": "[redacted]",
+          "x-run-id": "spikeb_dup_20261127211306"
+        },
+        "body": {
+          "input": {
+            "name": "Spike B"
+          },
+          "async": true
+        }
+      },
+      "response": {
+        "status": 409,
+        "headers": {
+          "content-type": "application/json;charset=utf-8",
+          "x-request-id": "ff4eef62",
+          "x-run-id": "spikeb_dup_20261127211306"
+        },
+        "body": {
+          "error": {
+            "code": "CONFLICT",
+            "message": "Run ID has already been used",
+            "details": {
+              "code": "RUN_ID_CONFLICT",
+              "runId": "spikeb_dup_20261127211306"
+            },
+            "requestId": "ff4eef62"
+          }
+        },
+        "elapsedMs": 79
+      }
+    },
+    {
+      "at": "2026-11-27T21:13:07.569Z",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3000/api/v2/workflows/8344ecdd-ac91-439e-b6c8-ad21ed6b5a38/runs/spikeb_dup_20261127211306?includeOutput=true",
+        "headers": {
+          "accept": "application/json",
+          "x-api-key": "[redacted]"
+        },
+        "body": null
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json;charset=utf-8",
+          "x-request-id": "a6e9240e"
+        },
+        "body": {
+          "data": {
+            "runId": "spikeb_dup_20261127211306",
+            "workflowId": "8344ecdd-ac91-439e-b6c8-ad21ed6b5a38",
+            "status": "running",
+            "trigger": "api",
+            "startedAt": "2026-11-27T21:13:06.696Z",
+            "endedAt": null,
+            "durationMs": null,
+            "version": 2,
+            "paused": null,
+            "cost": null,
+            "error": null,
+            "output": null,
+            "blockOutputs": null,
+            "files": []
+          }
+        },
+        "elapsedMs": 920
+      }
+    },
+    {
+      "at": "2026-11-27T21:13:08.592Z",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3000/api/v2/workflows/8344ecdd-ac91-439e-b6c8-ad21ed6b5a38/runs/spikeb_dup_20261127211306?includeOutput=true",
+        "headers": {
+          "accept": "application/json",
+          "x-api-key": "[redacted]"
+        },
+        "body": null
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json;charset=utf-8",
+          "x-request-id": "5fc04649"
+        },
+        "body": {
+          "data": {
+            "runId": "spikeb_dup_20261127211306",
+            "workflowId": "8344ecdd-ac91-439e-b6c8-ad21ed6b5a38",
+            "status": "completed",
+            "trigger": "api",
+            "startedAt": "2026-11-27T21:13:06.696Z",
+            "endedAt": "2026-11-27T21:13:08.087Z",
+            "durationMs": 1359,
+            "version": 2,
+            "paused": null,
+            "cost": {
+              "total": 0.005
+            },
+            "error": null,
+            "output": {
+              "data": {
+                "echo": "Spike B",
+                "version": "v2",
+                "at": "2026-11-27T21:13:08.054Z"
+              },
+              "status": 200,
+              "headers": {
+                "Content-Type": "application/json"
+              }
+            },
+            "blockOutputs": null,
+            "files": []
+          }
+        },
+        "elapsedMs": 20
+      }
+    },
+    {
+      "at": "2026-11-27T21:13:08.634Z",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3000/api/v2/logs/spikeb_dup_20261127211306?includeWorkflowState=false",
+        "headers": {
+          "accept": "application/json",
+          "x-api-key": "[redacted]"
+        },
+        "body": null
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json;charset=utf-8",
+          "x-request-id": "b2ef65e0"
+        },
+        "body": {
+          "data": {
+            "runId": "spikeb_dup_20261127211306",
+            "workflowId": "8344ecdd-ac91-439e-b6c8-ad21ed6b5a38",
+            "deploymentVersionId": "1f0d3396-437a-481b-9ab5-bf0c73c30518",
+            "status": "completed",
+            "level": "info",
+            "trigger": "api",
+            "startedAt": "2026-11-27T21:13:06.696Z",
+            "endedAt": "2026-11-27T21:13:08.087Z",
+            "totalDurationMs": 1359,
+            "files": null,
+            "executedByEmail": "[redacted-email]",
+            "workflow": {
+              "id": "8344ecdd-ac91-439e-b6c8-ad21ed6b5a38",
+              "name": "hello",
+              "description": "Spike B: echo the input with a timestamp. No LLM.",
+              "folderPath": "/",
+              "ownerEmail": "[redacted-email]",
+              "workspaceId": "363f1b14-11a4-4fa8-872f-4b3cb927dfe9",
+              "createdAt": "2026-11-27T21:12:15.259Z",
+              "updatedAt": "2026-11-27T21:12:55.913Z",
+              "deleted": false
+            },
+            "workflowState": null,
+            "traceSpans": [
+              {
+                "id": "workflow-execution",
+                "name": "Workflow Execution",
+                "type": "workflow",
+                "duration": 1359,
+                "durationMs": 1359,
+                "startTime": "2026-11-27T21:13:06.726Z",
+                "endTime": "2026-11-27T21:13:08.085Z",
+                "status": "success",
+                "children": [
+                  {
+                    "id": "524d13b4-34df-4230-a316-e3994d940648-1795813986726",
+                    "name": "Start",
+                    "type": "start_trigger",
+                    "duration": 5.0911249999917345,
+                    "durationMs": 5.0911249999917345,
+                    "startTime": "2026-11-27T21:13:06.726Z",
+                    "endTime": "2026-11-27T21:13:06.731Z",
+                    "status": "success",
+                    "blockId": "524d13b4-34df-4230-a316-e3994d940648",
+                    "input": {
+                      "inputFormat": [
+                        {
+                          "id": "f63eaa69-2f8a-4026-9bc7-19184322c27d",
+                          "name": "name",
+                          "type": "string",
+                          "value": ""
+                        }
+                      ]
+                    },
+                    "output": {
+                      "name": "Spike B"
+                    },
+                    "relativeStartMs": 0,
+                    "children": [],
+                    "executionOrder": 1
+                  },
+                  {
+                    "id": "495a92c6-7e99-43e2-ad78-fa1fb5e99c2e-1795813986732",
+                    "name": "Echo",
+                    "type": "function",
+                    "duration": 1350.8379589999968,
+                    "durationMs": 1350.8379589999968,
+                    "startTime": "2026-11-27T21:13:06.732Z",
+                    "endTime": "2026-11-27T21:13:08.083Z",
+                    "status": "success",
+                    "blockId": "495a92c6-7e99-43e2-ad78-fa1fb5e99c2e",
+                    "input": {
+                      "code": "return { echo: \"Spike B\", version: 'v2', greeting: 'Hello, ' + \"Spike B\", at: new Date().toISOString() }",
+                      "language": "javascript"
+                    },
+                    "output": {
+                      "result": {
+                        "echo": "Spike B",
+                        "version": "v2",
+                        "greeting": "Hello, Spike B",
+                        "at": "2026-11-27T21:13:08.054Z"
+                      },
+                      "stdout": "",
+                      "files": []
+                    },
+                    "relativeStartMs": 6,
+                    "children": [],
+                    "executionOrder": 2
+                  },
+                  {
+                    "id": "c6293044-51b5-4613-9ef0-80c71943fe93-1795813988084",
+                    "name": "Respond",
+                    "type": "response",
+                    "duration": 1.0805839999957243,
+                    "durationMs": 1.0805839999957243,
+                    "startTime": "2026-11-27T21:13:08.084Z",
+                    "endTime": "2026-11-27T21:13:08.085Z",
+                    "status": "success",
+                    "blockId": "c6293044-51b5-4613-9ef0-80c71943fe93",
+                    "input": {
+                      "data": {
+                        "echo": "Spike B",
+                        "version": "v2",
+                        "at": "2026-11-27T21:13:08.054Z"
+                      },
+                      "status": null,
+                      "headers": null,
+                      "dataMode": "json"
+                    },
+                    "output": {
+                      "data": {
+                        "echo": "Spike B",
+                        "version": "v2",
+                        "at": "2026-11-27T21:13:08.054Z"
+                      },
+                      "status": 200,
+                      "headers": {
+                        "Content-Type": "application/json"
+                      }
+                    },
+                    "relativeStartMs": 1358,
+                    "children": [],
+                    "executionOrder": 3
+                  }
+                ]
+              }
+            ],
+            "finalOutput": {
+              "data": {
+                "echo": "Spike B",
+                "version": "v2",
+                "at": "2026-11-27T21:13:08.054Z"
+              },
+              "status": 200,
+              "headers": {
+                "Content-Type": "application/json"
+              }
+            },
+            "cost": {
+              "total": 0.005,
+              "items": [
+                {
+                  "category": "fixed",
+                  "description": "execution_fee",
+                  "cost": 0.005
+                }
+              ]
+            },
+            "workflowInput": {
+              "name": "Spike B"
+            },
+            "createdAt": "2026-11-27T21:13:06.697Z"
+          }
+        },
+        "elapsedMs": 42
+      }
+    }
+  ]
+}
