@@ -1,0 +1,41 @@
+# @repo/synthetic, seed 42: keys, sites, scenarios, intended labels, local submit time, click channel
+
+$ pnpm --filter @repo/synthetic generate --seed 42 --summary
+seed 42  version 1  sha256 14fdebd96f7a9ce02f30b809845da47703b759c552bd5ccac25b77766e2cc198
+s42-demo-01    saas             spam             spam           2026-10-26T22:28:20+05:00  meta
+s42-demo-02    saas             qualified        qualified      2026-10-27T10:37:10+05:00  google
+s42-demo-03    saas             no_show          qualified      2026-10-27T14:02:45+05:00  google
+s42-demo-04    rehab            qualified        qualified      2026-10-27T14:34:39+05:00  google
+s42-demo-05    saas             auto_dq_score    nurture        2026-10-30T14:13:00+05:00  meta
+s42-demo-06    saas             nurture          nurture        2026-10-31T19:24:16+05:00  google
+s42-demo-07    saas             auto_dq_score    nurture        2026-11-02T01:15:17+05:00  meta
+s42-demo-08    saas             qualified        qualified      2026-11-02T05:07:17+05:00  google
+s42-demo-09    saas             test             spam           2026-11-03T08:01:15+05:00  meta
+s42-demo-10    rehab            nurture          nurture        2026-11-03T18:52:09+05:00  google
+s42-demo-11    rehab            qualified        qualified      2026-11-04T21:29:41+05:00  google
+s42-demo-12    saas             qualified        qualified      2026-11-05T05:46:40+05:00  google
+s42-demo-13    rehab            qualified        qualified      2026-11-05T11:36:09+05:00  -
+s42-demo-14    saas             spam             spam           2026-11-05T16:29:52+05:00  -
+s42-demo-15    saas             partial_refund   qualified      2026-11-06T00:54:30+05:00  meta
+s42-demo-16    rehab            duplicate        duplicate      2026-11-06T06:50:06+05:00  google
+s42-demo-17    saas             qualified        qualified      2026-11-06T07:11:01+05:00  google
+s42-demo-18    saas             nurture          nurture        2026-11-06T18:47:43+05:00  google
+s42-demo-19    saas             qualified        qualified      2026-11-07T09:55:31+05:00  meta
+s42-demo-20    saas             duplicate        duplicate      2026-11-07T23:33:57+05:00  meta
+s42-eval-01    saas             qualified        qualified      2026-11-02T00:30:00+05:00  google
+s42-eval-02    saas             duplicate        duplicate      2026-11-03T14:10:00+05:00  google
+s42-eval-03    saas             nurture          nurture        2026-11-02T08:15:00+05:00  meta
+s42-eval-04    saas             spam             spam           2026-11-05T02:05:00+05:00  -
+s42-eval-05    saas             test             spam           2026-11-05T11:00:00+05:00  -
+s42-eval-06    saas             auto_dq_score    nurture        2026-11-05T18:45:00+05:00  microsoft
+s42-eval-07    local_services   out_of_area      needs_review   2026-11-06T23:59:59+05:00  google
+s42-eval-08    clinic           no_show          qualified      2026-11-07T00:00:00+05:00  meta
+s42-eval-09    local_services   partial_refund   qualified      2026-11-07T09:30:00+05:00  google
+s42-eval-10    rehab            qualified        qualified      2026-11-07T16:20:00+05:00  google
+
+$ pnpm --filter @repo/synthetic generate --seed 42 | shasum -a 256   # twice
+14fdebd96f7a9ce02f30b809845da47703b759c552bd5ccac25b77766e2cc198  -
+14fdebd96f7a9ce02f30b809845da47703b759c552bd5ccac25b77766e2cc198  -
+
+$ TZ=Pacific/Chatham LANG=tr_TR.UTF-8 pnpm --filter @repo/synthetic generate --seed 42 | shasum -a 256
+14fdebd96f7a9ce02f30b809845da47703b759c552bd5ccac25b77766e2cc198  -

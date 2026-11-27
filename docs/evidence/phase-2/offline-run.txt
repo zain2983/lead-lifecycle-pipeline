@@ -1,0 +1,437 @@
+# Phase 2 offline run, 2026-11-27. Fake HubSpot, not HubSpot.
+# Each step shows the command, its output, the exit code, and the fake's request/write counts and a
+# hash of its whole state (equal hashes = identical end state).
+
+## demo
+
+$ pnpm hs:setup --account demo --dry-run    # plan only
+$ pnpm --filter @repo/crm-hubspot run setup --account demo --dry-run
+$ tsx src/cli/setup.ts --account demo --dry-run
+hs:setup  account demo  (dry run: reads only)
+target    http://127.0.0.1:<port> (NOT HubSpot: HUBSPOT_API_BASE_URL override), key HUBSPOT_SERVICE_KEY_DEMO (redacted)
+group     lead_lifecycle_pipeline (contacts)
+group     lead_lifecycle_pipeline      would be created
+property  triage_disposition           would be created
+property  triage_confidence            would be created
+property  attribution_session_id       would be created
+property  click_gclid                  would be created
+property  click_gbraid                 would be created
+property  click_wbraid                 would be created
+property  click_fbclid                 would be created
+property  click_fbc                    would be created
+property  click_fbp                    would be created
+property  click_msclkid                would be created
+property  consent_ad_user_data         would be created
+property  consent_ad_personalization   would be created
+property  consent_gpc                  would be created
+property  fixture_key                  would be created
+summary   created 15  updated 0  unchanged 0  failed 0  unknown 0  (requests 2, retries 0, rate-limit waits 0)
+[exit 0] fake demo: requests +2, writes +0; state df0a63bf1b6d2e44 (0 custom properties, 0 contacts)
+
+$ pnpm hs:setup --account demo    # first run
+$ pnpm --filter @repo/crm-hubspot run setup --account demo
+$ tsx src/cli/setup.ts --account demo
+hs:setup  account demo
+target    http://127.0.0.1:<port> (NOT HubSpot: HUBSPOT_API_BASE_URL override), key HUBSPOT_SERVICE_KEY_DEMO (redacted)
+group     lead_lifecycle_pipeline (contacts)
+group     lead_lifecycle_pipeline      created
+property  triage_disposition           created
+property  triage_confidence            created
+property  attribution_session_id       created
+property  click_gclid                  created
+property  click_gbraid                 created
+property  click_wbraid                 created
+property  click_fbclid                 created
+property  click_fbc                    created
+property  click_fbp                    created
+property  click_msclkid                created
+property  consent_ad_user_data         created
+property  consent_ad_personalization   created
+property  consent_gpc                  created
+property  fixture_key                  created
+summary   created 15  updated 0  unchanged 0  failed 0  unknown 0  (requests 17, retries 0, rate-limit waits 0)
+[exit 0] fake demo: requests +17, writes +15; state 6c097a2e9291c8e5 (14 custom properties, 0 contacts)
+
+$ pnpm hs:setup --account demo    # second run: no changes
+$ pnpm --filter @repo/crm-hubspot run setup --account demo
+$ tsx src/cli/setup.ts --account demo
+hs:setup  account demo
+target    http://127.0.0.1:<port> (NOT HubSpot: HUBSPOT_API_BASE_URL override), key HUBSPOT_SERVICE_KEY_DEMO (redacted)
+group     lead_lifecycle_pipeline (contacts)
+group     lead_lifecycle_pipeline      unchanged
+property  triage_disposition           unchanged
+property  triage_confidence            unchanged
+property  attribution_session_id       unchanged
+property  click_gclid                  unchanged
+property  click_gbraid                 unchanged
+property  click_wbraid                 unchanged
+property  click_fbclid                 unchanged
+property  click_fbc                    unchanged
+property  click_fbp                    unchanged
+property  click_msclkid                unchanged
+property  consent_ad_user_data         unchanged
+property  consent_ad_personalization   unchanged
+property  consent_gpc                  unchanged
+property  fixture_key                  unchanged
+summary   created 0  updated 0  unchanged 15  failed 0  unknown 0  (requests 2, retries 0, rate-limit waits 0)
+[exit 0] fake demo: requests +2, writes +0; state 6c097a2e9291c8e5 (14 custom properties, 0 contacts)
+
+$ pnpm hs:seed --account demo --seed 42 --dry-run    # plan only
+$ pnpm --filter @repo/crm-hubspot run seed --account demo --seed 42 --dry-run
+$ tsx src/cli/seed.ts --account demo --seed 42 --dry-run
+hs:seed   account demo  seed 42  contacts 20  (dry run: reads only)
+target    http://127.0.0.1:<port> (NOT HubSpot: HUBSPOT_API_BASE_URL override), key HUBSPOT_SERVICE_KEY_DEMO (redacted)
+s42-demo-01   id -            would be created
+s42-demo-02   id -            would be created
+s42-demo-03   id -            would be created
+s42-demo-04   id -            would be created
+s42-demo-05   id -            would be created
+s42-demo-06   id -            would be created
+s42-demo-07   id -            would be created
+s42-demo-08   id -            would be created
+s42-demo-09   id -            would be created
+s42-demo-10   id -            would be created
+s42-demo-11   id -            would be created
+s42-demo-12   id -            would be created
+s42-demo-13   id -            would be created
+s42-demo-14   id -            would be created
+s42-demo-15   id -            would be created
+s42-demo-16   id -            would be created
+s42-demo-17   id -            would be created
+s42-demo-18   id -            would be created
+s42-demo-19   id -            would be created
+s42-demo-20   id -            would be created
+summary   created 20  updated 0  unchanged 0  failed 0  unknown 0  (requests 1: upserts 0; retries 0, rate-limit waits 0)
+[exit 0] fake demo: requests +1, writes +0; state 6c097a2e9291c8e5 (14 custom properties, 0 contacts)
+
+$ pnpm hs:seed --account demo --seed 42    # first run
+$ pnpm --filter @repo/crm-hubspot run seed --account demo --seed 42
+$ tsx src/cli/seed.ts --account demo --seed 42
+hs:seed   account demo  seed 42  contacts 20
+target    http://127.0.0.1:<port> (NOT HubSpot: HUBSPOT_API_BASE_URL override), key HUBSPOT_SERVICE_KEY_DEMO (redacted)
+s42-demo-01   id 1001         created
+s42-demo-02   id 1002         created
+s42-demo-03   id 1003         created
+s42-demo-04   id 1004         created
+s42-demo-05   id 1005         created
+s42-demo-06   id 1006         created
+s42-demo-07   id 1007         created
+s42-demo-08   id 1008         created
+s42-demo-09   id 1009         created
+s42-demo-10   id 1010         created
+s42-demo-11   id 1011         created
+s42-demo-12   id 1012         created
+s42-demo-13   id 1013         created
+s42-demo-14   id 1014         created
+s42-demo-15   id 1015         created
+s42-demo-16   id 1016         created
+s42-demo-17   id 1017         created
+s42-demo-18   id 1018         created
+s42-demo-19   id 1019         created
+s42-demo-20   id 1020         created
+summary   created 20  updated 0  unchanged 0  failed 0  unknown 0  (requests 2: upserts 1; retries 0, rate-limit waits 0)
+[exit 0] fake demo: requests +2, writes +1; state d58f01533c5c8a69 (14 custom properties, 20 contacts)
+
+$ pnpm hs:seed --account demo --seed 42    # second run: no changes
+$ pnpm --filter @repo/crm-hubspot run seed --account demo --seed 42
+$ tsx src/cli/seed.ts --account demo --seed 42
+hs:seed   account demo  seed 42  contacts 20
+target    http://127.0.0.1:<port> (NOT HubSpot: HUBSPOT_API_BASE_URL override), key HUBSPOT_SERVICE_KEY_DEMO (redacted)
+s42-demo-01   id 1001         unchanged
+s42-demo-02   id 1002         unchanged
+s42-demo-03   id 1003         unchanged
+s42-demo-04   id 1004         unchanged
+s42-demo-05   id 1005         unchanged
+s42-demo-06   id 1006         unchanged
+s42-demo-07   id 1007         unchanged
+s42-demo-08   id 1008         unchanged
+s42-demo-09   id 1009         unchanged
+s42-demo-10   id 1010         unchanged
+s42-demo-11   id 1011         unchanged
+s42-demo-12   id 1012         unchanged
+s42-demo-13   id 1013         unchanged
+s42-demo-14   id 1014         unchanged
+s42-demo-15   id 1015         unchanged
+s42-demo-16   id 1016         unchanged
+s42-demo-17   id 1017         unchanged
+s42-demo-18   id 1018         unchanged
+s42-demo-19   id 1019         unchanged
+s42-demo-20   id 1020         unchanged
+summary   created 0  updated 0  unchanged 20  failed 0  unknown 0  (requests 1: upserts 0; retries 0, rate-limit waits 0)
+[exit 0] fake demo: requests +1, writes +0; state d58f01533c5c8a69 (14 custom properties, 20 contacts)
+
+## eval
+
+$ pnpm hs:setup --account eval --dry-run    # plan only
+$ pnpm --filter @repo/crm-hubspot run setup --account eval --dry-run
+$ tsx src/cli/setup.ts --account eval --dry-run
+hs:setup  account eval  (dry run: reads only)
+target    http://127.0.0.1:<port> (NOT HubSpot: HUBSPOT_API_BASE_URL override), key HUBSPOT_SERVICE_KEY_EVAL (redacted)
+group     lead_lifecycle_pipeline (contacts)
+group     lead_lifecycle_pipeline      would be created
+property  triage_disposition           would be created
+property  triage_confidence            would be created
+property  attribution_session_id       would be created
+property  click_gclid                  would be created
+property  click_gbraid                 would be created
+property  click_wbraid                 would be created
+property  click_fbclid                 would be created
+property  click_fbc                    would be created
+property  click_fbp                    would be created
+property  click_msclkid                would be created
+property  consent_ad_user_data         would be created
+property  consent_ad_personalization   would be created
+property  consent_gpc                  would be created
+property  fixture_key                  would be created
+summary   created 15  updated 0  unchanged 0  failed 0  unknown 0  (requests 2, retries 0, rate-limit waits 0)
+[exit 0] fake eval: requests +2, writes +0; state df0a63bf1b6d2e44 (0 custom properties, 0 contacts)
+
+$ pnpm hs:setup --account eval    # first run
+$ pnpm --filter @repo/crm-hubspot run setup --account eval
+$ tsx src/cli/setup.ts --account eval
+hs:setup  account eval
+target    http://127.0.0.1:<port> (NOT HubSpot: HUBSPOT_API_BASE_URL override), key HUBSPOT_SERVICE_KEY_EVAL (redacted)
+group     lead_lifecycle_pipeline (contacts)
+group     lead_lifecycle_pipeline      created
+property  triage_disposition           created
+property  triage_confidence            created
+property  attribution_session_id       created
+property  click_gclid                  created
+property  click_gbraid                 created
+property  click_wbraid                 created
+property  click_fbclid                 created
+property  click_fbc                    created
+property  click_fbp                    created
+property  click_msclkid                created
+property  consent_ad_user_data         created
+property  consent_ad_personalization   created
+property  consent_gpc                  created
+property  fixture_key                  created
+summary   created 15  updated 0  unchanged 0  failed 0  unknown 0  (requests 17, retries 0, rate-limit waits 0)
+[exit 0] fake eval: requests +17, writes +15; state 6c097a2e9291c8e5 (14 custom properties, 0 contacts)
+
+$ pnpm hs:setup --account eval    # second run: no changes
+$ pnpm --filter @repo/crm-hubspot run setup --account eval
+$ tsx src/cli/setup.ts --account eval
+hs:setup  account eval
+target    http://127.0.0.1:<port> (NOT HubSpot: HUBSPOT_API_BASE_URL override), key HUBSPOT_SERVICE_KEY_EVAL (redacted)
+group     lead_lifecycle_pipeline (contacts)
+group     lead_lifecycle_pipeline      unchanged
+property  triage_disposition           unchanged
+property  triage_confidence            unchanged
+property  attribution_session_id       unchanged
+property  click_gclid                  unchanged
+property  click_gbraid                 unchanged
+property  click_wbraid                 unchanged
+property  click_fbclid                 unchanged
+property  click_fbc                    unchanged
+property  click_fbp                    unchanged
+property  click_msclkid                unchanged
+property  consent_ad_user_data         unchanged
+property  consent_ad_personalization   unchanged
+property  consent_gpc                  unchanged
+property  fixture_key                  unchanged
+summary   created 0  updated 0  unchanged 15  failed 0  unknown 0  (requests 2, retries 0, rate-limit waits 0)
+[exit 0] fake eval: requests +2, writes +0; state 6c097a2e9291c8e5 (14 custom properties, 0 contacts)
+
+$ pnpm hs:seed --account eval --seed 42 --dry-run    # plan only
+$ pnpm --filter @repo/crm-hubspot run seed --account eval --seed 42 --dry-run
+$ tsx src/cli/seed.ts --account eval --seed 42 --dry-run
+hs:seed   account eval  seed 42  contacts 10  (dry run: reads only)
+target    http://127.0.0.1:<port> (NOT HubSpot: HUBSPOT_API_BASE_URL override), key HUBSPOT_SERVICE_KEY_EVAL (redacted)
+s42-eval-01   id -            would be created
+s42-eval-02   id -            would be created
+s42-eval-03   id -            would be created
+s42-eval-04   id -            would be created
+s42-eval-05   id -            would be created
+s42-eval-06   id -            would be created
+s42-eval-07   id -            would be created
+s42-eval-08   id -            would be created
+s42-eval-09   id -            would be created
+s42-eval-10   id -            would be created
+summary   created 10  updated 0  unchanged 0  failed 0  unknown 0  (requests 1: upserts 0; retries 0, rate-limit waits 0)
+[exit 0] fake eval: requests +1, writes +0; state 6c097a2e9291c8e5 (14 custom properties, 0 contacts)
+
+$ pnpm hs:seed --account eval --seed 42    # first run
+$ pnpm --filter @repo/crm-hubspot run seed --account eval --seed 42
+$ tsx src/cli/seed.ts --account eval --seed 42
+hs:seed   account eval  seed 42  contacts 10
+target    http://127.0.0.1:<port> (NOT HubSpot: HUBSPOT_API_BASE_URL override), key HUBSPOT_SERVICE_KEY_EVAL (redacted)
+s42-eval-01   id 1001         created
+s42-eval-02   id 1002         created
+s42-eval-03   id 1003         created
+s42-eval-04   id 1004         created
+s42-eval-05   id 1005         created
+s42-eval-06   id 1006         created
+s42-eval-07   id 1007         created
+s42-eval-08   id 1008         created
+s42-eval-09   id 1009         created
+s42-eval-10   id 1010         created
+summary   created 10  updated 0  unchanged 0  failed 0  unknown 0  (requests 2: upserts 1; retries 0, rate-limit waits 0)
+[exit 0] fake eval: requests +2, writes +1; state d60c06d9ed816d5a (14 custom properties, 10 contacts)
+
+$ pnpm hs:seed --account eval --seed 42    # second run: no changes
+$ pnpm --filter @repo/crm-hubspot run seed --account eval --seed 42
+$ tsx src/cli/seed.ts --account eval --seed 42
+hs:seed   account eval  seed 42  contacts 10
+target    http://127.0.0.1:<port> (NOT HubSpot: HUBSPOT_API_BASE_URL override), key HUBSPOT_SERVICE_KEY_EVAL (redacted)
+s42-eval-01   id 1001         unchanged
+s42-eval-02   id 1002         unchanged
+s42-eval-03   id 1003         unchanged
+s42-eval-04   id 1004         unchanged
+s42-eval-05   id 1005         unchanged
+s42-eval-06   id 1006         unchanged
+s42-eval-07   id 1007         unchanged
+s42-eval-08   id 1008         unchanged
+s42-eval-09   id 1009         unchanged
+s42-eval-10   id 1010         unchanged
+summary   created 0  updated 0  unchanged 10  failed 0  unknown 0  (requests 1: upserts 0; retries 0, rate-limit waits 0)
+[exit 0] fake eval: requests +1, writes +0; state d60c06d9ed816d5a (14 custom properties, 10 contacts)
+
+## Failure handling (demo fake)
+
+$ pnpm hs:setup --account demo    # drift: a label renamed in the UI
+$ pnpm --filter @repo/crm-hubspot run setup --account demo
+$ tsx src/cli/setup.ts --account demo
+hs:setup  account demo
+target    http://127.0.0.1:<port> (NOT HubSpot: HUBSPOT_API_BASE_URL override), key HUBSPOT_SERVICE_KEY_DEMO (redacted)
+group     lead_lifecycle_pipeline (contacts)
+group     lead_lifecycle_pipeline      unchanged
+property  triage_disposition           updated  (label)
+property  triage_confidence            unchanged
+property  attribution_session_id       unchanged
+property  click_gclid                  unchanged
+property  click_gbraid                 unchanged
+property  click_wbraid                 unchanged
+property  click_fbclid                 unchanged
+property  click_fbc                    unchanged
+property  click_fbp                    unchanged
+property  click_msclkid                unchanged
+property  consent_ad_user_data         unchanged
+property  consent_ad_personalization   unchanged
+property  consent_gpc                  unchanged
+property  fixture_key                  unchanged
+summary   created 0  updated 1  unchanged 14  failed 0  unknown 0  (requests 3, retries 0, rate-limit waits 0)
+[exit 0] fake demo: requests +3, writes +1; state 0e91444e14e26bfa (14 custom properties, 20 contacts)
+
+$ pnpm hs:seed --account demo --seed 42    # drift: one contact edited; two 429s first
+$ pnpm --filter @repo/crm-hubspot run seed --account demo --seed 42
+$ tsx src/cli/seed.ts --account demo --seed 42
+hs:seed   account demo  seed 42  contacts 20
+target    http://127.0.0.1:<port> (NOT HubSpot: HUBSPOT_API_BASE_URL override), key HUBSPOT_SERVICE_KEY_DEMO (redacted)
+  ... POST /crm/objects/2026-09/contacts/batch/read: 429 TEN_SECONDLY_ROLLING; retry 1/5 in 418 ms
+  ... POST /crm/objects/2026-09/contacts/batch/read: 429 TEN_SECONDLY_ROLLING; retry 2/5 in 843 ms
+s42-demo-01   id 1001         updated  (firstname)
+s42-demo-02   id 1002         unchanged
+s42-demo-03   id 1003         unchanged
+s42-demo-04   id 1004         unchanged
+s42-demo-05   id 1005         unchanged
+s42-demo-06   id 1006         unchanged
+s42-demo-07   id 1007         unchanged
+s42-demo-08   id 1008         unchanged
+s42-demo-09   id 1009         unchanged
+s42-demo-10   id 1010         unchanged
+s42-demo-11   id 1011         unchanged
+s42-demo-12   id 1012         unchanged
+s42-demo-13   id 1013         unchanged
+s42-demo-14   id 1014         unchanged
+s42-demo-15   id 1015         unchanged
+s42-demo-16   id 1016         unchanged
+s42-demo-17   id 1017         unchanged
+s42-demo-18   id 1018         unchanged
+s42-demo-19   id 1019         unchanged
+s42-demo-20   id 1020         unchanged
+summary   created 0  updated 1  unchanged 19  failed 0  unknown 0  (requests 4: upserts 1; retries 2, rate-limit waits 0)
+[exit 0] fake demo: requests +4, writes +1; state 2b992662ed8aa532 (14 custom properties, 20 contacts)
+
+$ pnpm hs:seed --account demo --seed 43    # seed 43 (20 new contacts); the upsert hangs
+$ pnpm --filter @repo/crm-hubspot run seed --account demo --seed 43
+$ tsx src/cli/seed.ts --account demo --seed 43
+hs:seed   account demo  seed 43  contacts 20
+target    http://127.0.0.1:<port> (NOT HubSpot: HUBSPOT_API_BASE_URL override), key HUBSPOT_SERVICE_KEY_DEMO (redacted)
+s43-demo-01   id -            unknown
+          POST /crm/objects/2026-09/contacts/batch/upsert: outcome unknown (no response within 15000 ms)
+s43-demo-02   id -            unknown
+          POST /crm/objects/2026-09/contacts/batch/upsert: outcome unknown (no response within 15000 ms)
+s43-demo-03   id -            unknown
+          POST /crm/objects/2026-09/contacts/batch/upsert: outcome unknown (no response within 15000 ms)
+s43-demo-04   id -            unknown
+          POST /crm/objects/2026-09/contacts/batch/upsert: outcome unknown (no response within 15000 ms)
+s43-demo-05   id -            unknown
+          POST /crm/objects/2026-09/contacts/batch/upsert: outcome unknown (no response within 15000 ms)
+s43-demo-06   id -            unknown
+          POST /crm/objects/2026-09/contacts/batch/upsert: outcome unknown (no response within 15000 ms)
+s43-demo-07   id -            unknown
+          POST /crm/objects/2026-09/contacts/batch/upsert: outcome unknown (no response within 15000 ms)
+s43-demo-08   id -            unknown
+          POST /crm/objects/2026-09/contacts/batch/upsert: outcome unknown (no response within 15000 ms)
+s43-demo-09   id -            unknown
+          POST /crm/objects/2026-09/contacts/batch/upsert: outcome unknown (no response within 15000 ms)
+s43-demo-10   id -            unknown
+          POST /crm/objects/2026-09/contacts/batch/upsert: outcome unknown (no response within 15000 ms)
+s43-demo-11   id -            unknown
+          POST /crm/objects/2026-09/contacts/batch/upsert: outcome unknown (no response within 15000 ms)
+s43-demo-12   id -            unknown
+          POST /crm/objects/2026-09/contacts/batch/upsert: outcome unknown (no response within 15000 ms)
+s43-demo-13   id -            unknown
+          POST /crm/objects/2026-09/contacts/batch/upsert: outcome unknown (no response within 15000 ms)
+s43-demo-14   id -            unknown
+          POST /crm/objects/2026-09/contacts/batch/upsert: outcome unknown (no response within 15000 ms)
+s43-demo-15   id -            unknown
+          POST /crm/objects/2026-09/contacts/batch/upsert: outcome unknown (no response within 15000 ms)
+s43-demo-16   id -            unknown
+          POST /crm/objects/2026-09/contacts/batch/upsert: outcome unknown (no response within 15000 ms)
+s43-demo-17   id -            unknown
+          POST /crm/objects/2026-09/contacts/batch/upsert: outcome unknown (no response within 15000 ms)
+s43-demo-18   id -            unknown
+          POST /crm/objects/2026-09/contacts/batch/upsert: outcome unknown (no response within 15000 ms)
+s43-demo-19   id -            unknown
+          POST /crm/objects/2026-09/contacts/batch/upsert: outcome unknown (no response within 15000 ms)
+s43-demo-20   id -            unknown
+          POST /crm/objects/2026-09/contacts/batch/upsert: outcome unknown (no response within 15000 ms)
+summary   created 0  updated 0  unchanged 0  failed 0  unknown 20  (requests 2: upserts 1; retries 0, rate-limit waits 0)
+<repo>/packages/crm-hubspot:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @repo/crm-hubspot@0.0.0 seed: `tsx src/cli/seed.ts --account demo --seed 43`
+Exit status 2
+[ELIFECYCLE] Command failed with exit code 2.
+[exit 2] fake demo: requests +2, writes +1; state 2b992662ed8aa532 (14 custom properties, 20 contacts)
+
+$ pnpm hs:seed --account demo --seed 43    # re-run settles the unknowns
+$ pnpm --filter @repo/crm-hubspot run seed --account demo --seed 43
+$ tsx src/cli/seed.ts --account demo --seed 43
+hs:seed   account demo  seed 43  contacts 20
+target    http://127.0.0.1:<port> (NOT HubSpot: HUBSPOT_API_BASE_URL override), key HUBSPOT_SERVICE_KEY_DEMO (redacted)
+s43-demo-01   id 1021         created
+s43-demo-02   id 1022         created
+s43-demo-03   id 1023         created
+s43-demo-04   id 1024         created
+s43-demo-05   id 1025         created
+s43-demo-06   id 1026         created
+s43-demo-07   id 1027         created
+s43-demo-08   id 1028         created
+s43-demo-09   id 1029         created
+s43-demo-10   id 1030         created
+s43-demo-11   id 1031         created
+s43-demo-12   id 1032         created
+s43-demo-13   id 1033         created
+s43-demo-14   id 1034         created
+s43-demo-15   id 1035         created
+s43-demo-16   id 1036         created
+s43-demo-17   id 1037         created
+s43-demo-18   id 1038         created
+s43-demo-19   id 1039         created
+s43-demo-20   id 1040         created
+summary   created 20  updated 0  unchanged 0  failed 0  unknown 0  (requests 2: upserts 1; retries 0, rate-limit waits 0)
+[exit 0] fake demo: requests +2, writes +1; state 7a434b7671f97101 (14 custom properties, 40 contacts)
+
+$ pnpm hs:seed --account eval --seed 42    # wrong key for the account
+$ pnpm --filter @repo/crm-hubspot run seed --account eval --seed 42
+$ tsx src/cli/seed.ts --account eval --seed 42
+error     Invalid environment for [hubspotServiceKeyEval]:
+✖ Too small: expected string to have >=1 characters
+  → at HUBSPOT_SERVICE_KEY_EVAL
+<repo>/packages/crm-hubspot:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @repo/crm-hubspot@0.0.0 seed: `tsx src/cli/seed.ts --account eval --seed 42`
+Exit status 1
+[ELIFECYCLE] Command failed with exit code 1.
+[exit 1] fake demo: requests +0, writes +0; state 7a434b7671f97101 (14 custom properties, 40 contacts)
