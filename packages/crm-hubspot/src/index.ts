@@ -30,6 +30,18 @@ export {
   type UpsertSummary,
   upsertContactsByEmail,
 } from "./contacts.ts";
+export {
+  CONVERSION_MAPPING,
+  CONVERSION_MAPPING_STATUS,
+  type ConversionAction,
+  type ConversionTier,
+  type CrmChange,
+  isPersonChange,
+  type MappingOutcome,
+  type MappingRule,
+  mapCrmChange,
+  PERSON_CHANGE_SOURCES,
+} from "./conversion-mapping.ts";
 export { crmEventDedupeKey } from "./crm-event-key.ts";
 export {
   type AuthorizeUrlInput,
