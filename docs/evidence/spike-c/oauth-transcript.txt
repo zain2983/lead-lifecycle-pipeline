@@ -1,0 +1,42 @@
+# 2026-11-27T16:51:32Z, next start --port 3100 (production build). HUBSPOT_OAUTH_TOKEN_URL=http://127.0.0.1:3199/oauth/v3/token is a LOCAL FAKE (fake-token-endpoint.mjs), not HubSpot. Built at commit 1ade86b; the OAuth code has not changed since.
+
+$ curl -sS -i http://localhost:3100/api/hubspot/oauth/start
+HTTP/1.1 302 Found
+cache-control: no-store
+location: https://app.hubspot.com/oauth/authorize?client_id=offline-spike-client-id&scope=oauth%20crm.objects.contacts.read%20crm.objects.contacts.write%20crm.schemas.contacts.read%20crm.schemas.contacts.write%20crm.objects.deals.read%20crm.objects.deals.write&redirect_uri=http%3A%2F%2Flocalhost%3A3100%2Fapi%2Fhubspot%2Foauth%2Fcallback&state=czD8vEPEp7TbjJZp7m_RDbAUqABT3Hf75hKs8gP8lv0
+set-cookie: hs_oauth_state=czD8vEPEp7TbjJZp7m_RDbAUqABT3Hf75hKs8gP8lv0; Path=/api/hubspot/oauth; Max-Age=600; HttpOnly; SameSite=Lax
+
+# 1. state does not match the cookie
+$ curl -sS -i -H 'Cookie: hs_oauth_state=<state from start>' 'http://localhost:3100/api/hubspot/oauth/callback?code=synthetic-code-0001&state=forged-state'
+HTTP/1.1 400 Bad Request
+set-cookie: hs_oauth_state=; Path=/api/hubspot/oauth; Max-Age=0; HttpOnly; SameSite=Lax
+{"ok":false,"error":"state_mismatch"}
+
+# 2. good callback (state matches, fake token endpoint answers 200)
+$ curl -sS -i -H 'Cookie: hs_oauth_state=<state>' 'http://localhost:3100/api/hubspot/oauth/callback?code=synthetic-code-0001&state=<state>'
+HTTP/1.1 200 OK
+set-cookie: hs_oauth_state=; Path=/api/hubspot/oauth; Max-Age=0; HttpOnly; SameSite=Lax
+{"ok":true,"portalId":"900000001","scopes":["oauth","crm.objects.contacts.read","crm.objects.contacts.write","crm.schemas.contacts.read","crm.schemas.contacts.write","crm.objects.deals.read","crm.objects.deals.write"],"accessTokenExpiresAt":"2026-11-27T17:21:32.443Z"}
+(time 0.107252s)
+
+# 3. token endpoint rejects the code (fake answers 400): passed on as 502 with the body as it came back
+$ curl -sS -i -H 'Cookie: hs_oauth_state=<state>' 'http://localhost:3100/api/hubspot/oauth/callback?code=unknown-code&state=<state>'
+HTTP/1.1 502 Bad Gateway
+{"ok":false,"error":"token_exchange_failed","detail":"token endpoint answered 400","status":400,"hubspot":{"status":"BAD_AUTH_CODE","message":"fake endpoint: unknown code"}}
+
+# Requests the fake token endpoint received (client_secret value not logged):
+fake-token listening on 127.0.0.1:3199
+fake-token POST /oauth/v3/token content-type=application/x-www-form-urlencoded fields=grant_type,client_id,client_secret,redirect_uri,code grant_type=authorization_code code=synthetic-code-0001 redirect_uri=http://localhost:3100/api/hubspot/oauth/callback
+fake-token POST /oauth/v3/token content-type=application/x-www-form-urlencoded fields=grant_type,client_id,client_secret,redirect_uri,code grant_type=authorization_code code=unknown-code redirect_uri=http://localhost:3100/api/hubspot/oauth/callback
+
+# Stored row in spike_hubspot (plaintext_found_at = 0 means the token text is not in the ciphertext)
+$ docker exec llp-postgres-1 psql -U app -d spike_hubspot -c "select id, portal_id, octet_length(refresh_token_ciphertext) as ct_bytes, octet_length(refresh_token_iv) as iv_bytes, octet_length(refresh_token_auth_tag) as tag_bytes, position(convert_to('synthetic-refresh','UTF8') in refresh_token_ciphertext) as plaintext_found_at, array_length(scopes,1) as n_scopes, access_token_expires_at, created_at, updated_at from oauth_token;"
+ id | portal_id | ct_bytes | iv_bytes | tag_bytes | plaintext_found_at | n_scopes | access_token_expires_at |       created_at        |       updated_at        
+----+-----------+----------+----------+-----------+--------------------+----------+-------------------------+-------------------------+-------------------------
+  1 | 900000001 |       37 |       12 |        16 |                  0 |        7 | 2026-11-27 17:21:32.443 | 2026-11-27 16:51:32.507 | 2026-11-27 16:51:32.507
+(1 row)
+
+# Independent decrypt with node:crypto (AES-256-GCM, AAD hubspot-refresh-token:v1:<portal>, TOKEN_ENCRYPTION_KEY from .env)
+decrypts to the fake endpoint refresh token: true
+other portal AAD: rejected (Unsupported state or unable to authenticate data)
+wrong key: rejected (Unsupported state or unable to authenticate data)

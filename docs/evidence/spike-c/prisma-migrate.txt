@@ -1,0 +1,32 @@
+$ cd packages/db && pnpm exec prisma migrate dev --name oauth_token
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma/schema.prisma.
+Datasource "db": PostgreSQL database "spike_hubspot", schema "public" at "localhost:5433"
+
+Applying migration `20261127162420_init`
+
+The following migration(s) have been applied:
+
+migrations/
+  └─ 20261127162420_init/
+    └─ migration.sql
+Applying migration `20261127164438_oauth_token`
+
+
+The following migration(s) have been created and applied from new schema changes:
+
+prisma/migrations/
+  └─ 20261127164438_oauth_token/
+    └─ migration.sql
+
+Your database is now in sync with your schema.
+
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma/schema.prisma.
+Datasource "db": PostgreSQL database "spike_hubspot", schema "public" at "localhost:5433"
+
+2 migrations found in prisma/migrations
+
+Database schema is up to date!

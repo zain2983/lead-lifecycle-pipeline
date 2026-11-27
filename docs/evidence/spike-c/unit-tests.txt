@@ -1,0 +1,94 @@
+# commit 2c47470
+$ cd packages/crm-hubspot && pnpm exec vitest run --reporter=verbose
+
+ RUN  v5.1.2 <repo>/packages/crm-hubspot
+
+ ✓ test/token-crypto.test.ts > token crypto (AES-256-GCM) > round-trips a refresh token 2ms
+ ✓ test/token-crypto.test.ts > token crypto (AES-256-GCM) > uses a fresh IV every time 0ms
+ ✓ test/token-crypto.test.ts > token crypto (AES-256-GCM) > fails on a tampered ciphertext 0ms
+ ✓ test/token-crypto.test.ts > token crypto (AES-256-GCM) > fails on a tampered auth tag or IV 0ms
+ ✓ test/token-crypto.test.ts > token crypto (AES-256-GCM) > fails with the wrong key 0ms
+ ✓ test/token-crypto.test.ts > token crypto (AES-256-GCM) > fails when the ciphertext is moved to another portal's row 0ms
+ ✓ test/token-crypto.test.ts > token crypto (AES-256-GCM) > checks the key from TOKEN_ENCRYPTION_KEY 1ms
+ ✓ test/signature.test.ts > verifySignatureV3 > accepts HubSpot's published example (Java tab of the request-validation docs) 2ms
+ ✓ test/signature.test.ts > verifySignatureV3 > accepts a valid signature 0ms
+ ✓ test/signature.test.ts > verifySignatureV3 > is base64 HMAC-SHA256 over method + uri + body + timestamp 0ms
+ ✓ test/signature.test.ts > verifySignatureV3 > rejects a signature made with another secret 0ms
+ ✓ test/signature.test.ts > verifySignatureV3 > rejects a garbage or truncated signature without throwing 0ms
+ ✓ test/signature.test.ts > verifySignatureV3 > rejects a tampered body 0ms
+ ✓ test/signature.test.ts > verifySignatureV3 > rejects a changed URI, method or timestamp 1ms
+ ✓ test/signature.test.ts > verifySignatureV3 > verifies the raw body, not a re-serialised one 0ms
+ ✓ test/signature.test.ts > verifySignatureV3 > rejects a timestamp older than 5 minutes, and accepts one exactly at the limit 0ms
+ ✓ test/signature.test.ts > verifySignatureV3 > rejects a timestamp more than 5 minutes in the future, and tolerates small clock skew 0ms
+ ✓ test/signature.test.ts > verifySignatureV3 > rejects missing or malformed headers 0ms
+ ✓ test/signature.test.ts > verifySignatureV3 > refuses to run with an empty client secret 1ms
+ ✓ test/signature.test.ts > URL-encoded query strings > decodes exactly the documented characters in the query 0ms
+ ✓ test/signature.test.ts > URL-encoded query strings > verifies a request whose URL has an encoded query string 0ms
+ ✓ test/signature.test.ts > URL-encoded query strings > leaves other escapes, lowercase escapes and the path alone 0ms
+ ✓ test/signature.test.ts > URL-encoded query strings > drops the fragment and leaves a URI without a query unchanged 0ms
+ ✓ test/signature.test.ts > signedUriFor > takes scheme and host from PUBLIC_WEBHOOK_URL, path and query from the request 0ms
+ ✓ test/signature.test.ts > signedUriFor > ignores a spoofed Host header 0ms
+ ✓ test/signature.test.ts > signedUriFor > keeps a non-default port and the encoded query as received 0ms
+ ✓ test/signature.test.ts > signedUriFor > accepts a path-only request URL 0ms
+ ✓ test/webhook-events.test.ts > parseWebhookBatch > parses every synthetic fixture 4ms
+ ✓ test/webhook-events.test.ts > parseWebhookBatch > keeps the fields the consumer needs, and unknown fields 0ms
+ ✓ test/webhook-events.test.ts > parseWebhookBatch > rejects bodies that are not a batch of events 1ms
+ ✓ test/oauth.test.ts > buildAuthorizeUrl > builds HubSpot's authorize URL with %20-separated scopes 2ms
+ ✓ test/oauth.test.ts > HUBSPOT_REQUIRED_SCOPES > matches requiredScopes in the dev app's app-hsmeta.json 1ms
+ ✓ test/oauth.test.ts > exchangeAuthorizationCode (against a fake token endpoint) > posts the documented form fields and returns the tokens 23ms
+ ✓ test/oauth.test.ts > exchangeAuthorizationCode (against a fake token endpoint) > reports HubSpot's error status and body as they came back 7ms
+ ✓ test/oauth.test.ts > exchangeAuthorizationCode (against a fake token endpoint) > rejects a 200 without hub_id, naming the field but not the token values 3ms
+ ✓ test/oauth.test.ts > exchangeAuthorizationCode (against a fake token endpoint) > treats a timeout as unknown, not as failed 203ms
+
+ Test Files  4 passed (4)
+      Tests  36 passed (36)
+   Start at  21:57:22
+   Duration  423ms (tests 61%, import 29%, transform 8%, worker 3%)
+
+
+$ cd apps/web && pnpm exec vitest run --reporter=verbose
+
+ RUN  v5.1.2 <repo>/apps/web
+
+ ✓ test/hubspot-webhook.test.ts > POST /api/webhooks/hubspot > accepts a signed contact creation and answers with the event count 15ms
+ ✓ test/hubspot-webhook.test.ts > POST /api/webhooks/hubspot > counts every event in a batch 1ms
+ ✓ test/hubspot-webhook.test.ts > POST /api/webhooks/hubspot > returns 401 for a tampered body 0ms
+ ✓ test/hubspot-webhook.test.ts > POST /api/webhooks/hubspot > returns 401 for a request older than 5 minutes 1ms
+ ✓ test/hubspot-webhook.test.ts > POST /api/webhooks/hubspot > returns 401 when the headers are missing 1ms
+ ✓ test/hubspot-webhook.test.ts > POST /api/webhooks/hubspot > verifies against PUBLIC_WEBHOOK_URL whatever the Host header says 1ms
+ ✓ test/hubspot-webhook.test.ts > POST /api/webhooks/hubspot > verifies a target URL whose query string is URL-encoded 0ms
+ ✓ test/hubspot-webhook.test.ts > POST /api/webhooks/hubspot > returns 400 for a correctly signed body that is not an event batch 1ms
+ ✓ test/hubspot-webhook.test.ts > the route module > reads its config from the environment at request time 13ms
+ ✓ test/hubspot-webhook.test.ts > delivery capture (HUBSPOT_WEBHOOK_CAPTURE_DIR) > keeps accepted and rejected deliveries exactly as received 1ms
+ ✓ test/hubspot-webhook.test.ts > delivery capture (HUBSPOT_WEBHOOK_CAPTURE_DIR) > answers normally when the capture fails 1ms
+ ✓ test/hubspot-webhook.test.ts > delivery capture (HUBSPOT_WEBHOOK_CAPTURE_DIR) > writes one JSON file per delivery 4ms
+ ✓ test/hubspot-oauth.test.ts > GET /api/hubspot/oauth/start > sets a one-time state cookie and redirects to HubSpot's authorize URL 2ms
+ ✓ test/hubspot-oauth.test.ts > GET /api/hubspot/oauth/start > generates a random state, and marks the cookie Secure on https 1ms
+ ✓ test/hubspot-oauth.test.ts > GET /api/hubspot/oauth/callback (fake token endpoint) > exchanges the code and stores only the encrypted refresh token 23ms
+ ✓ test/hubspot-oauth.test.ts > GET /api/hubspot/oauth/callback (fake token endpoint) > rejects a state that doesn't match the cookie, without calling the token endpoint 2ms
+ ✓ test/hubspot-oauth.test.ts > GET /api/hubspot/oauth/callback (fake token endpoint) > rejects a callback without the state cookie 0ms
+ ✓ test/hubspot-oauth.test.ts > GET /api/hubspot/oauth/callback (fake token endpoint) > passes on HubSpot's error from the token endpoint as it came back 7ms
+ ✓ test/hubspot-oauth.test.ts > GET /api/hubspot/oauth/callback (fake token endpoint) > reports a token endpoint that never answers as unknown (504) 202ms
+ ✓ test/hubspot-oauth.test.ts > GET /api/hubspot/oauth/callback (fake token endpoint) > reports an error HubSpot sends back to the redirect URI 1ms
+
+ Test Files  2 passed (2)
+      Tests  20 passed (20)
+   Start at  21:57:23
+   Duration  405ms (tests 64%, import 20%, transform 14%, worker 1%)
+
+
+$ cd packages/core && pnpm exec vitest run --reporter=verbose
+
+ RUN  v5.1.2 <repo>/packages/core
+
+ ✓ test/env.test.ts > loadEnv > returns typed values for the requested groups 2ms
+ ✓ test/env.test.ts > loadEnv > lists every missing variable at once 2ms
+ ✓ test/env.test.ts > loadEnv > rejects an encryption key that is not 32 bytes 1ms
+ ✓ test/env.test.ts > loadEnv > lets the webhook receiver start with only the secret and the public URL 1ms
+ ✓ test/env.test.ts > loadEnv > defaults the token endpoint to HubSpot's v3 endpoint 0ms
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  21:57:24
+   Duration  150ms (import 53%, transform 33%, tests 11%, worker 3%)
+
