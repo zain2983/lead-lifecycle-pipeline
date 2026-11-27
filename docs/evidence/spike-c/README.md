@@ -29,7 +29,7 @@ cd packages/db && pnpm exec prisma migrate dev --name oauth_token && cd ../..
 pnpm db:generate
 pnpm lint && pnpm typecheck && pnpm test
 cd apps/web && pnpm exec next build
-# Next reads .env from apps/web only, so export the repo-root .env into the server's environment:
+# Next read .env from apps/web only, so the repo-root .env was exported by hand (next.config.ts loads it now):
 set -a && . ../../.env && set +a && HUBSPOT_WEBHOOK_CAPTURE_DIR=/tmp/llp-captures pnpm exec next start --port 3100
 # in another shell, from the repo root:
 pnpm hs:replay packages/crm-hubspot/fixtures/contact-creation.json
@@ -134,8 +134,8 @@ and redact secrets, emails and the signature header (keep 6 characters).
    install into "up to 10 allowlisted accounts (not including developer test accounts)", and the _Add approved
    account(s)_ panel lists production accounts. Start the install from our app instead, so the callback gets its
    `state`:
-   - build and start: `pnpm --filter @repo/web build`, then
-     `cd apps/web && set -a && . ../../.env && set +a && pnpm exec next start --port 3100`;
+   - build and start: `pnpm --filter @repo/web build && pnpm --filter @repo/web start` (`next.config.ts` loads the
+     repo-root `.env`; a variable exported in the shell wins over the file);
    - open `http://localhost:3100/api/hubspot/oauth/start` in the browser that is signed in to HubSpot, choose
      **demo**, review the scopes, tick the unverified-app box and click **Connect app**;
    - expect `{"ok":true,"portalId":"<demo>", …}`. Save it, plus the row query from `oauth-transcript.txt`.

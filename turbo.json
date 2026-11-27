@@ -22,7 +22,8 @@
     "dev": {
       "dependsOn": ["^generate"],
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "passThroughEnv": ["HUBSPOT_*", "PUBLIC_*", "TOKEN_ENCRYPTION_KEY", "SIM_*", "SPIKE_ROUTES"]
     }
   },
   "globalPassThroughEnv": ["DATABASE_URL", "DIRECT_URL"]
