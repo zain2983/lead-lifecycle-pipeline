@@ -59,9 +59,15 @@ export const envGroups = {
     HUBSPOT_SERVICE_KEY_DEMO: z.string().min(1),
     HUBSPOT_SERVICE_KEY_EVAL: z.string().min(1),
   }),
+  /** The local Sim instance. Only the local worker talks to it (ADR 0003). */
   sim: z.object({
     SIM_BASE_URL: z.url().default("http://localhost:3000"),
+    /** A personal API key: saving workflow source and running a pinned version need one. */
     SIM_API_KEY: z.string().min(1),
+    /** Listing paused runs (GET /api/v2/workflows/runs/paused) needs the workspace. */
+    SIM_WORKSPACE_ID: z.string().min(1),
+  }),
+  simTriage: z.object({
     SIM_TRIAGE_WORKFLOW_ID: z.string().min(1),
   }),
   simApprovals: z.object({
