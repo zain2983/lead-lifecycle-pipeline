@@ -27,4 +27,6 @@ Things to know before uploading:
   suggests the build won't fail. That is unverified for project builds: see the runbook.
 - Changing a `uid` later makes HubSpot treat the component as new.
 
+The production twin is [`../prod`](../prod/README.md): same scopes and subscriptions, production URLs only.
+
 Runbook for the live test, and what has and hasn't been verified: [`docs/evidence/spike-c/README.md`](../../../docs/evidence/spike-c/README.md).
