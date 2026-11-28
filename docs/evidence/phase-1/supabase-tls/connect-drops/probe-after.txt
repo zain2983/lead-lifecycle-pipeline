@@ -1,0 +1,51 @@
+=== run 1 18:19:56
+--- DATABASE_URL | as configured | createPgPool
+result: ok
+--- DATABASE_URL | as configured | createPrismaClient
+result: ok
+--- DATABASE_URL | as configured | createBoss: pg-boss pool
+result: ok
+--- DATABASE_URL | as configured | createBoss: pg-boss LISTEN client
+result: ok
+--- DIRECT_URL | as configured | createPgPool
+result: ok
+--- DIRECT_URL | as configured | createPrismaClient
+result: ok
+--- DIRECT_URL | as configured | createBoss: pg-boss pool
+result: ok
+--- DIRECT_URL | as configured | createBoss: pg-boss LISTEN client
+result: ok
+=== run 2 18:20:18
+--- DATABASE_URL | as configured | createPgPool
+result: ok
+--- DATABASE_URL | as configured | createPrismaClient
+result: ok
+--- DATABASE_URL | as configured | createBoss: pg-boss pool
+result: ok
+--- DATABASE_URL | as configured | createBoss: pg-boss LISTEN client
+result: ok
+--- DIRECT_URL | as configured | createPgPool
+result: ok
+--- DIRECT_URL | as configured | createPrismaClient
+result: ok
+--- DIRECT_URL | as configured | createBoss: pg-boss pool
+result: ok
+--- DIRECT_URL | as configured | createBoss: pg-boss LISTEN client
+result: ok
+=== run 3 18:20:38
+--- DATABASE_URL | as configured | createPgPool
+result: ok
+--- DATABASE_URL | as configured | createPrismaClient
+result: ok
+--- DATABASE_URL | as configured | createBoss: pg-boss pool
+result: ok
+--- DATABASE_URL | as configured | createBoss: pg-boss LISTEN client
+result: ok
+--- DIRECT_URL | as configured | createPgPool
+result: ok
+--- DIRECT_URL | as configured | createPrismaClient
+result: ok
+--- DIRECT_URL | as configured | createBoss: pg-boss pool
+result: ok
+--- DIRECT_URL | as configured | createBoss: pg-boss LISTEN client
+result: ok
