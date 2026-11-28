@@ -1,0 +1,46 @@
+$ pnpm --filter @repo/db exec prisma migrate status   (commit d7c9086, database phase3)
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma/schema.prisma.
+Datasource "db": PostgreSQL database "phase3", schema "public" at "localhost:5433"
+
+4 migrations found in prisma/migrations
+
+┌─────────────────────────────────────────────────────────┐
+│  Update available 7.10.1 -> 8.0.0-rc.36                 │
+│                                                         │
+│  This is a major update - please follow the guide at    │
+│  https://pris.ly/d/major-version-upgrade                │
+│                                                         │
+│  Run the following to update                            │
+│    npm i --save-dev prisma@latest                       │
+│    npm i @prisma/client@latest                          │
+└─────────────────────────────────────────────────────────┘
+Database schema is up to date!
+
+$ pnpm db:migrate   (a second run: no drift from the hand-written CHECKs)
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma/schema.prisma.
+Datasource "db": PostgreSQL database "phase3", schema "public" at "localhost:5433"
+
+Already in sync, no schema change or pending migration was found.
+
+
+$ psql: the constraints this migration adds or replaces, as Postgres reports them
+             conname             |                                                                                                     pg_get_constraintdef                                                                                                      
+---------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ lead_pii_purged                 | CHECK (((pii_purged_at IS NULL) OR ((email IS NULL) AND (first_name IS NULL) AND (last_name IS NULL) AND (phone IS NULL) AND (company_name IS NULL) AND (job_title IS NULL) AND (message IS NULL) AND (submission IS NULL))))
+ oauth_token_installed_via_known | CHECK ((installed_via = ANY (ARRAY['app_start'::text, 'hubspot_initiated'::text])))
+(2 rows)
+
+$ psql: the new oauth_token columns
+       column_name        |        data_type         | is_nullable |  column_default   
+--------------------------+--------------------------+-------------+-------------------
+ installed_via            | text                     | NO          | 'app_start'::text
+ last_refresh_error       | jsonb                    | YES         | 
+ last_refresh_error_at    | timestamp with time zone | YES         | 
+ last_refreshed_at        | timestamp with time zone | YES         | 
+ refresh_token_rotated_at | timestamp with time zone | YES         | 
+(5 rows)
+

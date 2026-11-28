@@ -94,6 +94,8 @@ export async function completeHubSpotOAuth(
   }
 
   const state = url.searchParams.get("state");
+  // UNVERIFIED (live check pending): that HubSpot's Install button sends no `state` parameter rather
+  // than an empty one. An empty one is refused as state_missing (ADR 0006, Consequences).
   const installedVia: InstallSource = state === null ? "hubspot_initiated" : "app_start";
   if (state !== null) {
     const expected = readCookie(request.headers.get("cookie"), OAUTH_STATE_COOKIE);

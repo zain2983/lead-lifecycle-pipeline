@@ -1,0 +1,242 @@
+commit d7c9086; database phase3 on localhost:5433; verbose Vitest output per package
+
+===== @repo/crm-hubspot
+
+ RUN  v5.1.2 <repo>/packages/crm-hubspot
+
+ ✓ test/token-crypto.test.ts > token crypto (AES-256-GCM) > round-trips a refresh token
+ ✓ test/token-crypto.test.ts > token crypto (AES-256-GCM) > uses a fresh IV every time
+ ✓ test/token-crypto.test.ts > token crypto (AES-256-GCM) > fails on a tampered ciphertext
+ ✓ test/token-crypto.test.ts > token crypto (AES-256-GCM) > fails on a tampered auth tag or IV
+ ✓ test/token-crypto.test.ts > token crypto (AES-256-GCM) > fails with the wrong key
+ ✓ test/token-crypto.test.ts > token crypto (AES-256-GCM) > fails when the ciphertext is moved to another portal's row
+ ✓ test/token-crypto.test.ts > token crypto (AES-256-GCM) > checks the key from TOKEN_ENCRYPTION_KEY
+ ✓ test/webhook-events.test.ts > parseWebhookBatch > parses every synthetic fixture
+ ✓ test/webhook-events.test.ts > parseWebhookBatch > keeps the fields the consumer needs, and unknown fields
+ ✓ test/webhook-events.test.ts > parseWebhookBatch > rejects bodies that are not a batch of events
+ ✓ test/contracts.test.ts > fixtures/api > every file has the envelope, a source and where it came from
+ ✓ test/contracts.test.ts > GET /crm/objects/2026-09/contacts/{id} > 200: keeps exactly the allow-listed properties, missing ones as null
+ ✓ test/contracts.test.ts > GET /crm/objects/2026-09/contacts/{id} > 404: not found is null, not an error
+ ✓ test/contracts.test.ts > GET /crm/objects/2026-09/contacts/{id} > refuses a property outside the allow-list before sending anything
+ ✓ test/contracts.test.ts > POST /oauth/v3/token > authorization_code 200: sends the documented form and parses the answer
+ ✓ test/contracts.test.ts > POST /oauth/v3/token > refresh_token 200: sends the documented form and parses the answer
+ ✓ test/contracts.test.ts > POST /oauth/v3/token > refresh_token 400 BAD_REFRESH_TOKEN: rejected, with HubSpot's codes
+ ✓ test/oauth.test.ts > buildAuthorizeUrl > builds HubSpot's authorize URL with %20-separated scopes
+ ✓ test/oauth.test.ts > HUBSPOT_REQUIRED_SCOPES > matches requiredScopes in the dev app's app-hsmeta.json
+ ✓ test/oauth.test.ts > the prod app (integrations/hubspot-app/prod) > has the required scopes and only the production redirect and target
+ ✓ test/oauth.test.ts > the prod app (integrations/hubspot-app/prod) > differs from dev only in names, uids, description, redirects and target URL
+ ✓ test/oauth.test.ts > exchangeAuthorizationCode (against a fake token endpoint) > posts the documented form fields and returns the tokens
+ ✓ test/oauth.test.ts > exchangeAuthorizationCode (against a fake token endpoint) > reports HubSpot's error status and body as they came back
+ ✓ test/oauth.test.ts > exchangeAuthorizationCode (against a fake token endpoint) > rejects a 200 without hub_id, naming the field but not the token values
+ ✓ test/api.test.ts > HubSpotClient > sends the service key as a Bearer token and never accepts a wrong one
+ ✓ test/api.test.ts > HubSpotClient > backs off on a 429 with growing, jittered delays, then succeeds
+ ✓ test/api.test.ts > HubSpotClient > retries a 429 on a write too (HubSpot refused it before processing)
+ ✓ test/api.test.ts > HubSpotClient > gives up after maxRetries and reports HubSpot's 429 body as it came
+ ✓ test/api.test.ts > HubSpotClient > does not retry the daily limit
+ ✓ test/signature.test.ts > verifySignatureV3 > accepts HubSpot's published example (Java tab of the request-validation docs)
+ ✓ test/signature.test.ts > verifySignatureV3 > accepts a valid signature
+ ✓ test/signature.test.ts > verifySignatureV3 > is base64 HMAC-SHA256 over method + uri + body + timestamp
+ ✓ test/signature.test.ts > verifySignatureV3 > rejects a signature made with another secret
+ ✓ test/signature.test.ts > verifySignatureV3 > rejects a garbage or truncated signature without throwing
+ ✓ test/signature.test.ts > verifySignatureV3 > rejects a tampered body
+ ✓ test/signature.test.ts > verifySignatureV3 > rejects a changed URI, method or timestamp
+ ✓ test/signature.test.ts > verifySignatureV3 > verifies the raw body, not a re-serialised one
+ ✓ test/signature.test.ts > verifySignatureV3 > rejects a timestamp older than 5 minutes, and accepts one exactly at the limit
+ ✓ test/signature.test.ts > verifySignatureV3 > rejects a timestamp more than 5 minutes in the future, and tolerates small clock skew
+ ✓ test/signature.test.ts > verifySignatureV3 > rejects missing or malformed headers
+ ✓ test/signature.test.ts > verifySignatureV3 > refuses to run with an empty client secret
+ ✓ test/signature.test.ts > URL-encoded query strings > decodes exactly the documented characters in the query
+ ✓ test/signature.test.ts > URL-encoded query strings > verifies a request whose URL has an encoded query string
+ ✓ test/signature.test.ts > URL-encoded query strings > leaves other escapes, lowercase escapes and the path alone
+ ✓ test/signature.test.ts > URL-encoded query strings > drops the fragment and leaves a URI without a query unchanged
+ ✓ test/signature.test.ts > signedUriFor > takes scheme and host from PUBLIC_WEBHOOK_URL, path and query from the request
+ ✓ test/signature.test.ts > signedUriFor > ignores a spoofed Host header
+ ✓ test/signature.test.ts > signedUriFor > keeps a non-default port and the encoded query as received
+ ✓ test/signature.test.ts > signedUriFor > accepts a path-only request URL
+ ✓ test/token-manager.test.ts > HubSpotTokenManager > refreshes with the documented grant, then serves the cached token until the safety margin
+ ✓ test/token-manager.test.ts > HubSpotTokenManager > caps the margin at half the lifetime, so a short-lived token isn't refreshed on every call
+ ✓ test/token-manager.test.ts > HubSpotTokenManager > is single-flight per portal: ten concurrent callers share one refresh
+ ✓ test/token-manager.test.ts > HubSpotTokenManager > stores a new refresh token, encrypted, when HubSpot returns one
+ ✓ test/conversion-mapping.test.ts > conversion mapping (draft until Phase 8.2) > says it is a draft
+ ✓ test/conversion-mapping.test.ts > conversion mapping (draft until Phase 8.2) > never maps the agent's disposition to a primary action, whoever HubSpot says changed it
+ ✓ test/conversion-mapping.test.ts > conversion mapping (draft until Phase 8.2) > maps an approved 'qualified' to a secondary MQL, and spam or duplicate to correction candidates
+ ✓ test/conversion-mapping.test.ts > conversion mapping (draft until Phase 8.2) > gives a primary action only for a person's change, and fails closed otherwise
+ ✓ test/conversion-mapping.test.ts > conversion mapping (draft until Phase 8.2) > maps nothing it has no rule for
+ ✓ test/crm-event-key.test.ts > crmEventDedupeKey > is v1 + a sha256 hex, the format crm_event.dedupe_key checks
+ ✓ test/crm-event-key.test.ts > crmEventDedupeKey > is the same for a retry (only attemptNumber differs)
+ ✓ test/crm-event-key.test.ts > crmEventDedupeKey > differs when anything that identifies the change differs, even with the same eventId
+ ✓ test/crm-event-key.test.ts > crmEventDedupeKey > gives the batch's retried lifecycle event the same key as its first delivery
+ ✓ test/token-manager.test.ts > HubSpotTokenManager > a timeout is unknown: nothing cached, recorded as unknown, the next call asks again
+ ✓ test/token-manager.test.ts > HubSpotTokenManager > a revoked refresh token is rejected, with HubSpot's codes recorded and no token
+ ✓ test/token-manager.test.ts > HubSpotTokenManager > refuses an answer for another portal, and a portal with no install
+ ✓ test/token-manager.test.ts > HubSpotClient with OAuth > reads a contact with the portal's access token, and retries a 401 once with a fresh one
+ ✓ test/oauth.test.ts > exchangeAuthorizationCode (against a fake token endpoint) > treats a timeout as unknown, not as failed
+ ✓ test/token-store.test.ts > prismaOAuthTokenStore (oauth_token) > saves, loads, records refreshes and failures, and a reinstall clears the bookkeeping
+ ✓ test/setup-and-seed.test.ts > hs:setup (ensureContactProperties) > creates the group and every property, then a second run changes nothing
+ ✓ test/setup-and-seed.test.ts > hs:setup (ensureContactProperties) > creates the properties the plan names, in our own group
+ ✓ test/setup-and-seed.test.ts > hs:setup (ensureContactProperties) > repairs drift by patching only the fields that differ, and never duplicates
+ ✓ test/leads.test.ts > upsertHubSpotDirectLead > creates the Lead from allow-listed properties, then leaves it alone
+ ✓ test/leads.test.ts > upsertHubSpotDirectLead > skips and never stores a contact without a reserved email, a deleted one, or none at all
+ ✓ test/api.test.ts > HubSpotClient > turns a timeout on a write into an unknown outcome, without retrying
+ ✓ test/api.test.ts > HubSpotClient > turns a 5xx on a write into an unknown outcome too, but retries it on a read
+ ✓ test/setup-and-seed.test.ts > hs:setup (ensureContactProperties) > reads again when a create fails because the property appeared meanwhile
+ ✓ test/setup-and-seed.test.ts > hs:setup (ensureContactProperties) > refuses to touch a HubSpot-defined property with the same name
+ ✓ test/api.test.ts > HubSpotClient > retries a timed-out read
+ ✓ test/api.test.ts > HubSpotClient > waits for the window when its own limit is reached
+ ✓ test/api.test.ts > HubSpotClient > waits when HubSpot's headers say the window is used up
+ ✓ test/api.test.ts > HubSpotClient > never puts the token in an error message
+ ✓ test/setup-and-seed.test.ts > hs:setup (ensureContactProperties) > reports a timed-out create as unknown, and a re-run settles it
+ ✓ test/setup-and-seed.test.ts > hs:setup (ensureContactProperties) > writes nothing in a dry run
+ ✓ test/setup-and-seed.test.ts > hs:seed (upsertContactsByEmail) > demo: creates 20 contacts, then a second run sends nothing and changes nothing
+ ✓ test/leads.test.ts > upsertHubSpotDirectLead > throws when HubSpot fails, so the job is retried
+ ✓ test/leads.test.ts > upsertHubSpotDirectLead > keeps the synthetic-key link only while no other portal's lead holds it
+ ✓ test/leads.test.ts > purgeLeadPii and the lead upsert after a privacy deletion > purges every PII column, keeps the row, and is idempotent
+ ✓ test/leads.test.ts > purgeLeadPii and the lead upsert after a privacy deletion > returns null when the contact never became a Lead, and a later upsert stores nothing
+ ✓ test/setup-and-seed.test.ts > hs:seed (upsertContactsByEmail) > eval: creates 10 contacts, then a second run sends nothing and changes nothing
+ ✓ test/setup-and-seed.test.ts > hs:seed (upsertContactsByEmail) > updates only the contact someone edited, and only its changed field
+ ✓ test/setup-and-seed.test.ts > hs:seed (upsertContactsByEmail) > leaves fields it doesn't own alone (a later approved disposition survives a re-seed)
+ ✓ test/setup-and-seed.test.ts > hs:seed (upsertContactsByEmail) > reports a timed-out upsert as unknown for every contact in it, and a re-run settles it
+ ✓ test/setup-and-seed.test.ts > hs:seed (upsertContactsByEmail) > reports HubSpot's 4xx body as it came, as failed
+ ✓ test/setup-and-seed.test.ts > hs:seed (upsertContactsByEmail) > only sends properties that exist, with valid option values
+ ✓ test/setup-and-seed.test.ts > hs:seed (upsertContactsByEmail) > dry run reads and writes nothing
+ ✓ test/setup-and-seed.test.ts > seed mapping > never writes the fields the agent or a person owns
+ ✓ test/setup-and-seed.test.ts > the CLIs, end to end against the fake > hs:setup twice, then hs:seed twice: the second runs report no changes
+ ✓ test/setup-and-seed.test.ts > the CLIs, end to end against the fake > refuses to run without the chosen account's key
+
+ Test Files  12 passed (12)
+      Tests  98 passed (98)
+
+
+===== @repo/web
+
+ RUN  v5.1.2 <repo>/apps/web
+
+pg-boss schema "pgboss" is already at version 48 (latest: 48)
+ ✓ test/hubspot-webhook.test.ts > POST /api/webhooks/hubspot > accepts a signed contact creation and answers with the event count
+ ✓ test/hubspot-webhook.test.ts > POST /api/webhooks/hubspot > counts every event in a batch
+ ✓ test/hubspot-webhook.test.ts > POST /api/webhooks/hubspot > returns 401 for a tampered body
+ ✓ test/hubspot-webhook.test.ts > POST /api/webhooks/hubspot > returns 401 for a request older than 5 minutes
+ ✓ test/hubspot-webhook.test.ts > POST /api/webhooks/hubspot > returns 401 when the headers are missing
+ ✓ test/hubspot-webhook.test.ts > POST /api/webhooks/hubspot > verifies against PUBLIC_WEBHOOK_URL whatever the Host header says
+ ✓ test/hubspot-webhook.test.ts > POST /api/webhooks/hubspot > verifies a target URL whose query string is URL-encoded
+ ✓ test/hubspot-webhook.test.ts > POST /api/webhooks/hubspot > returns 400 for a correctly signed body that is not an event batch
+ ✓ test/hubspot-webhook.test.ts > delivery capture (HUBSPOT_WEBHOOK_CAPTURE_DIR) > keeps accepted and rejected deliveries exactly as received
+ ✓ test/hubspot-webhook.test.ts > delivery capture (HUBSPOT_WEBHOOK_CAPTURE_DIR) > answers normally when the capture fails
+ ✓ test/hubspot-webhook.test.ts > delivery capture (HUBSPOT_WEBHOOK_CAPTURE_DIR) > writes one JSON file per delivery
+ ✓ app/api/spikes/queue/route.test.ts > spike queue route > is a 404 when SPIKE_ROUTES=undefined
+ ✓ app/api/spikes/queue/route.test.ts > spike queue route > is a 404 when SPIKE_ROUTES=0
+ ✓ app/api/spikes/queue/route.test.ts > spike queue route > is a 404 when SPIKE_ROUTES=true
+ ✓ app/api/spikes/queue/route.test.ts > spike queue route > is a 404 when SPIKE_ROUTES=yes
+ ✓ test/hubspot-oauth.test.ts > GET /api/hubspot/oauth/start > sets a one-time state cookie and redirects to HubSpot's authorize URL
+ ✓ test/hubspot-oauth.test.ts > GET /api/hubspot/oauth/start > generates a random state, and marks the cookie Secure on https
+ ✓ test/hubspot-oauth.test.ts > GET /api/hubspot/oauth/callback (fake token endpoint) > exchanges the code and stores only the encrypted refresh token
+ ✓ test/hubspot-oauth.test.ts > GET /api/hubspot/oauth/callback (fake token endpoint) > rejects a state that doesn't match the cookie, without calling the token endpoint
+ ✓ test/hubspot-oauth.test.ts > GET /api/hubspot/oauth/callback (fake token endpoint) > rejects a callback without the state cookie
+ ✓ test/hubspot-oauth.test.ts > GET /api/hubspot/oauth/callback (fake token endpoint) > passes on HubSpot's error from the token endpoint as it came back
+ ✓ test/hubspot-oauth.test.ts > GET /api/hubspot/oauth/callback (fake token endpoint) > reports a token endpoint that never answers as unknown (504)
+ ✓ test/hubspot-oauth.test.ts > GET /api/hubspot/oauth/callback (fake token endpoint) > reports an error HubSpot sends back to the redirect URI
+ ✓ test/hubspot-oauth.test.ts > GET /api/hubspot/oauth/callback (fake token endpoint) > without a state parameter (HubSpot's own Install button, ADR 0006) > rejects an unknown portal with a page, storing nothing
+ ✓ test/hubspot-oauth.test.ts > GET /api/hubspot/oauth/callback (fake token endpoint) > without a state parameter (HubSpot's own Install button, ADR 0006) > accepts a portal listed in HUBSPOT_KNOWN_PORTAL_IDS, recorded as hubspot_initiated
+ ✓ test/hubspot-oauth.test.ts > GET /api/hubspot/oauth/callback (fake token endpoint) > without a state parameter (HubSpot's own Install button, ADR 0006) > accepts a reinstall into a portal that already has an install
+ ✓ test/hubspot-oauth.test.ts > GET /api/hubspot/oauth/callback (fake token endpoint) > without a state parameter (HubSpot's own Install button, ADR 0006) > still refuses an empty state before any exchange
+ ✓ test/hubspot-intake.test.ts > POST /api/webhooks/hubspot: intake (done when) > one event sent 3 times (attemptNumber 0, 1, 2) gives exactly one CrmEvent row and one job
+ ✓ test/hubspot-intake.test.ts > POST /api/webhooks/hubspot: intake (done when) > a mixed batch with a retry inside it is deduplicated too, and so is the whole batch resent
+ ✓ test/hubspot-intake.test.ts > POST /api/webhooks/hubspot: intake (done when) > concurrent deliveries of one batch store it once
+ ✓ test/hubspot-intake.test.ts > POST /api/webhooks/hubspot: intake (done when) > a database failure mid-batch answers 500 and commits nothing; HubSpot's retry stores it
+ ✓ test/hubspot-intake.test.ts > POST /api/webhooks/hubspot: intake (done when) > answers a 100-event batch well under 5 s
+ ✓ test/hubspot-intake.test.ts > the route module > reads its config from the environment at request time and stores through the real database
+ ✓ test/hubspot-intake.test.ts > contact.privacyDeletion in the webhook transaction > purges the Lead's PII, keeps the row, links the event and logs IDs only
+
+ Test Files  4 passed (4)
+      Tests  34 passed (34)
+
+
+===== @repo/worker
+
+ RUN  v5.1.2 <repo>/apps/worker
+
+ ✓ test/ops.test.ts > ops sweep arguments > requires --once and defaults the budget to 240 s
+ ✓ test/ops.test.ts > ops sweep arguments > rejects a bad budget and unknown flags
+stdout | test/triage.test.ts > the local worker's triage handler (Phase 3: the hubspot_direct Lead) > refreshes the portal's token, reads the contact and creates the Lead once
+{"msg":"hubspot token refreshed","portalId":"900000333","expiresInSeconds":1800,"refreshTokenRotated":false}
+
+stdout | test/triage.test.ts > the local worker's triage handler (Phase 3: the hubspot_direct Lead) > completes with a reason for a non-reserved email, and stores nothing
+{"msg":"hubspot token refreshed","portalId":"900000333","expiresInSeconds":1800,"refreshTokenRotated":false}
+
+ ✓ test/triage.test.ts > the local worker's triage handler (Phase 3: the hubspot_direct Lead) > refreshes the portal's token, reads the contact and creates the Lead once
+ ✓ test/triage.test.ts > the local worker's triage handler (Phase 3: the hubspot_direct Lead) > completes with a reason for a non-reserved email, and stores nothing
+ ✓ test/triage.test.ts > the local worker's triage handler (Phase 3: the hubspot_direct Lead) > throws (so pg-boss retries) for a portal with no install or a malformed job
+
+ Test Files  2 passed (2)
+      Tests  5 passed (5)
+
+
+===== @repo/queue
+
+ RUN  v5.1.2 <repo>/packages/queue
+
+pg-boss schema "pgboss" is already at version 48 (latest: 48)
+ ✓ test/routing.test.ts > routeCrmEvent (Phase 3; Phase 4 replaces it) > sends a contact's object.creation to triage
+ ✓ test/routing.test.ts > routeCrmEvent (Phase 3; Phase 4 replaces it) > only logs everything else, with the reason
+ ✓ test/fifo-dead-letter.test.ts > key_strict_fifo after a dead-letter (pg-boss 12.40.0) > holds the key's next job until the failed one is deleted or retried
+ ✓ test/prisma-tx.test.ts > transactional enqueue through a Prisma interactive transaction > rollback leaves no job and no heartbeat
+ ✓ test/prisma-tx.test.ts > transactional enqueue through a Prisma interactive transaction > commit leaves exactly one job and the app's row
+ ✓ test/prisma-tx.test.ts > transactional enqueue through a Prisma interactive transaction > the same deterministic job id sent twice leaves one job
+ ✓ test/prisma-tx.test.ts > transactional enqueue through a Prisma interactive transaction > refuses the root client, which would auto-commit the job outside the transaction
+ ✓ test/sweep.test.ts > sweepOnce > expires a job a dead process left active, then retries and completes it
+ ✓ test/sweep.test.ts > sweepOnce > refuses a triage handler and skips the triage queue
+ ✓ test/sweep.test.ts > drainQueues > works every ready job, then removes its workers
+
+ Test Files  4 passed (4)
+      Tests  10 passed (10)
+
+
+===== @repo/core
+
+ RUN  v5.1.2 <repo>/packages/core
+
+ ✓ test/reserved.test.ts > isReservedEmail (same rule as the lead_email_reserved_domain CHECK) > accepts example.com/org/net and .test, with subdomains
+ ✓ test/reserved.test.ts > isReservedEmail (same rule as the lead_email_reserved_domain CHECK) > rejects lookalikes, other reserved TLDs, upper case and real-looking domains
+ ✓ test/ids.test.ts > uuidV5 > matches the reference implementation
+ ✓ test/ids.test.ts > uuidV5 > rejects a namespace that is not a UUID
+ ✓ test/ids.test.ts > deterministicJobId > is stable per key and differs across keys
+ ✓ test/ids.test.ts > deterministicJobId > refuses an empty key
+ ✓ test/env.test.ts > loadEnv > returns typed values for the requested groups
+ ✓ test/env.test.ts > loadEnv > lists every missing variable at once
+ ✓ test/env.test.ts > loadEnv > rejects an encryption key that is not 32 bytes
+ ✓ test/env.test.ts > loadEnv > lets the webhook receiver start with only the secret and the public URL
+ ✓ test/env.test.ts > loadEnv > defaults the token endpoint to HubSpot's v3 endpoint
+ ✓ test/env.test.ts > HubSpot service-key groups > needs only the chosen account's key
+ ✓ test/env.test.ts > HubSpot service-key groups > defaults the API base URL to HubSpot
+ ✓ test/env.test.ts > spikes group > is on only for exactly 1
+ ✓ test/env.test.ts > spikes group > parses known portal IDs for HubSpot-initiated installs, and rejects anything else
+ ✓ test/env.test.ts > spikes group > gives the worker the refresh credentials without a redirect URI
+
+ Test Files  3 passed (3)
+      Tests  16 passed (16)
+
+
+===== @repo/db
+
+ RUN  v5.1.2 <repo>/packages/db
+
+ ✓ test/erd.test.ts > README ERD > matches the Prisma schema (run `pnpm --filter @repo/db erd` after a schema change)
+ ✓ test/erd.test.ts > README ERD > draws a relation from the model that holds the foreign key, with its cardinality
+ ✓ test/constraints.test.ts > lead > defaults its id and timestamps in the database (raw SQL inserts need no Prisma)
+ ✓ test/constraints.test.ts > lead > accepts reserved email domains only
+ ✓ test/constraints.test.ts > lead > rejects a mixed-case email
+ ✓ test/constraints.test.ts > lead > requires a browser event ID on web-form leads
+ ✓ test/constraints.test.ts > lead > keeps a purged lead only without its PII
+ ✓ test/constraints.test.ts > lead > counts company and job title as PII in a purge (Phase 3 migration)
+ ✓ test/constraints.test.ts > lead > stores HubSpot portal and contact IDs together, unique per portal
+ ✓ test/constraints.test.ts > crm_event > stores a retried event once (ON CONFLICT on the dedupe key)
+ ✓ test/constraints.test.ts > crm_event > rejects a dedupe key that isn't a v1 hash
+ ✓ test/constraints.test.ts > agent_run > allows only this project's statuses, including unknown
+ ✓ test/constraints.test.ts > agent_run > refuses a second run with the same proposal run ID
+ ✓ test/constraints.test.ts > agent_run > never gives a shadow run a resume run ID, and keeps confidence in 0..1
+ ✓ test/constraints.test.ts > approval > is one per run, and a decision always comes with an approver and a time
+ ✓ test/constraints.test.ts > oauth_token > records only the two install paths
+
+ Test Files  2 passed (2)
+      Tests  16 passed (16)
+
