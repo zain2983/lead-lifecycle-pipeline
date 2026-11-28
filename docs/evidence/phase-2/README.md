@@ -142,4 +142,5 @@ The runbook (service key, the six commands, checking the account) ran on 2026-11
 1. After `hs:setup` in `demo`, the Phase 3.4 webhook subscription to `triage_disposition` can be enabled.
 2. Re-run `hs:setup` and `hs:seed` after every 90-day test-account renewal (PLAN Phase 2.4). If a second run says
    `updated (…)`, or a call fails, keep the output exactly as it is: the fix goes in the code, not the evidence.
-3. Delete HubSpot's 2 sample contacts from each account (see "Not ours").
+3. Done 2026-11-28: deleted from both accounts (recycle bin for 90 days); `demo` now holds exactly 20 contacts and
+   `eval` 10.
