@@ -7,7 +7,7 @@
     "distribution": "private",
     "auth": {
       "type": "oauth",
-      "redirectUrls": ["https://web-placeholder.example.com/api/hubspot/oauth/callback"],
+      "redirectUrls": ["https://lead-lifecycle-pipeline.vercel.app/api/hubspot/oauth/callback"],
       "requiredScopes": [
         "oauth",
         "crm.objects.contacts.read",

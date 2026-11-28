@@ -15,10 +15,10 @@ Each project is its own app in HubSpot, with its own client ID, client secret an
 (signed with the client secret) and the stored refresh tokens of one never work for the other: run `web` with the
 credentials of the app whose `targetUrl` points at it.
 
-**One placeholder.** `https://web-placeholder.example.com` stands for the production `web` URL in both `redirectUrls`
-and `targetUrl`. Replace it with the real URL once the Vercel project exists, then upload. Never point a `targetUrl` at a
-Vercel preview URL: previews are protected and would answer HubSpot with a login page. `PUBLIC_WEBHOOK_URL` on Vercel
-must be exactly the `targetUrl`, or every delivery fails signature v3.
+**The production URL.** Both `redirectUrls` and `targetUrl` use `https://lead-lifecycle-pipeline.vercel.app`, the production
+`web` deployment, since 2026-11-28 (it replaced `web-placeholder.example.com`). Upload is still pending: it needs Zain's
+HubSpot login. Never point a `targetUrl` at a Vercel preview URL: previews are protected and would answer HubSpot with a
+login page. `PUBLIC_WEBHOOK_URL` on Vercel must be exactly the `targetUrl`, or every delivery fails signature v3.
 
 **Installing into `demo`** (PLAN Phase 3.1): open `https://<production web>/api/hubspot/oauth/start` and choose `demo`.
 If HubSpot's picker doesn't offer it and you use the Distribution tab's _Test installs_ instead, the callback has no

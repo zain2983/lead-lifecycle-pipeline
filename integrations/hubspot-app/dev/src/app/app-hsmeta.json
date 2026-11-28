@@ -9,7 +9,7 @@
       "type": "oauth",
       "redirectUrls": [
         "http://localhost:3100/api/hubspot/oauth/callback",
-        "https://web-placeholder.example.com/api/hubspot/oauth/callback"
+        "https://lead-lifecycle-pipeline.vercel.app/api/hubspot/oauth/callback"
       ],
       "requiredScopes": [
         "oauth",
