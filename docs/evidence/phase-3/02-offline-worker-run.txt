@@ -1,0 +1,10 @@
+1. install stored for portal 900000001 (refresh token encrypted with a key made for this run)
+2. triage jobs for the portal before the drain: [["7b641584-d80d-5c93-ad24-c1ce32931ae6","created"]]
+{"msg":"hubspot token refreshed","portalId":"900000001","expiresInSeconds":1800,"refreshTokenRotated":false}
+3. drain: processed 1, failed 0, timedOut false
+   worker log: {"msg":"triage lead upsert","jobId":"7b641584-d80d-5c93-ad24-c1ce32931ae6","crmEventId":"694","portalId":"900000001","contactId":"610000000001","outcome":"created","leadId":"ca857881-5cfd-4b2a-bffc-ca157b1ef651","ms":"<ms>"}
+4. the job after: state completed, output {"leadId":"ca857881-5cfd-4b2a-bffc-ca157b1ef651","outcome":"created"}
+5. the Lead: {"source":"hubspot_direct","email":"<email redacted>","firstName":"<set>","companyName":"Quillmark","jobTitle":"Operations lead","submittedTimeZone":"UTC","hubspotContactId":"610000000001","piiPurgedAt":null}
+6. crm_event rows linked to it: [{"id":"694","subscriptionType":"object.creation"}]
+7. oauth_token bookkeeping: {"installedVia":"app_start","lastRefreshedAt":"<set>","refreshTokenRotatedAt":null,"lastRefreshError":null,"accessTokenExpiresAt":"<set>"}
+8. requests: token endpoint 1 (grant refresh_token), HubSpot 1 (GET /crm/objects/2026-09/contacts/610000000001?properties=email,firstname,lastname,phon… bearer=offline-access-token)

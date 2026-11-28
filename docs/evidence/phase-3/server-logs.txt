@@ -1,0 +1,22 @@
+▲ Next.js 16.4.6
+- Local:         http://localhost:3100
+- Network:       http://<lan-ip>:3100
+✓ Ready in 106ms
+✓ Running next.config.ts took 74ms
+{"msg":"hubspot event routed","crmEventId":"694","portalId":"900000001","objectId":"610000000001","subscriptionType":"object.creation","attemptNumber":0,"decision":"enqueue","reason":"contact created","queue":"triage","jobId":"7b641584-d80d-5c93-ad24-c1ce32931ae6","jobCreated":true}
+{"msg":"hubspot webhook accepted","received":1,"stored":1,"duplicates":0,"enqueued":1,"purged":0,"types":{"object.creation":1},"ms":100}
+{"msg":"hubspot webhook accepted","received":1,"stored":0,"duplicates":1,"enqueued":0,"purged":0,"types":{"object.creation":1},"ms":8}
+{"msg":"hubspot webhook accepted","received":1,"stored":0,"duplicates":1,"enqueued":0,"purged":0,"types":{"object.creation":1},"ms":7}
+{"msg":"hubspot event routed","crmEventId":"698","portalId":"900000001","objectId":"610000000001","subscriptionType":"contact.propertyChange","propertyName":"lifecyclestage","attemptNumber":0,"decision":"log_only","reason":"contact.propertyChange (lifecyclestage): Phase 4 routes stage and disposition changes"}
+{"msg":"hubspot event routed","crmEventId":"700","portalId":"900000001","objectId":"610000000002","subscriptionType":"contact.propertyChange","propertyName":"hs_lead_status","attemptNumber":0,"decision":"log_only","reason":"contact.propertyChange (hs_lead_status): Phase 4 routes stage and disposition changes"}
+{"msg":"hubspot webhook accepted","received":5,"stored":2,"duplicates":3,"enqueued":0,"purged":0,"types":{"object.creation":2,"contact.propertyChange":3},"ms":13}
+{"msg":"hubspot event routed","crmEventId":"703","portalId":"900000001","objectId":"620000000001","subscriptionType":"deal.propertyChange","propertyName":"dealstage","attemptNumber":0,"decision":"log_only","reason":"deal.propertyChange (dealstage): Phase 4 routes stage and disposition changes"}
+{"msg":"hubspot event routed","crmEventId":"705","portalId":"900000001","objectId":"610000000003","subscriptionType":"contact.privacyDeletion","attemptNumber":0,"purge":{"leadId":null,"note":"no lead for this contact"},"decision":"log_only","reason":"privacy deletion: purged by the intake, no job"}
+{"msg":"hubspot webhook accepted","received":4,"stored":2,"duplicates":2,"enqueued":0,"purged":0,"types":{"contact.propertyChange":2,"deal.propertyChange":1,"contact.privacyDeletion":1},"ms":37}
+{"msg":"hubspot webhook accepted","received":4,"stored":0,"duplicates":4,"enqueued":0,"purged":0,"types":{"contact.propertyChange":2,"deal.propertyChange":1,"contact.privacyDeletion":1},"ms":9}
+{"msg":"hubspot webhook rejected","reason":"signature_mismatch"}
+{"msg":"hubspot webhook rejected","reason":"timestamp_too_old"}
+{"msg":"hubspot webhook accepted","received":1,"stored":0,"duplicates":1,"enqueued":0,"purged":0,"types":{"object.creation":1},"ms":10}
+{"msg":"hubspot event routed","crmEventId":"711","portalId":"900000001","objectId":"610000000001","subscriptionType":"contact.privacyDeletion","attemptNumber":0,"purge":{"leadId":"ca857881-5cfd-4b2a-bffc-ca157b1ef651","alreadyPurged":false},"decision":"log_only","reason":"privacy deletion: purged by the intake, no job"}
+{"msg":"hubspot webhook accepted","received":1,"stored":1,"duplicates":0,"enqueued":0,"purged":1,"types":{"contact.privacyDeletion":1},"ms":42}
+{"msg":"hubspot webhook accepted","received":1,"stored":0,"duplicates":1,"enqueued":0,"purged":0,"types":{"contact.privacyDeletion":1},"ms":8}

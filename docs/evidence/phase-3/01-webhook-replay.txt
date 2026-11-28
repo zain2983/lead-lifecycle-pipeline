@@ -1,0 +1,123 @@
+commit c51e3ab, 2026-11-28T13:11:39Z, database phase3 on localhost:5433
+
+=== 0. Nothing stored yet for the fixture portal
+$ psql -c "select count(*) as crm_events, (select count(*) from pgboss.job where name = 'triage') as triage_jobs from crm_event where portal_id = 900000001"
+ crm_events | triage_jobs 
+------------+-------------
+          0 |           0
+(1 row)
+
+
+=== 1. One event sent 3 times, attemptNumber 0, 1, 2 (HubSpot's retries)
+$ pnpm -s hs:replay packages/crm-hubspot/fixtures/contact-creation.json --attempt 0
+fixture       packages/crm-hubspot/fixtures/contact-creation.json (1 event(s): object.creation)
+attemptNumber 0 (every event)
+POST          http://localhost:3100/api/webhooks/hubspot
+signed URI    http://localhost:3100/api/webhooks/hubspot
+timestamp     1795871500098
+signature v3  VSI/5a… (redacted)
+response      200 in 232 ms
+body          {"ok":true,"received":1,"stored":1,"duplicates":0,"enqueued":1,"purged":0}
+exit 0
+$ pnpm -s hs:replay packages/crm-hubspot/fixtures/contact-creation.json --attempt 1
+fixture       packages/crm-hubspot/fixtures/contact-creation.json (1 event(s): object.creation)
+attemptNumber 1 (every event)
+POST          http://localhost:3100/api/webhooks/hubspot
+signed URI    http://localhost:3100/api/webhooks/hubspot
+timestamp     1795871501045
+signature v3  fj4+ca… (redacted)
+response      200 in 37 ms
+body          {"ok":true,"received":1,"stored":0,"duplicates":1,"enqueued":0,"purged":0}
+exit 0
+$ pnpm -s hs:replay packages/crm-hubspot/fixtures/contact-creation.json --attempt 2
+fixture       packages/crm-hubspot/fixtures/contact-creation.json (1 event(s): object.creation)
+attemptNumber 2 (every event)
+POST          http://localhost:3100/api/webhooks/hubspot
+signed URI    http://localhost:3100/api/webhooks/hubspot
+timestamp     1795871501804
+signature v3  uiNv9y… (redacted)
+response      200 in 36 ms
+body          {"ok":true,"received":1,"stored":0,"duplicates":1,"enqueued":0,"purged":0}
+exit 0
+
+=== 2. A batch with retries inside it: creation again (attempt 1), lifecycle attempt 0 and 1, hs_lead_status
+$ pnpm -s hs:replay docs/evidence/phase-3/batch-retry-inside.json
+fixture       docs/evidence/phase-3/batch-retry-inside.json (5 event(s): object.creation, contact.propertyChange)
+POST          http://localhost:3100/api/webhooks/hubspot
+signed URI    http://localhost:3100/api/webhooks/hubspot
+timestamp     1795871502559
+signature v3  bKcA0w… (redacted)
+response      200 in 43 ms
+body          {"ok":true,"received":5,"stored":2,"duplicates":3,"enqueued":0,"purged":0}
+exit 0
+
+=== 3. The mixed fixture batch (its lifecycle event is a retry of step 2's), then all of it again as attempt 1
+$ pnpm -s hs:replay packages/crm-hubspot/fixtures/batch-mixed.json
+fixture       packages/crm-hubspot/fixtures/batch-mixed.json (4 event(s): contact.propertyChange, deal.propertyChange, contact.privacyDeletion)
+POST          http://localhost:3100/api/webhooks/hubspot
+signed URI    http://localhost:3100/api/webhooks/hubspot
+timestamp     1795871503314
+signature v3  UNvQll… (redacted)
+response      200 in 66 ms
+body          {"ok":true,"received":4,"stored":2,"duplicates":2,"enqueued":0,"purged":0}
+exit 0
+$ pnpm -s hs:replay packages/crm-hubspot/fixtures/batch-mixed.json --attempt 1
+fixture       packages/crm-hubspot/fixtures/batch-mixed.json (4 event(s): contact.propertyChange, deal.propertyChange, contact.privacyDeletion)
+attemptNumber 1 (every event)
+POST          http://localhost:3100/api/webhooks/hubspot
+signed URI    http://localhost:3100/api/webhooks/hubspot
+timestamp     1795871504087
+signature v3  gD//Ir… (redacted)
+response      200 in 42 ms
+body          {"ok":true,"received":4,"stored":0,"duplicates":4,"enqueued":0,"purged":0}
+exit 0
+
+=== 4. Signature v3 still holds: tampered body, old timestamp, URL-encoded query string
+$ pnpm -s hs:replay packages/crm-hubspot/fixtures/contact-lifecyclestage-change.json --tamper --expect 401
+fixture       packages/crm-hubspot/fixtures/contact-lifecyclestage-change.json (1 event(s): contact.propertyChange)
+POST          http://localhost:3100/api/webhooks/hubspot
+signed URI    http://localhost:3100/api/webhooks/hubspot
+timestamp     1795871504845
+signature v3  lRx0HJ… (redacted)
+tampered      first event's objectId changed after signing
+response      401 in 29 ms
+body          {"ok":false,"error":"invalid_signature","reason":"signature_mismatch"}
+exit 0
+$ pnpm -s hs:replay packages/crm-hubspot/fixtures/contact-creation.json --age 301 --expect 401
+fixture       packages/crm-hubspot/fixtures/contact-creation.json (1 event(s): object.creation)
+POST          http://localhost:3100/api/webhooks/hubspot
+signed URI    http://localhost:3100/api/webhooks/hubspot
+timestamp     1795871204585 (backdated 301 s)
+signature v3  xt+uTs… (redacted)
+response      401 in 30 ms
+body          {"ok":false,"error":"invalid_signature","reason":"timestamp_too_old"}
+exit 0
+$ pnpm -s hs:replay packages/crm-hubspot/fixtures/contact-creation.json --url http://localhost:3100/api/webhooks/hubspot?env=dev&next=https%3A%2F%2Fapp.example.test%2Fdone%3Fa%3D1&tags=a%2Cb
+fixture       packages/crm-hubspot/fixtures/contact-creation.json (1 event(s): object.creation)
+POST          http://localhost:3100/api/webhooks/hubspot?env=dev&next=https%3A%2F%2Fapp.example.test%2Fdone%3Fa%3D1&tags=a%2Cb
+signed URI    http://localhost:3100/api/webhooks/hubspot?env=dev&next=https%3A%2F%2Fapp.example.test%2Fdone%3Fa%3D1&tags=a%2Cb
+timestamp     1795871506364
+signature v3  fN276B… (redacted)
+response      200 in 40 ms
+body          {"ok":true,"received":1,"stored":0,"duplicates":1,"enqueued":0,"purged":0}
+exit 0
+
+=== 5. What the database holds: one row per distinct event, the first attempt kept
+$ psql -c "select id, subscription_type, property_name, object_id, attempt_number, lead_id from crm_event where portal_id = 900000001 order by id"
+ id  |    subscription_type    | property_name  |  object_id   | attempt_number | lead_id 
+-----+-------------------------+----------------+--------------+----------------+---------
+ 694 | object.creation         |                | 610000000001 |              0 | 
+ 698 | contact.propertyChange  | lifecyclestage | 610000000001 |              0 | 
+ 700 | contact.propertyChange  | hs_lead_status | 610000000002 |              0 | 
+ 703 | deal.propertyChange     | dealstage      | 620000000001 |              0 | 
+ 705 | contact.privacyDeletion |                | 610000000003 |              0 | 
+(5 rows)
+
+
+=== 6. And one triage job, for the one contact creation, with its ID derived from the dedupe key
+$ psql -c "select j.id, j.state, j.data->>'crmEventId' as crm_event_id, j.data->>'contactId' as contact_id, left(j.data->>'dedupeKey', 12) || '…' as dedupe_key from pgboss.job j where j.name = 'triage' and j.data->>'portalId' = '900000001'"
+                  id                  |  state  | crm_event_id |  contact_id  |  dedupe_key   
+--------------------------------------+---------+--------------+--------------+---------------
+ 7b641584-d80d-5c93-ad24-c1ce32931ae6 | created | 694          | 610000000001 | v1:82febc00d…
+(1 row)
+
