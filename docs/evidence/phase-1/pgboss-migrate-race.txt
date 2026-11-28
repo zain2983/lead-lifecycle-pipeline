@@ -35,3 +35,22 @@ run 4: web-exit=0 queue-exit=0
 run 5: web-exit=0 queue-exit=0
 
 Result: 0 of 5 runs failed. Web: 34 tests passed each run. Queue: 10 tests passed each run. No 'already exists' or 'migrate exited' lines.
+
+## Follow-up: the sweep test deleted the shared triage queue (test(queue): never delete the shared triage queue)
+
+PR #12's CI failed with 4 `storage_failed` (500) responses in `apps/web/test/hubspot-intake.test.ts`. The sweep test
+in `packages/queue/test/sweep.test.ts` created the real `triage` queue when missing and deleted it in `finally`,
+while the web intake tests sent to it in parallel. The fix removes that delete: the test calls
+`ensureQueues(boss, INTAKE_QUEUES)` and leaves `triage` in place. `grep` for `deleteQueue|createQueue` in
+`packages/*/test` and `apps/*/test` shows the other deletes only remove queues their own test named.
+
+Method: the same loop as above, after the schema drop, with the fix. Nothing was re-run before this change for the
+`storage_failed` symptom: it appeared only in CI, and the local runs above never showed it.
+
+run 1: web-exit=0 queue-exit=0 storage_failed=0
+run 2: web-exit=0 queue-exit=0 storage_failed=0
+run 3: web-exit=0 queue-exit=0 storage_failed=0
+run 4: web-exit=0 queue-exit=0 storage_failed=0
+run 5: web-exit=0 queue-exit=0 storage_failed=0
+
+Result: 0 of 5 runs failed. Web: 34 tests passed each run. Queue: 10 tests passed each run. No storage_failed lines.

@@ -2,7 +2,7 @@ import { setTimeout as sleep } from "node:timers/promises";
 import { afterAll, describe, expect, it } from "vitest";
 import { createBoss } from "../src/boss.ts";
 import { drainQueues } from "../src/drain.ts";
-import { TRIAGE_QUEUE } from "../src/queues.ts";
+import { ensureQueues, INTAKE_QUEUES, TRIAGE_QUEUE } from "../src/queues.ts";
 import { spikeEchoHandler } from "../src/spike.ts";
 import { sweepOnce } from "../src/sweep.ts";
 import { databaseUrl, uniqueQueue } from "./helpers.ts";
@@ -65,20 +65,15 @@ describe("sweepOnce", () => {
       await expect(
         sweepOnce(boss, { [TRIAGE_QUEUE]: spikeEchoHandler("sweeper") }, { budgetSeconds: 5 }),
       ).rejects.toThrow(/local worker/);
-      // Phase 4 owns triage's real options, and createQueue never updates an existing queue, so
-      // only a triage queue this test created is removed again.
-      const created = (await boss.getQueue(TRIAGE_QUEUE)) === null;
-      if (created) await boss.createQueue(TRIAGE_QUEUE);
-      try {
-        const summary = await sweepOnce(boss, {}, { budgetSeconds: 5 });
-        expect(summary.skipped).toContainEqual({
-          name: TRIAGE_QUEUE,
-          reason: "triage: local worker only",
-        });
-        expect(summary.worked).not.toContain(TRIAGE_QUEUE);
-      } finally {
-        if (created) await boss.deleteQueue(TRIAGE_QUEUE);
-      }
+      // The triage queue is shared: the web intake tests send to it in a parallel suite on the same
+      // database. Never delete it here. Create it the way they do (idempotent, same options), and leave it.
+      await ensureQueues(boss, INTAKE_QUEUES);
+      const summary = await sweepOnce(boss, {}, { budgetSeconds: 5 });
+      expect(summary.skipped).toContainEqual({
+        name: TRIAGE_QUEUE,
+        reason: "triage: local worker only",
+      });
+      expect(summary.worked).not.toContain(TRIAGE_QUEUE);
     } finally {
       await boss.stop();
     }
