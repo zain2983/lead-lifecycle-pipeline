@@ -44,6 +44,15 @@ export {
 } from "./conversion-mapping.ts";
 export { crmEventDedupeKey } from "./crm-event-key.ts";
 export {
+  type LeadUpsertDeps,
+  type LeadUpsertInput,
+  type LeadUpsertOutcome,
+  lockHubSpotContact,
+  type PurgeResult,
+  purgeLeadPii,
+  upsertHubSpotDirectLead,
+} from "./leads.ts";
+export {
   type AuthorizeUrlInput,
   buildAuthorizeUrl,
   type ExchangeCodeInput,
