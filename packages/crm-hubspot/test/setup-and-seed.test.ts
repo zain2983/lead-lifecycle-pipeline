@@ -298,6 +298,10 @@ describe("the CLIs, end to end against the fake", () => {
         PATH: process.env.PATH,
         HUBSPOT_API_BASE_URL: fake.url,
         HUBSPOT_SERVICE_KEY_DEMO: TOKEN,
+        // Set (empty) so the CLI's repo-root `.env` loader, where set variables win, can't fill in a real key
+        // on a laptop that has one. Without this, the missing-key test sent the real eval key to the fake and
+        // printed it in the assertion diff.
+        HUBSPOT_SERVICE_KEY_EVAL: "",
       },
     }).then(
       (r) => ({ code: 0, out: r.stdout }),
