@@ -170,13 +170,6 @@ later with `sim credentials update`. The smoke test only reads.
 
 ~~HubSpot service key in Sim (PLAN step 5, bullet 6).~~ Done on 2026-11-28, see "Live (2026-11-28)" above.
 
-**Gemini API key (not set on 2026-11-28).** `GEMINI_API_KEY` was not in the root `.env`, so no Gemini request was made
-and nothing was stored in Sim.
-
-1. In Google AI Studio (<https://aistudio.google.com>) → **Get API key** → **Create API key**, in a project with no
-   billing account.
-2. Add the line `GEMINI_API_KEY=<key>` to the root `.env` (gitignored). Don't paste it anywhere else.
-3. Tell the next session. It still has to: list the models and record the Flash-Lite IDs, make one tiny
-   `generateContent` call, store the key with `sim secrets set GEMINI_API_KEY --scope workspace --value @-` (value on
-   stdin without a trailing newline), check that `sim secrets list` shows the name only, and add the variable to
-   `.env.example`.
+~~Gemini API key in Sim.~~ Done on 2026-11-28: the key was checked with one `generateContent` call (3.5 Flash-Lite, HTTP
+200), stored as the Sim workspace secret `GEMINI_API_KEY`, and `.env.example` lists it. See
+[`../phase-0/gemini/README.md`](../phase-0/gemini/README.md).
