@@ -1,6 +1,8 @@
 // Fixed, fictional reference data. Every name here is invented for this repo, and every domain is
-// reserved: `*.test` (RFC 6761) for companies and sites, example.com / example.org (RFC 2606) for
-// personal mail. A test fails on any other domain in the generated output.
+// reserved (RFC 2606): `<name>.example.com` for companies and sites, example.com / example.org / example.net
+// for personal and bulk mail. Not `*.test` (RFC 6761): HubSpot rejects those emails as INVALID_EMAIL
+// (live seed, 2026-11-28), so a test fails on any email outside example.com/org/net. Matching a company by
+// domain must treat `example.com` as the suffix, the way a real matcher treats `.com`.
 import { LEAD_TIME_ZONE } from "./time.ts";
 
 export const VERTICALS = ["b2b_saas", "rehab", "clinic", "local_services"] as const;
@@ -26,7 +28,7 @@ export const SITES: readonly SyntheticSite[] = [
   {
     key: "saas",
     name: "Quillmark",
-    domain: "quillmark.test",
+    domain: "quillmark.example.com",
     vertical: "b2b_saas",
     timeZone: LEAD_TIME_ZONE,
     sensitive: false,
@@ -36,7 +38,7 @@ export const SITES: readonly SyntheticSite[] = [
   {
     key: "rehab",
     name: "Harborlight Recovery",
-    domain: "harborlight.test",
+    domain: "harborlight.example.com",
     vertical: "rehab",
     timeZone: LEAD_TIME_ZONE,
     sensitive: true,
@@ -46,7 +48,7 @@ export const SITES: readonly SyntheticSite[] = [
   {
     key: "clinic",
     name: "Fernway Family Clinic",
-    domain: "fernway-clinic.test",
+    domain: "fernway-clinic.example.com",
     vertical: "clinic",
     timeZone: LEAD_TIME_ZONE,
     sensitive: false,
@@ -56,7 +58,7 @@ export const SITES: readonly SyntheticSite[] = [
   {
     key: "local_services",
     name: "Tidewell Home Services",
-    domain: "tidewell.test",
+    domain: "tidewell.example.com",
     vertical: "local_services",
     timeZone: LEAD_TIME_ZONE,
     sensitive: false,
@@ -91,7 +93,7 @@ export const COMPANIES: readonly SyntheticCompany[] = [
   {
     key: "kestrel-group",
     name: "Kestrel Group",
-    domain: "kestrelgroup.test",
+    domain: "kestrelgroup.example.com",
     size: "1000+",
     city: "Karachi",
     country: "Pakistan",
@@ -101,7 +103,7 @@ export const COMPANIES: readonly SyntheticCompany[] = [
   {
     key: "kestrel-freight",
     name: "Kestrel Freight",
-    domain: "kestrelfreight.test",
+    domain: "kestrelfreight.example.com",
     size: "201-1000",
     city: "Karachi",
     country: "Pakistan",
@@ -111,7 +113,7 @@ export const COMPANIES: readonly SyntheticCompany[] = [
   {
     key: "kestrel-freight-ltd",
     name: "Kestrel Freight Ltd.",
-    domain: "kestrel-freight.test",
+    domain: "kestrel-freight.example.com",
     size: "201-1000",
     city: "Karachi",
     country: "Pakistan",
@@ -121,7 +123,7 @@ export const COMPANIES: readonly SyntheticCompany[] = [
   {
     key: "kestrel-cold-chain",
     name: "Kestrel Cold Chain",
-    domain: "kestrelcoldchain.test",
+    domain: "kestrelcoldchain.example.com",
     size: "51-200",
     city: "Lahore",
     country: "Pakistan",
@@ -131,7 +133,7 @@ export const COMPANIES: readonly SyntheticCompany[] = [
   {
     key: "saltmarsh-robotics",
     name: "Saltmarsh Robotics",
-    domain: "saltmarsh.test",
+    domain: "saltmarsh.example.com",
     size: "201-1000",
     city: "Rotterdam",
     country: "Netherlands",
@@ -141,7 +143,7 @@ export const COMPANIES: readonly SyntheticCompany[] = [
   {
     key: "saltmarsh-robotics-pk",
     name: "Saltmarsh Robotics Pakistan",
-    domain: "pk.saltmarsh.test",
+    domain: "pk.saltmarsh.example.com",
     size: "11-50",
     city: "Karachi",
     country: "Pakistan",
@@ -151,7 +153,7 @@ export const COMPANIES: readonly SyntheticCompany[] = [
   {
     key: "bluefin-textiles",
     name: "Bluefin Textiles",
-    domain: "bluefintextiles.test",
+    domain: "bluefintextiles.example.com",
     size: "51-200",
     city: "Faisalabad",
     country: "Pakistan",
@@ -161,7 +163,7 @@ export const COMPANIES: readonly SyntheticCompany[] = [
   {
     key: "bluefin-textiles-pvt",
     name: "BLUEFIN TEXTILES (PVT) LTD",
-    domain: "bluefintextiles.test",
+    domain: "bluefintextiles.example.com",
     size: "51-200",
     city: "Faisalabad",
     country: "Pakistan",
@@ -171,7 +173,7 @@ export const COMPANIES: readonly SyntheticCompany[] = [
   {
     key: "indus-ledger",
     name: "Indus Ledger Works",
-    domain: "indusledger.test",
+    domain: "indusledger.example.com",
     size: "11-50",
     city: "Karachi",
     country: "Pakistan",
@@ -181,7 +183,7 @@ export const COMPANIES: readonly SyntheticCompany[] = [
   {
     key: "margalla-data",
     name: "Margalla Data Systems",
-    domain: "margalladata.test",
+    domain: "margalladata.example.com",
     size: "51-200",
     city: "Islamabad",
     country: "Pakistan",
@@ -191,7 +193,7 @@ export const COMPANIES: readonly SyntheticCompany[] = [
   {
     key: "cobalt-harbor",
     name: "Cobalt Harbor Logistics",
-    domain: "cobaltharbor.test",
+    domain: "cobaltharbor.example.com",
     size: "201-1000",
     city: "Dubai",
     country: "United Arab Emirates",
@@ -201,7 +203,7 @@ export const COMPANIES: readonly SyntheticCompany[] = [
   {
     key: "juniper-fold",
     name: "Juniper Fold Studio",
-    domain: "juniperfold.test",
+    domain: "juniperfold.example.com",
     size: "1-10",
     city: "Karachi",
     country: "Pakistan",
