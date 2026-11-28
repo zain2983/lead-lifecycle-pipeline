@@ -1,0 +1,37 @@
+# pg-boss migrate race: parallel test setups, before and after the fix (brief 55)
+
+What this shows: `@repo/web` and `@repo/queue` test global setups each ran `pg-boss migrate` against the same
+local database (`gemini`, the worktree's own .env) while Turborepo runs the two suites in parallel. Before the fix,
+starting both on a dropped `pgboss` schema failed the web setup with `type "job_state" already exists`
+(`pg-boss migrate exited 1`). After the fix (`migratePgBoss` holds `pg_advisory_lock` on one key), 5 of 5
+parallel runs passed.
+
+Method, both phases: `docker exec llp-postgres-1 psql -U app -d gemini -qc "DROP SCHEMA IF EXISTS pgboss CASCADE"`,
+then `pnpm --filter @repo/web test & pnpm --filter @repo/queue test & wait`. Exit codes are the suite's exit
+codes (`web-exit`, `queue-exit`). Counted lines: `already exists` or `migrate exited` in each log.
+
+## Before the fix (main at 31e0499)
+
+run 1: web-exit=0 queue-exit=0
+run 2: web-exit=1 queue-exit=0
+run 3: web-exit=1 queue-exit=0
+run 4: web-exit=0 queue-exit=0
+run 5: web-exit=1 queue-exit=0
+run 6: web-exit=1 queue-exit=0
+
+Error lines from a failing run (repro run 2, web):
+  Error: pg-boss migrate exited 1
+  Error: type "job_state" already exists
+
+Result: 4 of 6 runs failed the web setup (runs 2, 3, 5, 6). The queue suite passed every time. Run 1 used a separate
+invocation of the same loop and passed, as did run 4.
+
+## After the fix (`migratePgBoss` in packages/queue/src/pgboss-cli.ts, used by both global setups)
+
+run 1: web-exit=0 queue-exit=0
+run 2: web-exit=0 queue-exit=0
+run 3: web-exit=0 queue-exit=0
+run 4: web-exit=0 queue-exit=0
+run 5: web-exit=0 queue-exit=0
+
+Result: 0 of 5 runs failed. Web: 34 tests passed each run. Queue: 10 tests passed each run. No 'already exists' or 'migrate exited' lines.
