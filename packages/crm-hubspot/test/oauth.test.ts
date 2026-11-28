@@ -71,11 +71,11 @@ describe("the prod app (integrations/hubspot-app/prod)", () => {
     const app = read("prod", "src/app/app-hsmeta.json");
     expect(at(app, "config", "auth", "requiredScopes")).toEqual([...HUBSPOT_REQUIRED_SCOPES]);
     expect(at(app, "config", "auth", "redirectUrls")).toEqual([
-      "https://web-placeholder.example.com/api/hubspot/oauth/callback",
+      "https://lead-lifecycle-pipeline.vercel.app/api/hubspot/oauth/callback",
     ]);
     expect(
       at(read("prod", "src/app/webhooks/webhooks-hsmeta.json"), "config", "settings", "targetUrl"),
-    ).toBe("https://web-placeholder.example.com/api/webhooks/hubspot");
+    ).toBe("https://lead-lifecycle-pipeline.vercel.app/api/webhooks/hubspot");
   });
 
   it("differs from dev only in names, uids, description, redirects and target URL", () => {

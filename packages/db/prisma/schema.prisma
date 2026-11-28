@@ -277,6 +277,7 @@ model AgentRun {
   @@index([leadId, createdAt])
   @@index([workflowId, workflowVersion])
   @@index([status])
+  @@index([crmEventId])
   @@map("agent_run")
 }
 
@@ -378,5 +379,6 @@ model EvalResult {
   evalCase EvalCase @relation(fields: [evalCaseId], references: [id], onDelete: Restrict)
 
   @@unique([evalRunId, evalCaseId])
+  @@index([evalCaseId])
   @@map("eval_result")
 }
