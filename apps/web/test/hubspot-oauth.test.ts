@@ -64,7 +64,10 @@ describe("GET /api/hubspot/oauth/callback (fake token endpoint)", () => {
     redirectUri,
     tokenUrl,
     encryptionKey,
-    store: { save: async (token: StoredOAuthToken) => void saved.push(token) },
+    store: {
+      save: async (token: StoredOAuthToken) => void saved.push(token),
+      load: async (portalId: bigint) => saved.find((t) => t.portalId === portalId) ?? null,
+    },
     now: () => new Date("2026-11-27T15:00:00.000Z"),
   });
 
@@ -170,5 +173,60 @@ describe("GET /api/hubspot/oauth/callback (fake token endpoint)", () => {
       hubspot: { error: "access_denied" },
     });
     expect(server.requests).toHaveLength(0);
+  });
+
+  describe("without a state parameter (HubSpot's own Install button, ADR 0006)", () => {
+    it("rejects an unknown portal with a page, storing nothing", async () => {
+      server = await startFakeTokenServer(() => ({ status: 200, body: syntheticTokenResponse() }));
+      const response = await completeHubSpotOAuth(
+        callback("code=synthetic-code-0001", null),
+        config(server.url),
+      );
+      expect(response.status).toBe(403);
+      expect(response.headers.get("content-type")).toBe("text/html; charset=utf-8");
+      const page = await response.text();
+      expect(page).toContain('data-error="unknown_portal"');
+      expect(page).toContain("HUBSPOT_KNOWN_PORTAL_IDS");
+      expect(page).toContain("900000001");
+      expect(page).not.toContain(syntheticTokenResponse().refresh_token);
+      expect(server.requests).toHaveLength(1); // the exchange is what names the portal
+      expect(saved).toHaveLength(0);
+    });
+
+    it("accepts a portal listed in HUBSPOT_KNOWN_PORTAL_IDS, recorded as hubspot_initiated", async () => {
+      server = await startFakeTokenServer(() => ({ status: 200, body: syntheticTokenResponse() }));
+      const response = await completeHubSpotOAuth(callback("code=synthetic-code-0001", null), {
+        ...config(server.url),
+        knownPortalIds: [900000001n],
+      });
+      expect(response.status).toBe(200);
+      expect(await response.json()).toMatchObject({
+        ok: true,
+        portalId: "900000001",
+        installedVia: "hubspot_initiated",
+      });
+      expect(saved[0]?.installedVia).toBe("hubspot_initiated");
+    });
+
+    it("accepts a reinstall into a portal that already has an install", async () => {
+      server = await startFakeTokenServer(() => ({ status: 200, body: syntheticTokenResponse() }));
+      await completeHubSpotOAuth(callback(`code=first&state=${state}`), config(server.url));
+      const response = await completeHubSpotOAuth(
+        callback("code=second", null),
+        config(server.url),
+      );
+      expect(response.status).toBe(200);
+      expect(saved.map((t) => t.installedVia)).toEqual(["app_start", "hubspot_initiated"]);
+    });
+
+    it("still refuses an empty state before any exchange", async () => {
+      server = await startFakeTokenServer(() => ({ status: 200, body: syntheticTokenResponse() }));
+      const response = await completeHubSpotOAuth(
+        callback("code=synthetic-code-0001&state=", null),
+        { ...config(server.url), knownPortalIds: [900000001n] },
+      );
+      expect(await response.json()).toEqual({ ok: false, error: "state_missing" });
+      expect(server.requests).toHaveLength(0);
+    });
   });
 });

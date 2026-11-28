@@ -1,35 +1,35 @@
 import { randomBytes, timingSafeEqual } from "node:crypto";
 import {
   buildAuthorizeUrl,
-  type EncryptedSecret,
   encryptSecret,
   exchangeAuthorizationCode,
   HubSpotOAuthError,
+  type InstallSource,
+  type OAuthTokenStore,
   refreshTokenAad,
 } from "@repo/crm-hubspot";
 
+export type { StoredOAuthToken } from "@repo/crm-hubspot";
+
 /**
- * OAuth install for the HubSpot app (Phase 1 minimal; Phase 3 adds refresh on expiry).
+ * OAuth install for the HubSpot app. The worker refreshes access tokens (HubSpotTokenManager); this file
+ * only installs.
  *
  * GET /api/hubspot/oauth/start     sets a one-time `state` cookie and redirects to HubSpot's consent page.
  * GET /api/hubspot/oauth/callback  checks `state` against the cookie, exchanges the code at
  *                                  /oauth/v3/token and stores the refresh token encrypted.
+ *
+ * A callback with **no `state` parameter at all** came from HubSpot's own Install button (or a test
+ * install), which sends none. docs/adr/0006-hubspot-initiated-installs.md: it is accepted only for a
+ * portal that is already known (HUBSPOT_KNOWN_PORTAL_IDS, or an install stored earlier), which needs the
+ * code exchanged first, since only the token response names the portal. For any other portal the tokens
+ * are dropped unstored and the browser gets a page that says what to do. A `state` that is present but
+ * empty, wrong or without its cookie is still refused before any exchange.
  */
 
 export const OAUTH_STATE_COOKIE = "hs_oauth_state";
 const COOKIE_PATH = "/api/hubspot/oauth";
 const STATE_TTL_SECONDS = 10 * 60;
-
-export interface StoredOAuthToken {
-  portalId: bigint;
-  refreshToken: EncryptedSecret;
-  scopes: string[];
-  accessTokenExpiresAt: Date;
-}
-
-export interface OAuthTokenStore {
-  save(token: StoredOAuthToken): Promise<void>;
-}
 
 export interface OAuthStartConfig {
   clientId: string;
@@ -62,7 +62,9 @@ export interface OAuthCallbackConfig {
   tokenUrl: string;
   /** 32-byte key from TOKEN_ENCRYPTION_KEY. */
   encryptionKey: Uint8Array;
-  store: OAuthTokenStore;
+  store: Pick<OAuthTokenStore, "save" | "load">;
+  /** HUBSPOT_KNOWN_PORTAL_IDS: portals that may install without our state. */
+  knownPortalIds?: readonly bigint[];
   fetch?: typeof fetch;
   now?: () => Date;
 }
@@ -92,9 +94,12 @@ export async function completeHubSpotOAuth(
   }
 
   const state = url.searchParams.get("state");
-  const expected = readCookie(request.headers.get("cookie"), OAUTH_STATE_COOKIE);
-  if (!state || !expected) return fail(400, { error: "state_missing" });
-  if (!sameString(state, expected)) return fail(400, { error: "state_mismatch" });
+  const installedVia: InstallSource = state === null ? "hubspot_initiated" : "app_start";
+  if (state !== null) {
+    const expected = readCookie(request.headers.get("cookie"), OAUTH_STATE_COOKIE);
+    if (!state || !expected) return fail(400, { error: "state_missing" });
+    if (!sameString(state, expected)) return fail(400, { error: "state_mismatch" });
+  }
 
   const code = url.searchParams.get("code");
   if (!code) return fail(400, { error: "code_missing" });
@@ -130,6 +135,23 @@ export async function completeHubSpotOAuth(
     });
   }
 
+  if (installedVia === "hubspot_initiated") {
+    const known =
+      (config.knownPortalIds ?? []).includes(tokens.portalId) ||
+      (await config.store.load(tokens.portalId)) !== null;
+    if (!known) {
+      // The tokens are dropped here, unstored; the access token expires on its own.
+      console.warn(
+        JSON.stringify({
+          msg: "hubspot install rejected",
+          reason: "unknown_portal",
+          portalId: tokens.portalId.toString(),
+        }),
+      );
+      return rejectionPage(tokens.portalId, headers);
+    }
+  }
+
   await config.store.save({
     portalId: tokens.portalId,
     refreshToken: encryptSecret(
@@ -139,8 +161,15 @@ export async function completeHubSpotOAuth(
     ),
     scopes: tokens.scopes,
     accessTokenExpiresAt: tokens.accessTokenExpiresAt,
+    installedVia,
   });
-  console.info(JSON.stringify({ msg: "hubspot installed", portalId: tokens.portalId.toString() }));
+  console.info(
+    JSON.stringify({
+      msg: "hubspot installed",
+      portalId: tokens.portalId.toString(),
+      installedVia,
+    }),
+  );
 
   // Never echo a token. The access token is dropped here; Phase 3 refreshes on demand.
   return Response.json(
@@ -149,9 +178,35 @@ export async function completeHubSpotOAuth(
       portalId: tokens.portalId.toString(),
       scopes: tokens.scopes,
       accessTokenExpiresAt: tokens.accessTokenExpiresAt.toISOString(),
+      ...(installedVia === "hubspot_initiated" ? { installedVia } : {}),
     },
     { status: 200, headers },
   );
+}
+
+/** 403 for a HubSpot-initiated install into a portal this deployment doesn't know. */
+function rejectionPage(portalId: bigint, headers: Record<string, string>): Response {
+  const id = portalId.toString(); // digits only: safe in HTML
+  const html = `<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Install not accepted</title></head>
+<body data-error="unknown_portal" style="font-family: system-ui, sans-serif; max-width: 40rem; margin: 3rem auto; line-height: 1.5">
+<h1>Install not accepted</h1>
+<p>HubSpot account <strong>${id}</strong> started this install from HubSpot's own Install button, and this
+deployment doesn't know that account, so nothing was stored.</p>
+<ul>
+<li>To install from here instead: <a href="/api/hubspot/oauth/start">start the install</a>.</li>
+<li>To accept installs from that button for this account: add <code>${id}</code> to
+<code>HUBSPOT_KNOWN_PORTAL_IDS</code>, then install again.</li>
+</ul>
+<p>HubSpot may still list the app as installed in that account; uninstall it there if it shouldn't be.</p>
+</body>
+</html>
+`;
+  return new Response(html, {
+    status: 403,
+    headers: { ...headers, "content-type": "text/html; charset=utf-8" },
+  });
 }
 
 function stateCookie(value: string, maxAgeSeconds: number, secure: boolean): string {
