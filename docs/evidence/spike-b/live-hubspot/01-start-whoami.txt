@@ -1,0 +1,35 @@
+$ docker compose -f infra/sim/docker-compose.yml ps --format "table {{.Service}}	{{.Image}}	{{.Status}}"
+SERVICE     IMAGE                                   STATUS
+cron        ghcr.io/simstudioai/cron:v0.9.66        Up About a minute
+db          pgvector/pgvector:pg17                  Up 3 minutes (healthy)
+realtime    ghcr.io/simstudioai/realtime:v0.9.66    Up 2 minutes (healthy)
+redis       redis:7-alpine                          Up 3 minutes (healthy)
+simstudio   ghcr.io/simstudioai/simstudio:v0.9.66   Up 2 minutes (healthy)
+
+$ sim whoami --output json
+{
+  "profile": "local",
+  "endpoint": "http://localhost:3000",
+  "workspaceId": "363f1b14-11a4-4fa8-872f-4b3cb927dfe9",
+  "output": "json",
+  "authenticated": true,
+  "sources": {
+    "endpoint": "config",
+    "authentication": "credentials",
+    "workspaceId": "config",
+    "output": "flag"
+  },
+  "verification": {
+    "status": "verified",
+    "workspace": {
+      "id": "363f1b14-11a4-4fa8-872f-4b3cb927dfe9",
+      "name": "Local dev",
+      "memberCount": 1
+    },
+    "keyType": "personal",
+    "expiresAt": null,
+    "boundWorkspaceId": null,
+    "detail": null
+  }
+}
+exit=0

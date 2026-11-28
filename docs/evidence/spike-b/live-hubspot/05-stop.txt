@@ -1,0 +1,5 @@
+$ docker compose -f infra/sim/docker-compose.yml stop
+
+$ docker compose -f infra/sim/docker-compose.yml ps --status running --services   (empty = nothing running)
+
+exit=0

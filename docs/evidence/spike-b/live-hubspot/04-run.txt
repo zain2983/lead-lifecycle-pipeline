@@ -1,0 +1,38 @@
+$ sim workflows run 1b791aff-c49d-4035-ac27-52dc94fe10b7 --manual --input '{"contactId":"609031662325"}' --select-output getcontact.contact getcontact.success --dir sim/hubspot-smoke --output json
+{
+  "runId": "d8a963b2-c854-4fbc-9f12-74c0b30dae9c",
+  "workflowId": "1b791aff-c49d-4035-ac27-52dc94fe10b7",
+  "status": "completed",
+  "error": null,
+  "startedAt": "2026-11-28T16:51:56.828Z",
+  "endedAt": "2026-11-28T16:51:58.187Z",
+  "durationMs": 1357.4313750000147,
+  "executionTimeoutSeconds": null,
+  "output": {
+    "data": {
+      "contactId": "609031662325",
+      "fixtureKey": "s42-demo-01"
+    },
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  },
+  "blockOutputs": {
+    "getcontact.contact": {
+      "id": "609031662325",
+      "properties": {
+        "createdate": "2026-11-28T16:19:23.841Z",
+        "fixture_key": "s42-demo-01",
+        "hs_object_id": "609031662325",
+        "lastmodifieddate": "2026-11-28T16:26:26.396Z"
+      },
+      "createdAt": "2026-11-28T16:19:23.841Z",
+      "updatedAt": "2026-11-28T16:26:26.396Z",
+      "archived": false,
+      "url": "https://app-na2.hubspot.com/contacts/248175909/record/0-1/609031662325"
+    },
+    "getcontact.success": true
+  }
+}
+exit=0

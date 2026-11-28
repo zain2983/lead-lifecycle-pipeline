@@ -8,6 +8,7 @@ worker calls it: [ADR 0003](../docs/adr/0003-agent-on-sim.md).
 | ----------------- | ------------------------------------------------------------------------------------ |
 | `hello/`          | Spike B. Start (API) → Function (echo + timestamp) → Response. No LLM                |
 | `hello-approval/` | Spike B. Start (API) → Human `Approval` → Condition on `approved` → Response. No LLM |
+| `hubspot-smoke/`  | Start (API) → HubSpot Get Contacts → Function → Response. Reads one contact. No LLM  |
 
 Pinned versions: Sim server **v0.9.66** (`infra/sim/.env`), `sim` CLI **2.3.0** (root `package.json`). Change them
 together, in one PR.
@@ -105,7 +106,8 @@ A clone has no `.sim/` folders (they are gitignored, see below). On a fresh inst
 or after `down -v`):
 
 1. steps 1–3 above;
-2. for each folder, create the workflow from the committed source and deploy it:
+2. for each folder, create the workflow from the committed source and deploy it. `hubspot-smoke/` first needs a
+   HubSpot service-key credential named `HubSpot demo` (commands in `docs/evidence/spike-b`, "Live"):
 
    ```sh
    pnpm exec sim workflows source create --dir sim/hello --workspace "$SIM_WORKSPACE" --yes --deploy
