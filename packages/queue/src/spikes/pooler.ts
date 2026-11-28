@@ -2,7 +2,11 @@
 // through PgBouncer in transaction mode (infra/docker-compose.yml, profile `pooler`, 127.0.0.1:6433), with
 // and without `?pgbouncer=true`, and prints one JSON line per check with the real result or error.
 //
-//   pnpm --filter @repo/queue exec tsx src/spikes/pooler.ts [--targets direct,pooler,pooler-pgbouncer] [--no-listen]
+//   pnpm --filter @repo/queue exec tsx src/spikes/pooler.ts [--targets direct,pooler,pooler-pgbouncer]
+//     [--no-listen | --listen-only] [--listen-settle-ms 1500]
+//
+// Against a hosted database, raise --listen-settle-ms (e.g. 10000): if the worker's first poll is still
+// running when the job is sent, that poll picks it up and the latency says nothing about NOTIFY.
 //
 // Connection strings are built from DATABASE_URL (only the port and query change) and never printed.
 import { randomUUID } from "node:crypto";
@@ -19,9 +23,12 @@ const { values } = parseArgs({
   options: {
     targets: { type: "string", default: "direct,pooler,pooler-pgbouncer" },
     "no-listen": { type: "boolean", default: false },
+    "listen-only": { type: "boolean", default: false },
+    "listen-settle-ms": { type: "string", default: "1500" },
     "pooler-port": { type: "string", default: "6433" },
   },
 });
+const settleMs = Number(values["listen-settle-ms"]);
 
 const base = new URL(loadEnv(["database"]).DATABASE_URL);
 function targetUrl(name: string): string {
@@ -62,6 +69,11 @@ async function withBoss<T>(boss: PgBoss, fn: (boss: PgBoss) => Promise<T>): Prom
 
 async function run(target: string): Promise<void> {
   const url = targetUrl(target);
+  if (values["listen-only"]) {
+    await rawListenCheck(target, url);
+    await listenCheck(target, url);
+    return;
+  }
 
   const pool = createPgPool(url, { max: 4, applicationName: `spike-pooler:${target}` });
   pool.on("error", () => undefined);
@@ -153,7 +165,52 @@ async function run(target: string): Promise<void> {
     }),
   );
 
-  if (!values["no-listen"]) await listenCheck(target, url);
+  if (!values["no-listen"]) {
+    await rawListenCheck(target, url);
+    await listenCheck(target, url);
+  }
+}
+
+/** LISTEN/NOTIFY without pg-boss or polling: does an idle listener get another connection's NOTIFY? */
+async function rawListenCheck(target: string, url: string): Promise<void> {
+  const channel = `spike_raw_${randomUUID().slice(0, 8)}`;
+  await check(
+    target,
+    "pg: idle LISTEN, then NOTIFY from a second connection (10 s wait)",
+    async () => {
+      // Two one-connection pools, so listener and sender never share a client.
+      const listenerPool = createPgPool(url, { max: 1 });
+      const sender = createPgPool(url, { max: 1 });
+      listenerPool.on("error", () => undefined);
+      sender.on("error", () => undefined);
+      try {
+        const listener = await listenerPool.connect();
+        listener.on("error", () => undefined);
+        await sender.query("SELECT 1"); // connect before the clock starts
+        let sentAt = 0;
+        let timer: NodeJS.Timeout | undefined;
+        const received = new Promise<number | null>((resolve) => {
+          listener.on("notification", (message) => {
+            if (message.channel === channel) resolve((Date.now() - sentAt) / 1000);
+          });
+          timer = setTimeout(() => resolve(null), settleMs + 10_000);
+        });
+        await listener.query(`LISTEN ${channel}`);
+        await new Promise((resolve) => setTimeout(resolve, settleMs));
+        sentAt = Date.now();
+        await sender.query("SELECT pg_notify($1, 'spike')", [channel]);
+        const latencySeconds = await received;
+        clearTimeout(timer);
+        await listener.query(`UNLISTEN ${channel}`);
+        listener.release();
+        return { delivered: latencySeconds !== null, latencySeconds };
+      } finally {
+        // A client still checked out after a failure would make end() wait for ever; don't await it.
+        void listenerPool.end().catch(() => undefined);
+        await sender.end().catch(() => undefined);
+      }
+    },
+  );
 }
 
 /** LISTEN/NOTIFY: how long a notify-enabled worker takes to see a new job. */
@@ -187,14 +244,14 @@ async function listenCheck(target: string, url: string): Promise<void> {
           });
         });
         // Let the worker finish its first (empty) poll so only a notification can wake it early.
-        await new Promise((resolve) => setTimeout(resolve, 1_500));
+        await new Promise((resolve) => setTimeout(resolve, settleMs));
         sentAt = Date.now();
         await sender.send(queue, { target });
         const timeout = new Promise<number>((_, reject) =>
           setTimeout(() => reject(new Error("no pickup within 40 s")), 40_000),
         );
         const latencyMs = await Promise.race([seen, timeout]);
-        return { latencySeconds: latencyMs / 1000, warnings };
+        return { latencySeconds: latencyMs / 1000, settleMs, warnings };
       } finally {
         await worker.stop({ timeout: 2_000 }).catch(() => undefined);
         await sender.deleteQueue(queue).catch(() => undefined);

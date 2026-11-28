@@ -1,0 +1,12 @@
+{"target":"direct","check":"pg: idle LISTEN, then NOTIFY from a second connection (10 s wait)","ok":true,"ms":16319,"result":{"delivered":true,"latencySeconds":1.94}}
+{"target":"direct","check":"pg-boss LISTEN/NOTIFY: seconds from send to handler (notify queue, 30 s poll backstop)","ok":true,"ms":32154,"result":{"latencySeconds":2.85,"settleMs":10000,"warnings":[]}}
+{"target":"pooler","check":"pg: idle LISTEN, then NOTIFY from a second connection (10 s wait)","ok":true,"ms":27634,"result":{"delivered":false,"latencySeconds":null}}
+{"target":"pooler","check":"pg-boss LISTEN/NOTIFY: seconds from send to handler (notify queue, 30 s poll backstop)","ok":true,"ms":31098,"result":{"latencySeconds":4.994,"settleMs":10000,"warnings":[]}}
+{"target":"direct","check":"pg: idle LISTEN, then NOTIFY from a second connection (10 s wait)","ok":true,"ms":16054,"result":{"delivered":true,"latencySeconds":1.91}}
+{"target":"direct","check":"pg-boss LISTEN/NOTIFY: seconds from send to handler (notify queue, 30 s poll backstop)","ok":true,"ms":33870,"result":{"latencySeconds":4.728,"settleMs":10000,"warnings":[]}}
+{"target":"pooler","check":"pg: idle LISTEN, then NOTIFY from a second connection (10 s wait)","ok":true,"ms":24268,"result":{"delivered":false,"latencySeconds":null}}
+{"target":"pooler","check":"pg-boss LISTEN/NOTIFY: seconds from send to handler (notify queue, 30 s poll backstop)","ok":true,"ms":57518,"result":{"latencySeconds":20.381,"settleMs":10000,"warnings":[]}}
+{"target":"direct","check":"pg: idle LISTEN, then NOTIFY from a second connection (10 s wait)","ok":true,"ms":22058,"result":{"delivered":true,"latencySeconds":1.933}}
+{"target":"direct","check":"pg-boss LISTEN/NOTIFY: seconds from send to handler (notify queue, 30 s poll backstop)","ok":true,"ms":31090,"result":{"latencySeconds":3.901,"settleMs":10000,"warnings":[]}}
+{"target":"pooler","check":"pg: idle LISTEN, then NOTIFY from a second connection (10 s wait)","ok":true,"ms":25081,"result":{"delivered":false,"latencySeconds":null}}
+{"target":"pooler","check":"pg-boss LISTEN/NOTIFY: seconds from send to handler (notify queue, 30 s poll backstop)","ok":true,"ms":51613,"result":{"latencySeconds":24.303,"settleMs":10000,"warnings":[]}}

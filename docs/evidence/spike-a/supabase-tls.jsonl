@@ -1,0 +1,6 @@
+{"url":"DIRECT_URL","params":"","ok":true,"clientTls":false,"certVerified":null}
+{"url":"DIRECT_URL","params":"sslmode=require","ok":false,"code":"SELF_SIGNED_CERT_IN_CHAIN","message":"self-signed certificate in certificate chain"}
+{"url":"DIRECT_URL","params":"uselibpqcompat=true&sslmode=require","ok":true,"clientTls":true,"certVerified":false}
+{"url":"DATABASE_URL","params":"","ok":true,"clientTls":false,"certVerified":null}
+{"url":"DATABASE_URL","params":"sslmode=require","ok":false,"code":"SELF_SIGNED_CERT_IN_CHAIN","message":"self-signed certificate in certificate chain"}
+{"url":"DATABASE_URL","params":"uselibpqcompat=true&sslmode=require","ok":true,"clientTls":true,"certVerified":false}
