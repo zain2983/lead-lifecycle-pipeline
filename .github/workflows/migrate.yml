@@ -28,6 +28,7 @@ jobs:
     environment: production
     env:
       # Session pooler (:5432). Never the direct db.<ref>.supabase.co host: it is IPv6-only and runners are IPv4.
+      # The secret must end in ?sslmode=verify-full (docs/adr/0007-tls-to-supabase.md).
       DIRECT_URL: ${{ secrets.DIRECT_URL }}
       DATABASE_URL: ${{ secrets.DIRECT_URL }}
     steps:

@@ -2,6 +2,7 @@ import { spawnSync } from "node:child_process";
 import { createRequire } from "node:module";
 import path from "node:path";
 import { createPgPool } from "@repo/db";
+import { pgCliUrl } from "@repo/db/tls-cli";
 
 /**
  * Session-level advisory lock that serializes `pg-boss migrate` across processes. pg-boss takes its own lock
@@ -19,12 +20,13 @@ export function pgBossCliPath(): string {
 
 /**
  * Run `pg-boss <args>` and return its exit code. The connection goes in `PGBOSS_DATABASE_URL`, which
- * the CLI reads, so the URL and its password never appear in argv or in pnpm's echo of the script.
+ * the CLI reads, so the URL and its password never appear in argv or in pnpm's echo of the script. For a
+ * Supabase URL the bundled root CA is added to it (docs/adr/0007-tls-to-supabase.md).
  */
 export function runPgBossCli(args: readonly string[], connectionString: string): number {
   const result = spawnSync(process.execPath, [pgBossCliPath(), ...args], {
     stdio: "inherit",
-    env: { ...process.env, PGBOSS_DATABASE_URL: connectionString },
+    env: { ...process.env, PGBOSS_DATABASE_URL: pgCliUrl(connectionString) },
   });
   if (result.error) throw result.error;
   return result.status ?? 1;

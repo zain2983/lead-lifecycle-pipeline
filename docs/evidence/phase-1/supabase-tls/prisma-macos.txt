@@ -1,0 +1,36 @@
+macOS 26.5.1, arm64, node v26.5.0
+--- prisma migrate status | as configured, attempt 1
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma/schema.prisma.
+Datasource "db": PostgreSQL database "postgres", schema "public" at "<host>:5432"
+Error: P1011: Error opening a TLS connection: The certificate was not trusted.
+exit 1
+--- prisma migrate status | as configured, attempt 2
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma/schema.prisma.
+Datasource "db": PostgreSQL database "postgres", schema "public" at "<host>:5432"
+Error: P1011: Error opening a TLS connection: The certificate was not trusted.
+exit 1
+--- prisma migrate status | as configured, attempt 3
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma/schema.prisma.
+Datasource "db": PostgreSQL database "postgres", schema "public" at "<host>:5432"
+Error: P1011: Error opening a TLS connection: The certificate was not trusted.
+exit 1
+--- prisma migrate status | unrelated CA
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma/schema.prisma.
+Datasource "db": PostgreSQL database "postgres", schema "public" at "<host>:5432"
+Error: P1011: Error opening a TLS connection: The certificate was not trusted.
+exit 1
+--- prisma migrate status | right CA, wrong host name (IP address)
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma/schema.prisma.
+Datasource "db": PostgreSQL database "postgres", schema "public" at "<host>:5432"
+Error: P1011: Error opening a TLS connection: The certificate was not trusted.
+exit 1

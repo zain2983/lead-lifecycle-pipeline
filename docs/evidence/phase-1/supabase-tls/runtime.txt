@@ -1,0 +1,88 @@
+--- DATABASE_URL | as configured | createPgPool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DATABASE_URL | as configured | createPrismaClient
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DATABASE_URL | as configured | createBoss: pg-boss pool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DATABASE_URL | as configured | createBoss: pg-boss LISTEN client
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DATABASE_URL | no sslmode | createPgPool
+result: failed: A Supabase database URL must set sslmode=verify-full (docs/adr/0007-tls-to-supabase.md)
+--- DATABASE_URL | no sslmode | createPrismaClient
+result: failed: A Supabase database URL must set sslmode=verify-full (docs/adr/0007-tls-to-supabase.md)
+--- DATABASE_URL | no sslmode | createBoss: pg-boss pool
+result: failed: A Supabase database URL must set sslmode=verify-full (docs/adr/0007-tls-to-supabase.md)
+--- DATABASE_URL | no sslmode | createBoss: pg-boss LISTEN client
+result: failed: A Supabase database URL must set sslmode=verify-full (docs/adr/0007-tls-to-supabase.md)
+--- DATABASE_URL | unrelated CA | createPgPool
+[tls] {"tlsFailed":"SELF_SIGNED_CERT_IN_CHAIN","rejectUnauthorized":"default(true)","customCa":true}
+result: failed: SELF_SIGNED_CERT_IN_CHAIN
+--- DATABASE_URL | unrelated CA | createPrismaClient
+[tls] {"tlsFailed":"SELF_SIGNED_CERT_IN_CHAIN","rejectUnauthorized":"default(true)","customCa":true}
+result: failed: P2010
+--- DATABASE_URL | unrelated CA | createBoss: pg-boss pool
+[tls] {"tlsFailed":"SELF_SIGNED_CERT_IN_CHAIN","rejectUnauthorized":"default(true)","customCa":true}
+result: failed: SELF_SIGNED_CERT_IN_CHAIN
+--- DATABASE_URL | unrelated CA | createBoss: pg-boss LISTEN client
+[tls] {"tlsFailed":"SELF_SIGNED_CERT_IN_CHAIN","rejectUnauthorized":"default(true)","customCa":true}
+result: failed: SELF_SIGNED_CERT_IN_CHAIN
+--- DATABASE_URL | right CA, wrong host name (IP address) | createPgPool
+[tls] {"tlsFailed":"ERR_TLS_CERT_ALTNAME_INVALID","rejectUnauthorized":"default(true)","customCa":true}
+result: failed: ERR_TLS_CERT_ALTNAME_INVALID
+--- DATABASE_URL | right CA, wrong host name (IP address) | createPrismaClient
+[tls] {"tlsFailed":"ERR_TLS_CERT_ALTNAME_INVALID","rejectUnauthorized":"default(true)","customCa":true}
+result: failed: P2010
+--- DATABASE_URL | right CA, wrong host name (IP address) | createBoss: pg-boss pool
+[tls] {"tlsFailed":"ERR_TLS_CERT_ALTNAME_INVALID","rejectUnauthorized":"default(true)","customCa":true}
+result: failed: ERR_TLS_CERT_ALTNAME_INVALID
+--- DATABASE_URL | right CA, wrong host name (IP address) | createBoss: pg-boss LISTEN client
+[tls] {"tlsFailed":"ERR_TLS_CERT_ALTNAME_INVALID","rejectUnauthorized":"default(true)","customCa":true}
+result: failed: ERR_TLS_CERT_ALTNAME_INVALID
+--- DIRECT_URL | as configured | createPgPool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | as configured | createPrismaClient
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | as configured | createBoss: pg-boss pool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | as configured | createBoss: pg-boss LISTEN client
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | no sslmode | createPgPool
+result: failed: A Supabase database URL must set sslmode=verify-full (docs/adr/0007-tls-to-supabase.md)
+--- DIRECT_URL | no sslmode | createPrismaClient
+result: failed: A Supabase database URL must set sslmode=verify-full (docs/adr/0007-tls-to-supabase.md)
+--- DIRECT_URL | no sslmode | createBoss: pg-boss pool
+result: failed: A Supabase database URL must set sslmode=verify-full (docs/adr/0007-tls-to-supabase.md)
+--- DIRECT_URL | no sslmode | createBoss: pg-boss LISTEN client
+result: failed: A Supabase database URL must set sslmode=verify-full (docs/adr/0007-tls-to-supabase.md)
+--- DIRECT_URL | unrelated CA | createPgPool
+[tls] {"tlsFailed":"SELF_SIGNED_CERT_IN_CHAIN","rejectUnauthorized":"default(true)","customCa":true}
+result: failed: SELF_SIGNED_CERT_IN_CHAIN
+--- DIRECT_URL | unrelated CA | createPrismaClient
+[tls] {"tlsFailed":"SELF_SIGNED_CERT_IN_CHAIN","rejectUnauthorized":"default(true)","customCa":true}
+result: failed: P2010
+--- DIRECT_URL | unrelated CA | createBoss: pg-boss pool
+[tls] {"tlsFailed":"SELF_SIGNED_CERT_IN_CHAIN","rejectUnauthorized":"default(true)","customCa":true}
+result: failed: SELF_SIGNED_CERT_IN_CHAIN
+--- DIRECT_URL | unrelated CA | createBoss: pg-boss LISTEN client
+[tls] {"tlsFailed":"SELF_SIGNED_CERT_IN_CHAIN","rejectUnauthorized":"default(true)","customCa":true}
+result: failed: SELF_SIGNED_CERT_IN_CHAIN
+--- DIRECT_URL | right CA, wrong host name (IP address) | createPgPool
+[tls] {"tlsFailed":"ERR_TLS_CERT_ALTNAME_INVALID","rejectUnauthorized":"default(true)","customCa":true}
+result: failed: ERR_TLS_CERT_ALTNAME_INVALID
+--- DIRECT_URL | right CA, wrong host name (IP address) | createPrismaClient
+[tls] {"tlsFailed":"ERR_TLS_CERT_ALTNAME_INVALID","rejectUnauthorized":"default(true)","customCa":true}
+result: failed: P2010
+--- DIRECT_URL | right CA, wrong host name (IP address) | createBoss: pg-boss pool
+[tls] {"tlsFailed":"ERR_TLS_CERT_ALTNAME_INVALID","rejectUnauthorized":"default(true)","customCa":true}
+result: failed: ERR_TLS_CERT_ALTNAME_INVALID
+--- DIRECT_URL | right CA, wrong host name (IP address) | createBoss: pg-boss LISTEN client
+[tls] {"tlsFailed":"ERR_TLS_CERT_ALTNAME_INVALID","rejectUnauthorized":"default(true)","customCa":true}
+result: failed: ERR_TLS_CERT_ALTNAME_INVALID

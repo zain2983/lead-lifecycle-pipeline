@@ -42,6 +42,8 @@ docs advise for deployments that scale to zero.
 
 ### Connection matrix (Supabase Free)
 
+Hosted URL shape: `postgresql://<user>:<password>@<pooler-host>:<6543 or 5432>/postgres?sslmode=verify-full`.
+
 | Runtime           | Prisma                                                                                         | pg-boss                                             | Why                                                                                                                                |
 | ----------------- | ---------------------------------------------------------------------------------------------- | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | Vercel function   | `DATABASE_URL` = transaction pooler `:6543`, through `new PrismaPg(pool)` on our own `pg.Pool` | same URL, `vercel` mode on our own pool             | Serverless needs the transaction pooler. Both pools are ours, so both can be wrapped with `attachDatabasePool`                     |
@@ -49,6 +51,9 @@ docs advise for deployments that scale to zero.
 | Sweeper (Actions) | `DIRECT_URL` (session pooler)                                                                  | `DIRECT_URL`, `sweeper` mode                        | It's a CLI, and the plan puts CLIs on the session pooler. It needs no LISTEN; through the transaction pooler it worked too (below) |
 | `migrate.yml`, CI | `prisma migrate deploy` on `DIRECT_URL`                                                        | `pnpm --filter @repo/queue migrate` on `DIRECT_URL` | Migrations on the session pooler                                                                                                   |
 
+- Every Supabase URL ends in `?sslmode=verify-full`, in every row of this matrix. The code refuses one without it
+  and verifies the server against the bundled Supabase CA ([ADR 0007](0007-tls-to-supabase.md)). Local and CI URLs
+  have no SSL parameter.
 - Never use `db.<ref>.supabase.co`. It's IPv6-only, and Actions runners are IPv4.
 - Prisma manages only `public`. pg-boss owns `pgboss`. Never run `prisma db pull`.
 - Don't add `?pgbouncer=true`, and never set PrismaPg's `statementNameGenerator` on a transaction pooler

@@ -123,6 +123,10 @@ under three settings:
 
 Verifying the certificate against Supabase's CA was not tested. No code or setting was changed.
 
+Fixed afterwards: see [ADR 0007](../../adr/0007-tls-to-supabase.md) and
+[`../phase-1/supabase-tls/`](../phase-1/supabase-tls/README.md). The commands above now need
+`?sslmode=verify-full` on both URLs.
+
 ### Cleanup
 
 A read-only transaction on the session pooler, after both commands:
@@ -170,9 +174,8 @@ These are from the local run; the Supavisor and latency points are answered abov
 2. **Verify `after()` and `attachDatabasePool` on Vercel.** The project and production URL exist
    (`https://lead-lifecycle-pipeline.vercel.app`). The function needs the database password, which only Zain adds.
    1. In the Vercel project, under _Settings → Environment Variables_, add for **Production** only:
-      - `DATABASE_URL`: the Supabase **transaction pooler** URI (`:6543`), marked Sensitive. To encrypt the
-        connection, end it with `?uselibpqcompat=true&sslmode=require` (certificate not verified; tested here only
-        with `SELECT 1` from a laptop, see "TLS").
+      - `DATABASE_URL`: the Supabase **transaction pooler** URI (`:6543`) ending in `?sslmode=verify-full`
+        ([ADR 0007](../../adr/0007-tls-to-supabase.md)), marked Sensitive.
       - `SPIKE_ROUTES`: `1`.
    2. Redeploy production, so the deployment picks the variables up. While `SPIKE_ROUTES=1`, anyone who knows the URL
       can enqueue spike jobs, so do steps 3 to 5 in one sitting.
