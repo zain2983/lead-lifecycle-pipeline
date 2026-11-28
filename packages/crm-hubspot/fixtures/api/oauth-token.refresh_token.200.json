@@ -1,0 +1,22 @@
+{
+  "source": "docs",
+  "docs": "https://developers.hubspot.com/docs/apps/developer-platform/build-apps/authentication/oauth/oauth-quickstart-guide",
+  "read": "2026-11-28",
+  "note": "The docs show one token response for both grants. UNVERIFIED: that a refresh answer carries hub_id, scopes and refresh_token; the parser treats all three as optional. Replace with a recording after the first live refresh.",
+  "request": {
+    "method": "POST",
+    "path": "/oauth/v3/token",
+    "form": ["grant_type", "client_id", "client_secret", "refresh_token"]
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "token_type": "bearer",
+      "refresh_token": "na1-aaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+      "access_token": "synthetic-access-token-from-docs-example-2",
+      "hub_id": 1234567,
+      "scopes": ["oauth", "crm.objects.contacts.write", "crm.objects.contacts.read"],
+      "expires_in": 1800
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "source": "docs",
+  "docs": "https://developers.hubspot.com/docs/api-reference/latest/crm/objects/contacts/get-contact",
+  "read": "2026-11-28",
+  "note": "Shape from the docs: the response fields (id, properties, createdAt, updatedAt, archived) and the contacts guide's example record, which always carries createdate, hs_object_id and lastmodifieddate. Values are synthetic (reserved domain, made-up IDs). Replace with a recording (source: recording) after the first live read.",
+  "request": {
+    "method": "GET",
+    "path": "/crm/objects/2026-09/contacts/610000000001"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "610000000001",
+      "properties": {
+        "createdate": "2026-11-02T09:05:12.000Z",
+        "email": "contract.fixture@example.com",
+        "firstname": "Contract",
+        "hs_object_id": "610000000001",
+        "lastmodifieddate": "2026-11-02T09:05:13.000Z",
+        "lastname": "Fixture",
+        "company": "Quillmark",
+        "jobtitle": "Operations lead",
+        "lifecyclestage": "lead"
+      },
+      "createdAt": "2026-11-02T09:05:12.000Z",
+      "updatedAt": "2026-11-02T09:05:13.000Z",
+      "archived": false
+    }
+  }
+}

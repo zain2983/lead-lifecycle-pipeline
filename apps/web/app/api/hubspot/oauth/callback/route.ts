@@ -14,5 +14,6 @@ export async function GET(request: Request): Promise<Response> {
     tokenUrl: env.HUBSPOT_OAUTH_TOKEN_URL,
     encryptionKey: parseEncryptionKey(env.TOKEN_ENCRYPTION_KEY),
     store: prismaTokenStore(env.DATABASE_URL),
+    knownPortalIds: env.HUBSPOT_KNOWN_PORTAL_IDS,
   });
 }

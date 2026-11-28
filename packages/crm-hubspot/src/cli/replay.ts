@@ -1,4 +1,4 @@
-// pnpm hs:replay <fixture.json> [--url <target>] [--tamper] [--age <seconds>] [--expect <status>]
+// pnpm hs:replay <fixture.json> [--url <target>] [--attempt <n>] [--tamper] [--age <seconds>] [--expect <status>]
 //
 // Signs a recorded (or synthetic) webhook batch the way HubSpot does (signature v3, HUBSPOT_CLIENT_SECRET,
 // against PUBLIC_WEBHOOK_URL) and POSTs it. This is the default local loop: no HubSpot account, no tunnel.
@@ -6,6 +6,8 @@
 //   --url      where to POST (default PUBLIC_WEBHOOK_URL). The signature still uses PUBLIC_WEBHOOK_URL's
 //              scheme and host, exactly as the receiver checks it, so you can sign for a tunnel URL and
 //              POST straight to localhost.
+//   --attempt  set every event's attemptNumber to n before signing, as HubSpot's retries do (the receiver
+//              must store nothing new for n > 0 once n = 0 was stored).
 //   --tamper   change the body after signing (the receiver must answer 401).
 //   --age      backdate the timestamp by this many seconds (over 300 must give 401).
 //   --expect   exit 0 only if the response has this status (default: any 2xx).
@@ -31,6 +33,7 @@ const { values, positionals } = parseArgs({
   allowPositionals: true,
   options: {
     url: { type: "string" },
+    attempt: { type: "string" },
     tamper: { type: "boolean", default: false },
     age: { type: "string", default: "0" },
     expect: { type: "string" },
@@ -40,7 +43,7 @@ const { values, positionals } = parseArgs({
 const [fixtureArg] = positionals;
 if (!fixtureArg) {
   console.error(
-    "usage: pnpm hs:replay <fixture.json> [--url <target>] [--tamper] [--age <seconds>] [--expect <status>]",
+    "usage: pnpm hs:replay <fixture.json> [--url <target>] [--attempt <n>] [--tamper] [--age <seconds>] [--expect <status>]",
   );
   process.exit(64);
 }
@@ -50,6 +53,14 @@ const env = loadEnv(["hubspotWebhook"]);
 const fixturePath = path.resolve(process.env.INIT_CWD ?? process.cwd(), fixtureArg);
 // HubSpot sends compact JSON, so the fixture's formatting doesn't matter.
 const events = JSON.parse(readFileSync(fixturePath, "utf8")) as Record<string, unknown>[];
+if (values.attempt !== undefined) {
+  const attempt = Number(values.attempt);
+  if (!Number.isInteger(attempt) || attempt < 0) {
+    console.error("--attempt must be a whole number >= 0");
+    process.exit(64);
+  }
+  for (const event of events) event.attemptNumber = attempt;
+}
 const rawBody = JSON.stringify(events);
 const target = values.url ?? env.PUBLIC_WEBHOOK_URL;
 const timestamp = String(Date.now() - Number(values.age) * 1000);
@@ -73,6 +84,7 @@ const types = [...new Set(events.map((event) => String(event.subscriptionType)))
 console.log(
   `fixture       ${path.relative(repoRoot, fixturePath)} (${events.length} event(s): ${types})`,
 );
+if (values.attempt !== undefined) console.log(`attemptNumber ${values.attempt} (every event)`);
 console.log(`POST          ${target}`);
 console.log(`signed URI    ${signedUri}`);
 console.log(

@@ -41,6 +41,58 @@ describe("HUBSPOT_REQUIRED_SCOPES", () => {
   });
 });
 
+describe("the prod app (integrations/hubspot-app/prod)", () => {
+  type Json = { [key: string]: unknown };
+  const read = (env: "dev" | "prod", file: string) =>
+    JSON.parse(
+      readFileSync(
+        path.resolve(import.meta.dirname, `../../../integrations/hubspot-app/${env}/${file}`),
+        "utf8",
+      ),
+    ) as Json;
+  const at = (json: Json, ...keys: string[]): unknown =>
+    keys.reduce<unknown>((node, key) => (node as Json | undefined)?.[key], json);
+  const files = [
+    "hsproject.json",
+    "src/app/app-hsmeta.json",
+    "src/app/webhooks/webhooks-hsmeta.json",
+  ];
+  /** What may differ between dev and prod. */
+  const allowed = [
+    ["uid"],
+    ["name"],
+    ["config", "name"],
+    ["config", "description"],
+    ["config", "auth", "redirectUrls"],
+    ["config", "settings", "targetUrl"],
+  ];
+
+  it("has the required scopes and only the production redirect and target", () => {
+    const app = read("prod", "src/app/app-hsmeta.json");
+    expect(at(app, "config", "auth", "requiredScopes")).toEqual([...HUBSPOT_REQUIRED_SCOPES]);
+    expect(at(app, "config", "auth", "redirectUrls")).toEqual([
+      "https://web-placeholder.example.com/api/hubspot/oauth/callback",
+    ]);
+    expect(
+      at(read("prod", "src/app/webhooks/webhooks-hsmeta.json"), "config", "settings", "targetUrl"),
+    ).toBe("https://web-placeholder.example.com/api/webhooks/hubspot");
+  });
+
+  it("differs from dev only in names, uids, description, redirects and target URL", () => {
+    const blank = (json: Json) => {
+      const copy = structuredClone(json);
+      for (const keys of allowed) {
+        const parent = at(copy, ...keys.slice(0, -1)) as Json | undefined;
+        if (parent) delete parent[keys.at(-1) ?? ""];
+      }
+      return copy;
+    };
+    for (const file of files) {
+      expect(blank(read("prod", file)), file).toEqual(blank(read("dev", file)));
+    }
+  });
+});
+
 describe("exchangeAuthorizationCode (against a fake token endpoint)", () => {
   let close: (() => Promise<void>) | undefined;
   afterEach(async () => {

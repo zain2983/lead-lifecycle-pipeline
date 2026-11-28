@@ -1,0 +1,22 @@
+{
+  "source": "docs",
+  "docs": "https://developers.hubspot.com/docs/apps/developer-platform/build-apps/authentication/oauth/oauth-quickstart-guide",
+  "read": "2026-11-28",
+  "note": "The quickstart's token response, field for field. Token values are synthetic. Replace with a recording (tokens redacted to the same length class) after the first live install.",
+  "request": {
+    "method": "POST",
+    "path": "/oauth/v3/token",
+    "form": ["grant_type", "client_id", "client_secret", "redirect_uri", "code"]
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "token_type": "bearer",
+      "refresh_token": "na1-aaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+      "access_token": "synthetic-access-token-from-docs-example",
+      "hub_id": 1234567,
+      "scopes": ["oauth", "crm.objects.contacts.write", "crm.objects.contacts.read"],
+      "expires_in": 1800
+    }
+  }
+}

@@ -21,3 +21,11 @@ Field names follow the docs:
 The `contact.privacyDeletion` `changeSource` value is a guess; the docs show no example of that event.
 
 Replay one with `pnpm hs:replay packages/crm-hubspot/fixtures/contact-creation.json`.
+
+## `api/`: REST contract fixtures
+
+One HubSpot exchange per file (`request` + `response`), used by `test/contracts.test.ts`. Today each is
+`source: "docs"`: the shape of HubSpot's documented example, with synthetic values. To swap one for a recording, keep
+the envelope, set `source: "recording"` and `recordedAt`, and paste the response as it came back (tokens replaced by
+same-shape placeholders, emails by reserved-domain ones). The tests read their expectations from the file, so they
+keep passing unless HubSpot's real shape differs from the docs; if one fails, fix the code, not the recording.

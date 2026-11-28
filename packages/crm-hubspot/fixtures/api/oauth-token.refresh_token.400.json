@@ -1,0 +1,20 @@
+{
+  "source": "docs",
+  "docs": "https://developers.hubspot.com/docs/api-reference/legacy/authentication/manage-oauth-tokens",
+  "read": "2026-11-28",
+  "note": "The docs' error body for a refresh token that is invalid, expired or revoked. The docs don't give its HTTP status; 400 is the OAuth 2.0 status for invalid_grant (RFC 6749 §5.2), UNVERIFIED. Replace with a recording (uninstall the app, then refresh).",
+  "request": {
+    "method": "POST",
+    "path": "/oauth/v3/token",
+    "form": ["grant_type", "client_id", "client_secret", "refresh_token"]
+  },
+  "response": {
+    "status": 400,
+    "body": {
+      "error": "invalid_grant",
+      "error_description": "refresh token is invalid, expired or revoked",
+      "status": "BAD_REFRESH_TOKEN",
+      "message": "refresh token is invalid, expired or revoked"
+    }
+  }
+}

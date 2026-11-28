@@ -1,0 +1,46 @@
+commit c51e3ab, 2026-11-28T13:12:45Z, after 02-offline-worker-run.txt made the Lead
+
+=== 7. The Lead before (true = column is null)
+$ psql -c "select source, email is null as email_null, first_name is null as first_null, last_name is null as last_null, company_name is null as company_null, job_title is null as title_null, message is null as message_null, pii_purged_at is not null as purged, hubspot_contact_id from lead where hubspot_portal_id = 900000001"
+     source     | email_null | first_null | last_null | company_null | title_null | message_null | purged | hubspot_contact_id 
+----------------+------------+------------+-----------+--------------+------------+--------------+--------+--------------------
+ hubspot_direct | f          | f          | f         | f            | f          | f            | f      |       610000000001
+(1 row)
+
+
+=== 8. contact.privacyDeletion for that contact, then HubSpot's retry of it
+$ pnpm -s hs:replay docs/evidence/phase-3/privacy-deletion.json
+fixture       docs/evidence/phase-3/privacy-deletion.json (1 event(s): contact.privacyDeletion)
+POST          http://localhost:3100/api/webhooks/hubspot
+signed URI    http://localhost:3100/api/webhooks/hubspot
+timestamp     1795871566472
+signature v3  BuLQEX… (redacted)
+response      200 in 80 ms
+body          {"ok":true,"received":1,"stored":1,"duplicates":0,"enqueued":0,"purged":1}
+exit 0
+$ pnpm -s hs:replay docs/evidence/phase-3/privacy-deletion.json --attempt 1
+fixture       docs/evidence/phase-3/privacy-deletion.json (1 event(s): contact.privacyDeletion)
+attemptNumber 1 (every event)
+POST          http://localhost:3100/api/webhooks/hubspot
+signed URI    http://localhost:3100/api/webhooks/hubspot
+timestamp     1795871567285
+signature v3  dl2XU5… (redacted)
+response      200 in 36 ms
+body          {"ok":true,"received":1,"stored":0,"duplicates":1,"enqueued":0,"purged":0}
+exit 0
+
+=== 9. The row stays, every PII column is null, and the deletion event points at it
+$ psql -c "select source, email is null as email_null, first_name is null as first_null, last_name is null as last_null, company_name is null as company_null, job_title is null as title_null, message is null as message_null, pii_purged_at is not null as purged, hubspot_contact_id from lead where hubspot_portal_id = 900000001"
+     source     | email_null | first_null | last_null | company_null | title_null | message_null | purged | hubspot_contact_id 
+----------------+------------+------------+-----------+--------------+------------+--------------+--------+--------------------
+ hubspot_direct | t          | t          | t         | t            | t          | t            | t      |       610000000001
+(1 row)
+
+$ psql -c "select id, subscription_type, attempt_number, lead_id is not null as linked from crm_event where portal_id = 900000001 and object_id = 610000000001 order by id"
+ id  |    subscription_type    | attempt_number | linked 
+-----+-------------------------+----------------+--------
+ 694 | object.creation         |              0 | t
+ 698 | contact.propertyChange  |              0 | f
+ 711 | contact.privacyDeletion |              0 | t
+(3 rows)
+

@@ -82,4 +82,20 @@ describe("spikes group", () => {
     expect(loadEnv(["spikes"], { SPIKE_ROUTES: "true" }).SPIKE_ROUTES).toBe(false);
     expect(loadEnv(["spikes"], { SPIKE_ROUTES: "1" }).SPIKE_ROUTES).toBe(true);
   });
+
+  it("parses known portal IDs for HubSpot-initiated installs, and rejects anything else", () => {
+    expect(loadEnv(["hubspotOAuth"], hubspot).HUBSPOT_KNOWN_PORTAL_IDS).toEqual([]);
+    expect(
+      loadEnv(["hubspotOAuth"], { ...hubspot, HUBSPOT_KNOWN_PORTAL_IDS: " 900000001, 900000002 " })
+        .HUBSPOT_KNOWN_PORTAL_IDS,
+    ).toEqual([900000001n, 900000002n]);
+    expect(() =>
+      loadEnv(["hubspotOAuth"], { ...hubspot, HUBSPOT_KNOWN_PORTAL_IDS: "9000,demo" }),
+    ).toThrowError(/not a portal ID: demo/);
+  });
+
+  it("gives the worker the refresh credentials without a redirect URI", () => {
+    const { HUBSPOT_REDIRECT_URI: _, PUBLIC_WEBHOOK_URL: __, ...refresh } = hubspot;
+    expect(loadEnv(["hubspotTokenRefresh"], refresh).HUBSPOT_CLIENT_ID).toBe("id");
+  });
 });

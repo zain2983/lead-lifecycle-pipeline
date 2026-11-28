@@ -1,6 +1,11 @@
 /**
- * A small HubSpot REST client for one account's **service key** (Bearer). Used by `hs:setup` and `hs:seed`;
- * Phase 3 grows it into the typed client.
+ * A small HubSpot REST client for one account, authenticated either with that account's **service key**
+ * (`hs:setup`, `hs:seed`) or with an **OAuth access token** of the installed app (the worker, Phase 3;
+ * see token-manager.ts). Both are sent as `Authorization: Bearer`.
+ *
+ * With OAuth, a 401 drops the cached access token and the request is sent once more with a fresh one (a
+ * 401 is refused before processing, so this is safe for writes). UNVERIFIED (live check pending): the
+ * body HubSpot sends with a 401 for an expired token; the code relies on the status only.
  *
  * Paths use the date-versioned API, `/crm/{api}/2026-09/...`, which HubSpot marks GA since 2026-09-08 and
  * shows on its "latest" reference pages; the `/crm/v3/...` paths are listed as legacy.
@@ -84,9 +89,20 @@ export interface HubSpotRequest {
   idempotentRead?: boolean;
 }
 
+/** How a request authenticates. Neither the key nor the token is ever logged. */
+export type HubSpotAuth =
+  | { type: "service_key"; key: string }
+  | {
+      type: "oauth";
+      getAccessToken: () => Promise<string>;
+      /** Called with the token HubSpot answered 401 to. */
+      invalidate: (failedToken: string) => void;
+    };
+
 export interface HubSpotClientOptions {
-  /** The account's service key. Never logged. */
-  token: string;
+  /** The account's service key (shorthand for `auth: { type: "service_key", key }`). */
+  token?: string;
+  auth?: HubSpotAuth;
   baseUrl?: string;
   fetch?: typeof fetch;
   timeoutMs?: number;
@@ -112,7 +128,7 @@ const realSleep = (ms: number) => new Promise<void>((resolve) => setTimeout(reso
 export class HubSpotClient {
   readonly baseUrl: string;
   readonly stats: ClientStats = { requests: 0, retries: 0, rateLimitWaits: 0 };
-  readonly #token: string;
+  readonly #auth: HubSpotAuth;
   readonly #fetch: typeof fetch;
   readonly #timeoutMs: number;
   readonly #rateLimit: { maxRequests: number; windowMs: number };
@@ -127,8 +143,12 @@ export class HubSpotClient {
   #blockedUntil = 0;
 
   constructor(options: HubSpotClientOptions) {
-    if (!options.token) throw new TypeError("HubSpotClient: empty token");
-    this.#token = options.token;
+    const auth =
+      options.auth ?? (options.token ? { type: "service_key" as const, key: options.token } : null);
+    if (!auth || (auth.type === "service_key" && !auth.key)) {
+      throw new TypeError("HubSpotClient: empty token");
+    }
+    this.#auth = auth;
     this.baseUrl = (options.baseUrl ?? HUBSPOT_API_BASE_URL).replace(/\/+$/, "");
     this.#fetch = options.fetch ?? fetch;
     this.#timeoutMs = options.timeoutMs ?? 15_000;
@@ -142,15 +162,18 @@ export class HubSpotClient {
 
   async request<T = unknown>(init: HubSpotRequest): Promise<HubSpotResponse<T>> {
     const read = init.idempotentRead ?? init.method === "GET";
+    let reauthorized = false;
     for (let attempt = 0; ; attempt++) {
       await this.#acquire();
+      const bearer =
+        this.#auth.type === "service_key" ? this.#auth.key : await this.#auth.getAccessToken();
       this.stats.requests++;
       let response: Response;
       try {
         response = await this.#fetch(`${this.baseUrl}${init.path}`, {
           method: init.method,
           headers: {
-            authorization: `Bearer ${this.#token}`,
+            authorization: `Bearer ${bearer}`,
             accept: "application/json",
             ...(init.body === undefined ? {} : { "content-type": "application/json" }),
           },
@@ -182,6 +205,12 @@ export class HubSpotClient {
         return { status: response.status, body: parseJson(text) as T, headers: response.headers };
       }
       const status = response.status;
+      if (status === 401 && this.#auth.type === "oauth" && !reauthorized) {
+        reauthorized = true;
+        this.#auth.invalidate(bearer);
+        this.#log(`${init.method} ${init.path}: 401, retrying once with a fresh access token`);
+        continue;
+      }
       if (status === 429) {
         if (/"policyName"\s*:\s*"DAILY"/i.test(text)) {
           throw new HubSpotApiError(init.method, init.path, status, text.slice(0, 4096));

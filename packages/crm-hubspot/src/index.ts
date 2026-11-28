@@ -1,17 +1,25 @@
-// HubSpot OAuth, webhook verification, token crypto, signed replay, the service-key REST client,
-// property setup and contact upsert. Phase 3 adds token refresh and the typed client.
+// HubSpot OAuth (install and refresh), webhook verification, token crypto, signed replay, the REST
+// client (service key or OAuth), property setup, contact upsert and read, and the draft conversion map.
 export {
   type ClientStats,
   DEFAULT_RATE_LIMIT,
   HUBSPOT_API_BASE_URL,
   HUBSPOT_API_VERSION,
   HubSpotApiError,
+  type HubSpotAuth,
   HubSpotClient,
   type HubSpotClientOptions,
   HubSpotOutcomeUnknownError,
   type HubSpotRequest,
   type HubSpotResponse,
 } from "./api.ts";
+export {
+  CONTACT_READ_PROPERTIES,
+  type ContactReadProperty,
+  getContactById,
+  type HubSpotContact,
+  HubSpotContractError,
+} from "./contact-read.ts";
 export {
   BATCH_LIMIT,
   type ContactAction,
@@ -22,7 +30,28 @@ export {
   type UpsertSummary,
   upsertContactsByEmail,
 } from "./contacts.ts";
+export {
+  CONVERSION_MAPPING,
+  CONVERSION_MAPPING_STATUS,
+  type ConversionAction,
+  type ConversionTier,
+  type CrmChange,
+  isPersonChange,
+  type MappingOutcome,
+  type MappingRule,
+  mapCrmChange,
+  PERSON_CHANGE_SOURCES,
+} from "./conversion-mapping.ts";
 export { crmEventDedupeKey } from "./crm-event-key.ts";
+export {
+  type LeadUpsertDeps,
+  type LeadUpsertInput,
+  type LeadUpsertOutcome,
+  lockHubSpotContact,
+  type PurgeResult,
+  purgeLeadPii,
+  upsertHubSpotDirectLead,
+} from "./leads.ts";
 export {
   type AuthorizeUrlInput,
   buildAuthorizeUrl,
@@ -33,6 +62,10 @@ export {
   HUBSPOT_TOKEN_URL,
   HubSpotOAuthError,
   type HubSpotTokens,
+  oauthErrorCodes,
+  type RefreshedAccessToken,
+  type RefreshTokenInput,
+  refreshAccessToken,
 } from "./oauth.ts";
 export {
   CONSENT_VALUES,
@@ -78,6 +111,20 @@ export {
   refreshTokenAad,
   TokenCryptoError,
 } from "./token-crypto.ts";
+export {
+  DEFAULT_SAFETY_MARGIN_MS,
+  HubSpotNotInstalledError,
+  HubSpotTokenManager,
+  type TokenManagerOptions,
+} from "./token-manager.ts";
+export {
+  type InstallSource,
+  type OAuthTokenStore,
+  prismaOAuthTokenStore,
+  type RefreshFailure,
+  type RefreshRecord,
+  type StoredOAuthToken,
+} from "./token-store.ts";
 export {
   type HubSpotWebhookEvent,
   type ParseWebhookBatchResult,

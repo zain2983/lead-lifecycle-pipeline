@@ -1,0 +1,19 @@
+{
+  "source": "docs",
+  "docs": "https://developers.hubspot.com/docs/api-reference/error-handling",
+  "read": "2026-11-28",
+  "note": "The docs' generic error body with category OBJECT_NOT_FOUND. The 404 body of this endpoint isn't documented (UNVERIFIED); the client relies on the status only. Replace with a recording after the first live miss.",
+  "request": {
+    "method": "GET",
+    "path": "/crm/objects/2026-09/contacts/610000009999"
+  },
+  "response": {
+    "status": 404,
+    "body": {
+      "status": "error",
+      "message": "This will be a human readable message with details about the error.",
+      "category": "OBJECT_NOT_FOUND",
+      "correlationId": "a43683b0-5717-4ceb-80b4-104d02915d8c"
+    }
+  }
+}

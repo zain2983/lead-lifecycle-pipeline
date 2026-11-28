@@ -21,21 +21,48 @@ const hubspotWebhook = z.object({
   HUBSPOT_WEBHOOK_CAPTURE_DIR: z.string().min(1).optional(),
 });
 
-/** OAuth install and token refresh (web, Actions, local worker). */
-const hubspotOAuth = z.object({
+/** Token refresh (local worker, Actions): what the refresh grant and the stored token need. */
+const hubspotTokenRefresh = z.object({
   HUBSPOT_CLIENT_ID: z.string().min(1),
   HUBSPOT_CLIENT_SECRET: z.string().min(1),
-  /**
-   * Sent as `redirect_uri` to the authorize URL and again to the token endpoint, so it must be one of the
-   * app's `redirectUrls` exactly: http://localhost:3100/api/hubspot/oauth/callback locally.
-   */
-  HUBSPOT_REDIRECT_URI: z.url(),
   /** Optional override of HubSpot's token endpoint, for offline tests against a local fake. */
   HUBSPOT_OAUTH_TOKEN_URL: z.url().default("https://api.hubapi.com/oauth/v3/token"),
   /** 32 bytes, base64. Encrypts the stored OAuth refresh token (AES-256-GCM). */
   TOKEN_ENCRYPTION_KEY: z.base64().refine((v) => Buffer.from(v, "base64").length === 32, {
     message: "must decode to exactly 32 bytes",
   }),
+});
+
+/**
+ * HubSpot portal IDs (comma-separated) whose installs may start from HubSpot's own Install button,
+ * without our `state`. Empty or unset: only installs started at /api/hubspot/oauth/start are accepted
+ * (docs/adr/0006-hubspot-initiated-installs.md).
+ */
+const knownPortalIds = z
+  .string()
+  .optional()
+  .transform((value, ctx) => {
+    const ids = (value ?? "")
+      .split(",")
+      .map((part) => part.trim())
+      .filter(Boolean);
+    for (const id of ids) {
+      if (!/^[1-9]\d{0,18}$/.test(id)) {
+        ctx.addIssue({ code: "custom", message: `not a portal ID: ${id}` });
+        return z.NEVER;
+      }
+    }
+    return ids.map((id) => BigInt(id));
+  });
+
+/** OAuth install and token refresh (web). */
+const hubspotOAuth = hubspotTokenRefresh.extend({
+  /**
+   * Sent as `redirect_uri` to the authorize URL and again to the token endpoint, so it must be one of the
+   * app's `redirectUrls` exactly: http://localhost:3100/api/hubspot/oauth/callback locally.
+   */
+  HUBSPOT_REDIRECT_URI: z.url(),
+  HUBSPOT_KNOWN_PORTAL_IDS: knownPortalIds,
 });
 
 export const envGroups = {
@@ -53,6 +80,7 @@ export const envGroups = {
   }),
   hubspotWebhook,
   hubspotOAuth,
+  hubspotTokenRefresh,
   /** Everything above: the web app as a whole. */
   hubspot: hubspotWebhook.extend(hubspotOAuth.shape),
   /** Both test accounts' service keys (the daily `hs:ping` keep-alive). */

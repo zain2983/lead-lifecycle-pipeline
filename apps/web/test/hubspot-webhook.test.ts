@@ -156,19 +156,7 @@ describe("POST /api/webhooks/hubspot", () => {
   });
 });
 
-describe("the route module", () => {
-  it("reads its config from the environment at request time", async () => {
-    vi.spyOn(console, "info").mockImplementation(() => {});
-    vi.stubEnv("HUBSPOT_CLIENT_SECRET", clientSecret);
-    vi.stubEnv("PUBLIC_WEBHOOK_URL", publicWebhookUrl);
-    const { POST } = await import("../app/api/webhooks/hubspot/route.ts");
-    const response = await POST(
-      delivery({ body: fixture("contact-creation.json"), sentAt: Date.now() }),
-    );
-    expect(response.status).toBe(200);
-    vi.unstubAllEnvs();
-  });
-});
+// The route module itself (env at request time, real database) is tested in hubspot-intake.test.ts.
 
 describe("delivery capture (HUBSPOT_WEBHOOK_CAPTURE_DIR)", () => {
   it("keeps accepted and rejected deliveries exactly as received", async () => {

@@ -104,6 +104,22 @@ describe("lead", () => {
     ).toBeNull();
   });
 
+  it("counts company and job title as PII in a purge (Phase 3 migration)", async () => {
+    const id = await lead();
+    await client.query(
+      "UPDATE lead SET company_name = 'Quillmark', job_title = 'Ops lead' WHERE id = $1",
+      [id],
+    );
+    const purge = "UPDATE lead SET pii_purged_at = now(), email = NULL";
+    expect(await violation(`${purge} WHERE id = $1`, [id])).toBe("lead_pii_purged");
+    expect(await violation(`${purge}, company_name = NULL WHERE id = $1`, [id])).toBe(
+      "lead_pii_purged",
+    );
+    expect(
+      await violation(`${purge}, company_name = NULL, job_title = NULL WHERE id = $1`, [id]),
+    ).toBeNull();
+  });
+
   it("stores HubSpot portal and contact IDs together, unique per portal", async () => {
     const id = await lead();
     expect(await violation("UPDATE lead SET hubspot_contact_id = 501 WHERE id = $1", [id])).toBe(
@@ -203,5 +219,17 @@ describe("approval", () => {
         [runId],
       ),
     ).toBeNull();
+  });
+});
+
+describe("oauth_token", () => {
+  it("records only the two install paths", async () => {
+    const insert = `INSERT INTO oauth_token (portal_id, refresh_token_ciphertext, refresh_token_iv,
+      refresh_token_auth_tag, scopes, updated_at, installed_via)
+      VALUES (900000099, '\\x00', '\\x00', '\\x00', '{}', now(), $1)`;
+    expect(await violation(insert, ["hubspot_initiated"])).toBeNull();
+    expect(await violation(insert.replace("900000099", "900000098"), ["guessed"])).toBe(
+      "oauth_token_installed_via_known",
+    );
   });
 });
