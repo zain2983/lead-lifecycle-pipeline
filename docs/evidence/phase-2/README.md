@@ -107,15 +107,15 @@ Real HubSpot (`https://api.hubapi.com`), two developer test accounts (`demo`, `e
 `DEVELOPER_TEST`, data hosting `na2`), one service key each. Raw outputs in `live/`; emails in them are redacted
 to `<redacted>@domain`, keys never appear. Run from branch `fix/live-accounts`.
 
-| Step | demo | eval |
-| --- | --- | --- |
-| `hs:setup --dry-run` (`*-1-*`) | would create 15, 2 requests | same |
-| `hs:setup` (`first-attempt/*-2-*`) | created 15, 17 requests | same |
-| `hs:setup` again (`first-attempt/*-3-*`) | unchanged 15, 2 requests, 0 writes | same |
-| `hs:seed --seed 42` (`first-attempt/*-5-*`, `*-6-*`) | **failed 20**: 400 `INVALID_EMAIL` | **failed 10**, same |
-| after the fix: `hs:seed --seed 42` (`*-5-*`) | created 20, 1 batch upsert | created 10 |
-| `hs:seed` again (`*-6-*`) | unchanged 20, upserts 0 | unchanged 10, upserts 0 |
-| `hs:setup` after seeding (`*-7-*`) | unchanged 15 | unchanged 15 |
+| Step                                                 | demo                               | eval                    |
+| ---------------------------------------------------- | ---------------------------------- | ----------------------- |
+| `hs:setup --dry-run` (`*-1-*`)                       | would create 15, 2 requests        | same                    |
+| `hs:setup` (`first-attempt/*-2-*`)                   | created 15, 17 requests            | same                    |
+| `hs:setup` again (`first-attempt/*-3-*`)             | unchanged 15, 2 requests, 0 writes | same                    |
+| `hs:seed --seed 42` (`first-attempt/*-5-*`, `*-6-*`) | **failed 20**: 400 `INVALID_EMAIL` | **failed 10**, same     |
+| after the fix: `hs:seed --seed 42` (`*-5-*`)         | created 20, 1 batch upsert         | created 10              |
+| `hs:seed` again (`*-6-*`)                            | unchanged 20, upserts 0            | unchanged 10, upserts 0 |
+| `hs:setup` after seeding (`*-7-*`)                   | unchanged 15                       | unchanged 15            |
 
 - **What failed, and the fix.** HubSpot rejects every email under `*.test` (RFC 6761) as `INVALID_EMAIL`, and
   rejects the whole batch with it. The same batch's `example.com`/`example.org` personal addresses were not
