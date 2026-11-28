@@ -1,0 +1,74 @@
+Debian GNU/Linux 12 (bookworm), aarch64, node v24.22.3, OpenSSL 3.0.22 25 Aug 2026 (Library: OpenSSL 3.0.22 25 Aug 2026)
+prisma               : 7.10.1
+Schema Engine        : schema-engine-cli d1b3f377ca835d73fd50954a5e22128b9ebdd6b8
+--- prisma migrate status | as configured, attempt 1
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma/schema.prisma.
+Datasource "db": PostgreSQL database "postgres", schema "public" at "<host>:5432"
+
+6 migrations found in prisma/migrations
+
+Database schema is up to date!
+exit 0
+--- prisma migrate status | as configured, attempt 2
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma/schema.prisma.
+Datasource "db": PostgreSQL database "postgres", schema "public" at "<host>:5432"
+
+6 migrations found in prisma/migrations
+
+┌─────────────────────────────────────────────────────────┐
+│  Update available 7.10.1 -> 8.0.0-rc.36                 │
+│                                                         │
+│  This is a major update - please follow the guide at    │
+│  https://pris.ly/d/major-version-upgrade                │
+│                                                         │
+│  Run the following to update                            │
+│    npm i --save-dev prisma@latest                       │
+│    npm i @prisma/client@latest                          │
+└─────────────────────────────────────────────────────────┘
+Database schema is up to date!
+exit 0
+--- prisma migrate status | as configured, attempt 3
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma/schema.prisma.
+Datasource "db": PostgreSQL database "postgres", schema "public" at "<host>:5432"
+
+6 migrations found in prisma/migrations
+
+Database schema is up to date!
+exit 0
+--- prisma migrate status | no sslmode
+Failed to load config file "/w/packages/db" as a TypeScript/JavaScript module. Error: TlsConfigError: A Supabase database URL must set sslmode=verify-full (docs/adr/0007-tls-to-supabase.md)
+exit 1
+--- prisma migrate status | unrelated CA, attempt 1
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma/schema.prisma.
+Datasource "db": PostgreSQL database "postgres", schema "public" at "<host>:5432"
+Error: P1011: Error opening a TLS connection: error:0A000086:SSL routines:tls_post_process_server_certificate:certificate verify failed:../ssl/statem/statem_clnt.c:1889: (self-signed certificate in certificate chain)
+exit 1
+--- prisma migrate status | unrelated CA, attempt 2
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma/schema.prisma.
+Datasource "db": PostgreSQL database "postgres", schema "public" at "<host>:5432"
+Error: P1011: Error opening a TLS connection: error:0A000086:SSL routines:tls_post_process_server_certificate:certificate verify failed:../ssl/statem/statem_clnt.c:1889: (self-signed certificate in certificate chain)
+exit 1
+--- prisma migrate status | unrelated CA, attempt 3
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma/schema.prisma.
+Datasource "db": PostgreSQL database "postgres", schema "public" at "<host>:5432"
+Error: P1011: Error opening a TLS connection: error:0A000086:SSL routines:tls_post_process_server_certificate:certificate verify failed:../ssl/statem/statem_clnt.c:1889: (self-signed certificate in certificate chain)
+exit 1
+--- prisma migrate status | right CA, wrong host name (IP address)
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma/schema.prisma.
+Datasource "db": PostgreSQL database "postgres", schema "public" at "<host>:5432"
+Error: P1011: Error opening a TLS connection: error:0A000086:SSL routines:tls_post_process_server_certificate:certificate verify failed:../ssl/statem/statem_clnt.c:1889: (IP address mismatch)
+exit 1

@@ -1,0 +1,13 @@
+$ security verify-cert -c leaf -c intermediate -r supabase-root.crt -p ssl -s <session pooler host>
+Cert Verify Result: CSSMERR_TP_CERT_SUSPENDED
+---
+No extended validation result found
+Certificate Transparency (CT) status: not verified
+Unable to find at least 2 signed certificate timestamps (SCTs) from approved logs
+exit 1
+$ the same with -p basic (chain only, no TLS server rules)
+...certificate verification successful.
+exit 0
+leaf certificate validity:
+notBefore=Mar 12 15:56:33 2025 GMT
+notAfter=Mar 11 15:56:33 2030 GMT
