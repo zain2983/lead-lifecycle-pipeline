@@ -2,9 +2,9 @@
 
 A synthetic ad click becomes a lead. An AI triage workflow, running on self-hosted [Sim](https://github.com/simstudioai/sim),
 proposes a disposition with evidence for every field, and a person approves it before anything is written to the CRM
-(HubSpot). Sales outcomes recorded in the CRM go back to the ad platforms (Meta Conversions API, Google Data Manager
-API, Microsoft Advertising) as consent-aware, deduplicated conversions, and a daily reconciliation accounts for every
-record at every hop.
+(HubSpot). Sales outcomes recorded in the CRM go back to the ad platforms (Meta Conversions API and Google Data
+Manager API) as consent-aware, deduplicated conversions, and a daily reconciliation accounts for every record at
+every hop.
 
 **Status:** early build. Everything here is synthetic. Platform responses are shown exactly as they came back,
 including errors and test-mode results.
