@@ -1,0 +1,97 @@
+$ sim workflows source check --dir sim/hubspot-smoke
+{
+  "checked": "compile",
+  "errors": 0,
+  "warnings": 0,
+  "catalogHash": "bc436876845e94afad8e15227fee5ce2221ababc584da8ab97597748d4fb4f3a",
+  "diagnostics": []
+}
+exit=0
+
+$ sim workflows source create --dir sim/hubspot-smoke --yes
+{
+  "workflowId": "1b791aff-c49d-4035-ac27-52dc94fe10b7",
+  "applied": true,
+  "dryRun": false,
+  "noop": false,
+  "created": [
+    {
+      "kind": "workflow",
+      "id": "1b791aff-c49d-4035-ac27-52dc94fe10b7"
+    },
+    {
+      "kind": "block",
+      "key": "start",
+      "id": "aebf795e-b435-456a-a1ad-c82bb9ab682b"
+    },
+    {
+      "kind": "block",
+      "key": "getcontact",
+      "id": "a83836ec-7cd9-4e4f-826d-46c05976706a"
+    },
+    {
+      "kind": "block",
+      "key": "pick",
+      "id": "2d5fbdd4-7c5b-42c2-89cd-419ec31e9fbf"
+    },
+    {
+      "kind": "block",
+      "key": "respond",
+      "id": "83a5ceb7-118b-4750-9a4f-247cf54b7669"
+    }
+  ],
+  "blocksAdded": 4,
+  "added": [
+    {
+      "block": "start",
+      "type": "start_trigger"
+    },
+    {
+      "block": "getcontact",
+      "type": "hubspot"
+    },
+    {
+      "block": "pick",
+      "type": "function"
+    },
+    {
+      "block": "respond",
+      "type": "response"
+    }
+  ],
+  "blocksRemoved": 0,
+  "blocksModified": 0,
+  "edgesAdded": 3,
+  "edgesRemoved": 0,
+  "errors": 0,
+  "warnings": 0,
+  "notes": [],
+  "fingerprint": "sf1:87f2c3ba98683f98524b228ec0e8b127e90728493fe9a7c7df6482404fd29728",
+  "needsRedeployment": false,
+  "guide": ".sim/AGENTS.md",
+  "diagnostics": []
+}
+exit=0
+
+$ sim workflows source status --dir sim/hubspot-smoke
+{
+  "workflowId": "1b791aff-c49d-4035-ac27-52dc94fe10b7",
+  "dir": "<repo>/sim/hubspot-smoke",
+  "server": "checked",
+  "state": "clean",
+  "local": [],
+  "drift": [],
+  "conflicts": [],
+  "plan": {
+    "blocksAdded": 0,
+    "blocksRemoved": 0,
+    "blocksModified": 0,
+    "edgesAdded": 0,
+    "edgesRemoved": 0,
+    "variablesRemoved": 0,
+    "errors": 0,
+    "warnings": 0
+  },
+  "next": null
+}
+exit=0

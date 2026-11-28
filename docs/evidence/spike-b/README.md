@@ -6,7 +6,8 @@ Run on 2026-11-27/28 on the author's Mac (Docker Desktop, 12 GB, 10 CPUs) agains
 
 Redaction: API keys, passwords, cookies and email addresses are replaced with `[redacted]` / `[redacted-email]`. The
 CLI's one-time pairing values are redacted too. Workspace, workflow, block and run IDs are left in: they belong to
-this local instance only and are needed to follow the exchanges.
+this local instance only and are needed to follow the exchanges. The sections up to "Assumed" describe that first run;
+later work is under "Live (2026-11-28)".
 
 ## How it was produced
 
@@ -110,20 +111,72 @@ and received.
 - `WORKFLOW_TESTS=true` enables workflow tests (it is read as a fallback in `lib/core/config/feature-flags.ts`, but
   the live docs page doesn't list it, and no test file was run in this spike).
 
+## Live (2026-11-28)
+
+Same local instance (Sim v0.9.66, `sim` CLI 2.3.0, profile `local`), now against the HubSpot developer test account
+`demo`. Compose and the CLI ran from a checkout that holds the gitignored `infra/sim/.env`, `infra/sim/.cli/` and
+root `.env`; the workflow source is `sim/hubspot-smoke/`. Paths are shortened to `<repo>` and `<main-checkout>`.
+
+```sh
+docker compose -f infra/sim/docker-compose.yml up -d --wait
+export SIM_CONFIG_DIR=$PWD/infra/sim/.cli DO_NOT_TRACK=1 SIM_NO_UPDATE_CHECK=1 SIM_PROFILE=local
+pnpm exec sim whoami
+# the key goes from .env to the CLI over stdin: never an argument, never a file
+( set -a; . ./.env; set +a
+  node -e 'process.stdout.write(JSON.stringify({apiToken:process.env.HUBSPOT_SERVICE_KEY_DEMO.trim()}))' \
+    | pnpm exec sim credentials create hubspot-service-account --name 'HubSpot demo' --credentials @- )
+pnpm exec sim credentials list
+pnpm exec sim workflows source create  --dir sim/hubspot-smoke --workspace <ws>   # starter + types
+pnpm exec sim workflows source check   --dir sim/hubspot-smoke
+pnpm exec sim workflows source create  --dir sim/hubspot-smoke --dry-run
+pnpm exec sim workflows source create  --dir sim/hubspot-smoke --yes
+pnpm exec sim workflows run <workflowId> --manual --input '{"contactId":"609031662325"}' \
+  --select-output getcontact.contact getcontact.success
+docker compose -f infra/sim/docker-compose.yml stop
+```
+
+The commands were run as `node_modules/.bin/sim` (the binary `pnpm exec sim` resolves to).
+
+| File (`live-hubspot/`) | What                                                                  |
+| ---------------------- | --------------------------------------------------------------------- |
+| `01-start-whoami.txt`  | Running services and image tags, `sim whoami`                         |
+| `02-credential.txt`    | `credentials create` and `credentials list` (neither returns the key) |
+| `03-workflow.txt`      | `check` and `status` (run after the create), and `create --yes`       |
+| `04-run.txt`           | The one run, with the HubSpot block's contact output                  |
+| `05-stop.txt`          | Nothing left running after `stop`                                     |
+
+### Verified
+
+- **Service-key credential from the CLI.** `credentials create hubspot-service-account` with the single field
+  `apiToken` created `HubSpot demo` (`type: service_account`, `hasServiceAccountKey: true`). No UI step and no
+  HubSpot OAuth client were needed.
+- **Sim reads HubSpot with it.** Run `d8a963b2-c854-4fbc-9f12-74c0b30dae9c` completed in 1.4 s. Get Contacts on
+  `609031662325` returned `success: true`, and the response was
+  `{"contactId":"609031662325","fixtureKey":"s42-demo-01"}`, the expected synthetic fixture. It ran the saved draft
+  (`--manual`); the workflow is not deployed.
+- **As code.** `check`: 0 errors, 0 warnings. `create --dry-run`: 0 errors, 0 warnings, 4 blocks and 3 edges to add
+  (its output was not saved). `status` after the create: `clean`. The source refers to the credential as
+  `credential('hubspot-demo')`, a key the CLI's workspace types derive for the credential, so a fresh instance needs
+  a `HubSpot demo` credential before this workflow can be recreated.
+
+### Scope of the key
+
+The credential reuses the `demo` account's service key. Its scopes include `crm.schemas.contacts.*`, which is wider
+than the dedicated `sim-local` key the earlier runbook described (`crm.objects.contacts.read`,
+`crm.objects.contacts.write`, `crm.objects.companies.read`). Swapping in a narrower key is optional and can be done
+later with `sim credentials update`. The smoke test only reads.
+
 ## Blocked on Zain
 
-**HubSpot service key in Sim (PLAN step 5, bullet 6).** There is no HubSpot account yet. When the `demo` developer
-test account exists:
+~~HubSpot service key in Sim (PLAN step 5, bullet 6).~~ Done on 2026-11-28, see "Live (2026-11-28)" above.
 
-1. In HubSpot (`demo` test account): **Development → Keys → Service keys** (in some accounts **Settings →
-   Integrations → Service keys**) → **Create service key**. Name it `sim-local`, then **Add new scope**:
-   `crm.objects.contacts.read`, `crm.objects.contacts.write`, `crm.objects.companies.read` → **Create** → open the key →
-   **Show** → **Copy**.
-2. Start Sim (`docker compose -f infra/sim/docker-compose.yml up -d --wait`), open <http://localhost:3000> and sign in
-   as `builder@example.com` (password: `SIM_LOCAL_USER_PASSWORD` in `infra/sim/.env`).
-3. Workspace sidebar → **Integrations** → search **HubSpot** → **Add to Sim** → **Add service key** → paste the key into
-   **Service key or private app token** → display name `HubSpot demo` → **Add service key**. Sim checks the key against
-   HubSpot's token-info endpoint and shows a specific error if it fails.
-4. Tell the next session the credential exists; `pnpm exec sim credentials list` will then show it.
+**Gemini API key (not set on 2026-11-28).** `GEMINI_API_KEY` was not in the root `.env`, so no Gemini request was made
+and nothing was stored in Sim.
 
-No OAuth client (`HUBSPOT_CLIENT_ID`/`SECRET`) is needed in Sim's env for this (verified above).
+1. In Google AI Studio (<https://aistudio.google.com>) → **Get API key** → **Create API key**, in a project with no
+   billing account.
+2. Add the line `GEMINI_API_KEY=<key>` to the root `.env` (gitignored). Don't paste it anywhere else.
+3. Tell the next session. It still has to: list the models and record the Flash-Lite IDs, make one tiny
+   `generateContent` call, store the key with `sim secrets set GEMINI_API_KEY --scope workspace --value @-` (value on
+   stdin without a trailing newline), check that `sim secrets list` shows the name only, and add the variable to
+   `.env.example`.
