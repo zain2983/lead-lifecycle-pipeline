@@ -42,7 +42,7 @@ describe("determinism", () => {
 
   it("matches the pinned hash for seed 42 (bump SYNTHETIC_VERSION when a change is intended)", () => {
     expect(datasetHash(generateDataset(42))).toBe(
-      "759acaa657114064a1301f9cc79c7e1089af7f9a041ed5d7f36dbcc44ca79ac7",
+      "4001bfde8ee212dc22a13fba40d19c6dbb578c1a7baeba301fcd2a07eba30362",
     );
   });
 
@@ -119,6 +119,16 @@ describe("reserved domains only", () => {
       expect(domains.length).toBeGreaterThan(60);
       const bad = [...new Set(domains.filter((d) => !isReservedDomain(d)))];
       expect(bad, `seed ${seed}`).toEqual([]);
+    }
+  });
+
+  it("every email uses example.com, example.org or example.net (HubSpot rejects *.test emails)", () => {
+    const HUBSPOT_OK = /@([a-z0-9-]+\.)*example\.(com|org|net)$/;
+    for (const seed of SEEDS) {
+      for (const set of [demoLeads(seed), evalFixtures(seed)]) {
+        const bad = set.map((l) => l.person.email).filter((e) => !HUBSPOT_OK.test(e));
+        expect(bad, `seed ${seed}`).toEqual([]);
+      }
     }
   });
 

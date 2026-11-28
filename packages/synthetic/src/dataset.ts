@@ -4,7 +4,7 @@ import { demoLeads, evalFixtures, type SyntheticLead } from "./leads.ts";
 import { ADS_ACCOUNT_TIME_ZONE, LEAD_TIME_ZONE, REPORT_TIME_ZONE } from "./time.ts";
 
 /** Bump when a change to the generator is meant to change its output (the golden-hash test pins it). */
-export const SYNTHETIC_VERSION = 2;
+export const SYNTHETIC_VERSION = 3;
 
 export interface SyntheticDataset {
   version: number;

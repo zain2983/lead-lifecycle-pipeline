@@ -1,0 +1,21 @@
+$ pnpm --filter @repo/crm-hubspot run setup --account eval
+$ tsx src/cli/setup.ts --account eval
+hs:setup  account eval
+target    https://api.hubapi.com (HubSpot), key HUBSPOT_SERVICE_KEY_EVAL (redacted)
+group     lead_lifecycle_pipeline (contacts)
+group     lead_lifecycle_pipeline      unchanged
+property  triage_disposition           unchanged
+property  triage_confidence            unchanged
+property  attribution_session_id       unchanged
+property  click_gclid                  unchanged
+property  click_gbraid                 unchanged
+property  click_wbraid                 unchanged
+property  click_fbclid                 unchanged
+property  click_fbc                    unchanged
+property  click_fbp                    unchanged
+property  click_msclkid                unchanged
+property  consent_ad_user_data         unchanged
+property  consent_ad_personalization   unchanged
+property  consent_gpc                  unchanged
+property  fixture_key                  unchanged
+summary   created 0  updated 0  unchanged 15  failed 0  unknown 0  (requests 2, retries 0, rate-limit waits 0)

@@ -1,0 +1,21 @@
+$ pnpm --filter @repo/crm-hubspot run setup --account demo
+$ tsx src/cli/setup.ts --account demo
+hs:setup  account demo
+target    https://api.hubapi.com (HubSpot), key HUBSPOT_SERVICE_KEY_DEMO (redacted)
+group     lead_lifecycle_pipeline (contacts)
+group     lead_lifecycle_pipeline      created
+property  triage_disposition           created
+property  triage_confidence            created
+property  attribution_session_id       created
+property  click_gclid                  created
+property  click_gbraid                 created
+property  click_wbraid                 created
+property  click_fbclid                 created
+property  click_fbc                    created
+property  click_fbp                    created
+property  click_msclkid                created
+property  consent_ad_user_data         created
+property  consent_ad_personalization   created
+property  consent_gpc                  created
+property  fixture_key                  created
+summary   created 15  updated 0  unchanged 0  failed 0  unknown 0  (requests 17, retries 0, rate-limit waits 0)

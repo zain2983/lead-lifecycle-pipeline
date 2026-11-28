@@ -518,7 +518,7 @@ function buildLead(spec: LeadSpec, rng: Rng, people: People, original: Built | u
     person = {
       firstName: rng.pick(["Best", "Top", "Mega"]),
       lastName: rng.pick(["SEO", "Offers", "Deals"]),
-      email: people.email(`offers${rng.int(10, 99)}`, "bulk-mailer.test"),
+      email: people.email(`offers${rng.int(10, 99)}`, "bulk-mailer.example.net"),
       phone: null,
       jobTitle: null,
       city: null,

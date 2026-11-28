@@ -1,8 +1,9 @@
 # @repo/synthetic
 
 Seeded, deterministic synthetic data: the same seed gives the same bytes on any machine. Every name in it is
-invented. Every domain is reserved: `*.test` for sites and companies, `example.com` and `example.org` for
-personal mail. Every phone number is `+1 201-555-01xx` (NANP's fictional 555-0100 to 555-0199 block, under one area
+invented. Every domain is reserved: `<name>.example.com` for sites and companies, `example.com`, `example.org`
+and `example.net` for personal and bulk mail. Not `*.test`: HubSpot rejects those emails (`INVALID_EMAIL`), and
+only spam message text still mentions `.test` hosts. Every phone number is `+1 201-555-01xx` (NANP's fictional 555-0100 to 555-0199 block, under one area
 code, so each is a valid 10-digit number nobody owns). Tests fail on any other domain or phone format.
 
 ```sh
