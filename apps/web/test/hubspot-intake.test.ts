@@ -209,6 +209,23 @@ describe("POST /api/webhooks/hubspot: intake (done when)", () => {
   });
 });
 
+describe("the route module", () => {
+  it("reads its config from the environment at request time and stores through the real database", async () => {
+    vi.stubEnv("HUBSPOT_CLIENT_SECRET", clientSecret);
+    vi.stubEnv("PUBLIC_WEBHOOK_URL", publicWebhookUrl);
+    try {
+      const { POST } = await import("../app/api/webhooks/hubspot/route.ts");
+      const response = await POST(signed([creation()]));
+      expect(response.status).toBe(200);
+      expect(await response.json()).toMatchObject({ ok: true, stored: 1, enqueued: 1 });
+      expect(await storedEvents()).toHaveLength(1);
+      expect(await triageJobs()).toHaveLength(1);
+    } finally {
+      vi.unstubAllEnvs();
+    }
+  });
+});
+
 describe("contact.privacyDeletion in the webhook transaction", () => {
   it("purges the Lead's PII, keeps the row, links the event and logs IDs only", async () => {
     const deletion = fixture("batch-mixed.json").find(
