@@ -1,0 +1,500 @@
+{"index":3,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2626}
+{"index":1,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2637}
+{"index":0,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2648}
+{"index":2,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2650}
+{"index":7,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2560}
+{"index":5,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2676}
+{"index":4,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":3565}
+{"index":6,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":3689}
+{"index":8,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2645}
+{"index":9,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2658}
+{"index":10,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2602}
+{"index":11,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2549}
+{"index":13,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2620}
+{"index":12,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":3420}
+{"index":14,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2652}
+{"index":16,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2635}
+{"index":15,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":4478}
+{"index":17,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2580}
+{"index":18,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2533}
+{"index":19,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2678}
+{"index":20,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2610}
+{"index":21,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2653}
+{"index":22,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2636}
+{"index":23,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2636}
+{"index":24,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2599}
+{"index":25,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2745}
+{"index":26,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2665}
+{"index":28,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2610}
+{"index":29,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2581}
+{"index":30,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2601}
+{"index":27,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":3640}
+{"index":31,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2570}
+{"index":32,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2627}
+{"index":33,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":3390}
+{"index":34,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":3110}
+{"index":35,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2646}
+{"index":36,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2649}
+{"index":38,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2612}
+{"index":37,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2636}
+{"index":39,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2659}
+{"index":40,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2648}
+{"index":42,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2547}
+{"index":41,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2652}
+{"index":43,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2621}
+{"index":44,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2640}
+{"index":46,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2717}
+{"index":47,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2590}
+{"index":48,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2607}
+{"index":45,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":5178}
+{"index":49,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2529}
+{"index":50,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2633}
+{"index":52,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2609}
+{"index":53,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2625}
+{"index":51,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":3518}
+{"index":54,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2589}
+{"index":55,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2578}
+{"index":56,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2544}
+{"index":57,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2575}
+{"index":58,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2580}
+{"index":59,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2561}
+{"index":60,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2575}
+{"index":61,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2603}
+{"index":62,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2559}
+{"index":63,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2488}
+{"index":64,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2501}
+{"index":65,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2529}
+{"index":66,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2714}
+{"index":67,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2701}
+{"index":69,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":3077}
+{"index":68,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":3651}
+{"index":70,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2608}
+{"index":71,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2637}
+{"index":72,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2668}
+{"index":73,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2629}
+{"index":74,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2576}
+{"index":76,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2617}
+{"index":77,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2635}
+{"index":78,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2630}
+{"index":75,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":4122}
+{"index":79,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2556}
+{"index":81,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2542}
+{"index":82,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2553}
+{"index":80,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":3090}
+{"index":83,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2684}
+{"index":84,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2639}
+{"index":85,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2527}
+{"index":86,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2521}
+{"index":87,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2750}
+{"index":89,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2736}
+{"index":90,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2630}
+{"index":88,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":3953}
+{"index":91,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2625}
+{"index":92,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2661}
+{"index":93,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2671}
+{"index":94,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2598}
+{"index":95,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2517}
+{"index":96,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2665}
+{"index":97,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2616}
+{"index":98,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2690}
+{"index":100,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2611}
+{"index":101,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2680}
+{"index":99,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":3602}
+{"index":102,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2648}
+{"index":103,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2696}
+{"index":104,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2638}
+{"index":105,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2591}
+{"index":106,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2611}
+{"index":108,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2532}
+{"index":107,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2592}
+{"index":109,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2599}
+{"index":110,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2582}
+{"index":112,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2587}
+{"index":111,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2753}
+{"index":113,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2641}
+{"index":114,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2576}
+{"index":115,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2592}
+{"index":116,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2703}
+{"index":117,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2645}
+{"index":118,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":3530}
+{"index":120,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2612}
+{"index":121,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2662}
+{"index":119,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":4473}
+{"index":122,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2718}
+{"index":124,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2682}
+{"index":123,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":4027}
+{"index":125,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2588}
+{"index":126,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":3532}
+{"index":127,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2657}
+{"index":128,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2677}
+{"index":129,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2653}
+{"index":130,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2586}
+{"index":131,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":3068}
+{"index":132,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2616}
+{"index":133,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2648}
+{"index":134,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2692}
+{"index":135,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2639}
+{"index":136,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2718}
+{"index":137,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2668}
+{"index":138,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2622}
+{"index":140,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2664}
+{"index":141,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2641}
+{"index":139,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":4015}
+{"index":142,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2654}
+{"index":144,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2650}
+{"index":143,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":3619}
+{"index":146,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2651}
+{"index":145,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":4236}
+{"index":147,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":3095}
+{"index":148,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2715}
+{"index":149,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2725}
+{"index":150,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":3070}
+{"index":151,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2576}
+{"index":152,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":3505}
+{"index":153,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":3668}
+{"index":154,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2646}
+{"index":155,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2656}
+{"index":156,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2535}
+{"index":157,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2646}
+{"index":158,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2648}
+{"index":159,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":3995}
+{"index":161,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2597}
+{"index":162,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2575}
+{"index":160,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":3504}
+{"index":163,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2676}
+{"index":164,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2566}
+{"index":165,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2592}
+{"index":166,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2612}
+{"index":168,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2708}
+{"index":170,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2665}
+{"index":167,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":3977}
+{"index":169,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":4519}
+{"index":171,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2542}
+{"index":172,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2566}
+{"index":173,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2562}
+{"index":174,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2604}
+{"index":177,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":3344}
+{"index":178,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2579}
+{"index":176,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":4533}
+{"index":175,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":5222}
+{"index":179,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2699}
+{"index":180,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":3041}
+{"index":182,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2522}
+{"index":181,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":3173}
+{"index":183,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2573}
+{"index":184,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2725}
+{"index":185,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2739}
+{"index":186,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2661}
+{"index":187,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2666}
+{"index":190,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2679}
+{"index":188,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":false,"ms":3274,"error":{"message":"Connection terminated unexpectedly"}}
+{"index":189,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":3859}
+{"index":191,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2656}
+{"index":192,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2796}
+{"index":193,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2710}
+{"index":195,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2605}
+{"index":194,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":3492}
+{"index":197,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2571}
+{"index":196,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":3162}
+{"index":198,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2619}
+{"index":199,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2627}
+{"index":200,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2642}
+{"index":201,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2569}
+{"index":202,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2562}
+{"index":203,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":3077}
+{"index":205,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2604}
+{"index":204,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":3129}
+{"index":206,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2661}
+{"index":207,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":3161}
+{"index":208,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2651}
+{"index":209,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2721}
+{"index":210,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2656}
+{"index":211,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2627}
+{"index":212,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2520}
+{"index":214,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2659}
+{"index":215,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2729}
+{"index":216,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2635}
+{"index":217,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2554}
+{"index":213,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":7108}
+{"index":218,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2595}
+{"index":219,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2650}
+{"index":220,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2622}
+{"index":221,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2570}
+{"index":222,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2686}
+{"index":223,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2685}
+{"index":224,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2642}
+{"index":225,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2511}
+{"index":226,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2511}
+{"index":227,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2526}
+{"index":228,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":3233}
+{"index":229,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2662}
+{"index":231,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2725}
+{"index":230,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":3492}
+{"index":233,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2648}
+{"index":234,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2558}
+{"index":232,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":3913}
+{"index":235,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2874}
+{"index":237,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2635}
+{"index":238,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2636}
+{"index":236,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":3817}
+{"index":239,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":3755}
+{"index":240,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2581}
+{"index":241,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2570}
+{"index":242,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2566}
+{"index":243,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2586}
+{"index":244,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2468}
+{"index":245,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2562}
+{"index":246,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2431}
+{"index":247,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2466}
+{"index":248,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2387}
+{"index":249,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2270}
+{"index":250,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2277}
+{"index":251,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2359}
+{"index":252,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2388}
+{"index":253,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2836}
+{"index":254,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":3540}
+{"index":255,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2355}
+{"index":256,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2280}
+{"index":257,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2262}
+{"index":258,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2242}
+{"index":259,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2287}
+{"index":260,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2226}
+{"index":261,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2293}
+{"index":262,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2232}
+{"index":263,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2134}
+{"index":264,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2219}
+{"index":265,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2165}
+{"index":267,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2504}
+{"index":268,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2125}
+{"index":269,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2177}
+{"index":266,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":3529}
+{"index":270,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2276}
+{"index":272,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2258}
+{"index":273,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2233}
+{"index":271,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":3330}
+{"index":274,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2684}
+{"index":275,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2225}
+{"index":276,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2184}
+{"index":277,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2146}
+{"index":278,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2223}
+{"index":280,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2214}
+{"index":279,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2255}
+{"index":281,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2098}
+{"index":283,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2110}
+{"index":284,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2150}
+{"index":282,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2504}
+{"index":285,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2108}
+{"index":286,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2097}
+{"index":287,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2250}
+{"index":289,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2153}
+{"index":288,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2813}
+{"index":290,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2044}
+{"index":291,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2112}
+{"index":292,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2126}
+{"index":293,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2132}
+{"index":294,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2089}
+{"index":296,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2074}
+{"index":295,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2247}
+{"index":297,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2125}
+{"index":298,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2072}
+{"index":300,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2108}
+{"index":299,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2632}
+{"index":301,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2120}
+{"index":302,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2169}
+{"index":303,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2173}
+{"index":304,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2183}
+{"index":305,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":3042}
+{"index":306,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2166}
+{"index":307,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2171}
+{"index":308,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":3022}
+{"index":310,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2024}
+{"index":309,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2405}
+{"index":311,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2713}
+{"index":312,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2178}
+{"index":313,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2087}
+{"index":315,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2079}
+{"index":314,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":3486}
+{"index":317,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":1998}
+{"index":316,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2111}
+{"index":318,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2105}
+{"index":319,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2152}
+{"index":320,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2085}
+{"index":321,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2449}
+{"index":322,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2122}
+{"index":323,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2128}
+{"index":324,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2103}
+{"index":325,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2229}
+{"index":326,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2008}
+{"index":327,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2014}
+{"index":328,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2087}
+{"index":329,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2177}
+{"index":330,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2084}
+{"index":331,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2126}
+{"index":332,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2497}
+{"index":333,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2081}
+{"index":334,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2154}
+{"index":335,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2221}
+{"index":337,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2163}
+{"index":336,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2518}
+{"index":338,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2532}
+{"index":339,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2061}
+{"index":340,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2141}
+{"index":341,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2087}
+{"index":343,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2087}
+{"index":342,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2836}
+{"index":344,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2152}
+{"index":345,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2039}
+{"index":347,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2113}
+{"index":346,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2914}
+{"index":348,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2092}
+{"index":349,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2116}
+{"index":350,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2055}
+{"index":351,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2121}
+{"index":352,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2122}
+{"index":353,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2267}
+{"index":354,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2151}
+{"index":355,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2155}
+{"index":357,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2089}
+{"index":356,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2932}
+{"index":358,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2176}
+{"index":360,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2102}
+{"index":359,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2831}
+{"index":361,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2127}
+{"index":363,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2235}
+{"index":362,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2844}
+{"index":364,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2552}
+{"index":366,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2164}
+{"index":367,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2135}
+{"index":368,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2072}
+{"index":365,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":4260}
+{"index":369,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2148}
+{"index":370,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2171}
+{"index":372,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2215}
+{"index":371,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2253}
+{"index":374,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2101}
+{"index":373,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2271}
+{"index":375,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2101}
+{"index":376,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2111}
+{"index":377,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2100}
+{"index":378,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2157}
+{"index":380,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2148}
+{"index":379,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2181}
+{"index":381,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2054}
+{"index":382,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2012}
+{"index":384,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2030}
+{"index":383,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2077}
+{"index":385,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2109}
+{"index":386,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2067}
+{"index":387,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":1977}
+{"index":388,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2074}
+{"index":389,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2063}
+{"index":390,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2111}
+{"index":391,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2099}
+{"index":392,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2070}
+{"index":393,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2026}
+{"index":394,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2082}
+{"index":395,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2017}
+{"index":396,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2087}
+{"index":397,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":1993}
+{"index":398,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2114}
+{"index":399,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2068}
+{"index":400,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2085}
+{"index":401,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":1952}
+{"index":402,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2006}
+{"index":403,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2039}
+{"index":404,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2030}
+{"index":405,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2623}
+{"index":407,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2042}
+{"index":406,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2396}
+{"index":408,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2920}
+{"index":409,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":1997}
+{"index":410,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":1970}
+{"index":411,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2058}
+{"index":412,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":1997}
+{"index":414,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2003}
+{"index":413,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2086}
+{"index":416,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2082}
+{"index":417,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2034}
+{"index":415,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":3970}
+{"index":418,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2851}
+{"index":419,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":1970}
+{"index":420,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2004}
+{"index":422,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":1931}
+{"index":421,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2789}
+{"index":423,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2058}
+{"index":424,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2013}
+{"index":426,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":1975}
+{"index":425,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2061}
+{"index":427,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":1957}
+{"index":428,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2703}
+{"index":431,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2024}
+{"index":429,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2899}
+{"index":430,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":3003}
+{"index":432,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":1954}
+{"index":433,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":1946}
+{"index":434,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2013}
+{"index":435,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":1983}
+{"index":437,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2038}
+{"index":436,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2751}
+{"index":438,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":1989}
+{"index":439,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":1935}
+{"index":440,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":1950}
+{"index":442,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2008}
+{"index":443,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":1966}
+{"index":441,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":3067}
+{"index":445,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":1944}
+{"index":444,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2858}
+{"index":446,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2374}
+{"index":447,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2091}
+{"index":448,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2081}
+{"index":449,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2042}
+{"index":450,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2130}
+{"index":451,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2047}
+{"index":454,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2176}
+{"index":452,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2849}
+{"index":453,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":3482}
+{"index":455,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2862}
+{"index":456,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2370}
+{"index":457,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2693}
+{"index":458,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":1931}
+{"index":459,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":1968}
+{"index":460,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2025}
+{"index":462,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":1983}
+{"index":461,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2054}
+{"index":463,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2020}
+{"index":464,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":1984}
+{"index":465,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2062}
+{"index":466,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2061}
+{"index":467,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":1972}
+{"index":468,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2070}
+{"index":470,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":1969}
+{"index":469,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2033}
+{"index":471,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2047}
+{"index":472,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2152}
+{"index":474,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2165}
+{"index":475,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2134}
+{"index":473,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2534}
+{"index":476,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2006}
+{"index":477,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":1965}
+{"index":478,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2006}
+{"index":479,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2039}
+{"index":480,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2029}
+{"index":481,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":1928}
+{"index":483,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2045}
+{"index":482,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2611}
+{"index":484,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2038}
+{"index":485,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2523}
+{"index":486,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2028}
+{"index":487,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":1939}
+{"index":488,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2104}
+{"index":490,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2006}
+{"index":491,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2033}
+{"index":489,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2835}
+{"index":493,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":1967}
+{"index":492,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":3012}
+{"index":494,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":2045}
+{"index":495,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":2039}
+{"index":496,"arm":"plain pg.Pool","variable":"DATABASE_URL","ok":true,"ms":2050}
+{"index":498,"arm":"plain pg.Pool","variable":"DIRECT_URL","ok":true,"ms":1999}
+{"index":497,"arm":"createPgPool","variable":"DATABASE_URL","ok":true,"ms":2033}
+{"index":499,"arm":"createPgPool","variable":"DIRECT_URL","ok":true,"ms":1917}

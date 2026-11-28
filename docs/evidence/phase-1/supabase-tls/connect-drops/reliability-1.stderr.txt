@@ -1,0 +1,4 @@
+[db] connection dropped during setup (Connection terminated unexpectedly), retrying
+plain pg.Pool: 1 of 250 failed
+createPgPool: 0 of 250 failed
+createPgPool: 1 dropped attempts retried

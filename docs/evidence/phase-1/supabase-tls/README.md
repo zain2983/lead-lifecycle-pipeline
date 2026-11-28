@@ -64,10 +64,80 @@ Run from the repo root. `$E` is this folder, `$WRONG` any CA certificate made fo
 
 Unit tests without a network: `packages/db/test/tls.test.ts`.
 
+## Dropped connections (2026-11-28)
+
+Some new connections from this Mac to the poolers die while being set up. Seen as
+`Connection terminated unexpectedly` or `ECONNRESET`. Data: [`connect-drops/`](connect-drops/).
+
+### Measurements
+
+All fresh connections, `SELECT 1`, same Mac, times UTC. "Plain" is a scratch script outside the repo using raw `pg`
+with TLS off (the repo refuses that). Both poolers asked for SCRAM, so no password crossed the network in clear.
+
+| Run                                                                             | When        | TLS failed               | Plain failed |
+| ------------------------------------------------------------------------------- | ----------- | ------------------------ | ------------ |
+| `tls-probe.ts`, 6 runs of 8 (`probe-before.txt`)                                | 17:33-17:36 | 5 / 48                   | not run      |
+| One at a time, TLS 1.3 and plain (`seq.jsonl`)                                  | 17:37-17:48 | 5 / 90                   | 0 / 90       |
+| One at a time, TLS 1.3, TLS 1.2 and plain (`seq3.jsonl`)                        | 17:48-18:02 | 1.3: 3 / 90, 1.2: 2 / 90 | 0 / 90       |
+| Bursts of 1, 4, 8 and 20 held open (`burst.jsonl`), without the 28 limit errors | 18:03-18:06 | 6 / 368                  | not run      |
+
+- **Only TLS failed** in the two interleaved runs: 10 of 270 against 0 of 180 (Fisher's exact test, p = 0.007).
+  TLS 1.2 fails too, so pinning a version is no fix.
+- **Where:** all 10 died before the server asked for authentication. In 7 the client finished the handshake and saw
+  the close within 10 ms, less than a round trip (about 385 ms), so the close wasn't a reply to anything sent after
+  the handshake. In 3 the connection was cut during the handshake.
+- **Parallel opens don't cause it:** the transaction pooler passed 198 of 198 in bursts; session-pooler bursts had 6
+  drops in 170 attempts that stayed under the limit.
+- **A different, explicit error is the session limit:** `(EMAXCONNSESSION) max clients reached in session mode - max
+  clients are limited to pool_size: 15`, 28 times, only in bursts of 20 on `:5432`. Supabase documents
+  [15 and 200 clients](https://supabase.com/docs/guides/platform/compute-and-disk) as the Nano defaults. The probe
+  never holds more than two or so connections.
+- **Supabase's logs** (checked by the coordinator, 17:25-17:33 UTC): `supavisor_logs` show only authenticated,
+  terminated and backend-authenticated lines, with no errors, rejections, timeouts, limit or SSL messages. That
+  window ends just before the runs above, and it fits drops that never reach authentication.
+
+**Cause: not established.** It is before authentication and specific to TLS, so it isn't a pool limit or our query
+path. One Mac on one network can't separate the network path from Supabase's TLS front end. The rate also moved over
+the hour (see below). Supavisor has an open report about handshake bytes split across packets
+([#1282](https://github.com/supabase/supavisor/issues/1282)), but it describes an explicit protocol error and plain
+connections too, so it doesn't match.
+
+### The fix: retry getting a connection
+
+`createPgPool` (and `createPrismaClient` with a URL) now returns a pool that makes up to three attempts, 250 ms and
+1 s apart, for `ECONNRESET`, `ETIMEDOUT`, `EPIPE` and node-postgres's two "Connection terminated" errors. Nothing has
+been sent at that point. Statements, server errors (including `EMAXCONNSESSION`) and certificate errors are not
+retried. `test/retry-pool.test.ts` drops connections in a local proxy and covers each of these.
+
+Live, alternating a plain `pg.Pool` and `createPgPool` (`scripts/connect-reliability.ts`):
+
+| Run                   | Parallel | Plain `pg.Pool` failed | `createPgPool` failed | Drops it retried |
+| --------------------- | -------- | ---------------------- | --------------------- | ---------------- |
+| `reliability-1.jsonl` | 4        | 1 / 250                | 0 / 250               | 1                |
+| `reliability-2.jsonl` | 2        | 0 / 180                | 0 / 180               | 0                |
+
+**This does not show a lower failure rate by itself:** drops had nearly stopped, and the difference isn't
+significant. What it shows is the retry recovering real drops. The reduction rests on the local tests and on
+arithmetic: at the earlier rate of about 4% per attempt, three independent failures would be under 1 in 10,000,
+if drops are independent (not measured).
+
+### Not covered, for Phase 4
+
+1. **pg-boss's own connections** (`createBoss` with a URL: worker and sweeper). A failed poll or maintenance query
+   is reported and repeated on the next cycle. `boss.start()` is not retried: wrap it.
+2. **The worker's LISTEN connection.** If its first connect drops, pg-boss 12.40.0 emits a
+   `listen_notify_unavailable` warning and polls only until restarted (read from `notifier.js`, not reproduced).
+   The worker should watch for that warning and restart the boss.
+3. **Session pool of 15.** The worker and sweeper both default to pools of 10 on `:5432`. Set `max` on every
+   session-mode pool so their sum stays under 15, and keep Prisma in the worker on `DATABASE_URL` (`:6543`).
+4. **CLIs** (pg-boss and Prisma migrate) have no retry. If `migrate.yml` fails with a dropped connection, re-run it.
+5. If a drop ever hangs instead of closing, add a `connectionTimeoutMillis`; none was seen, so none was added. It
+   would also limit waiting for a free connection in a full pool.
+
 ## Blocked on Zain
 
 1. After every URL has `sslmode=verify-full` (GitHub secret, env files, Vercel): in the Supabase dashboard, _Database →
    Settings → SSL Configuration_, turn on **Enforce SSL on incoming connections**. Then re-run the `pgboss version`
-   command above.
+   command above. At 17:37-18:02 UTC on 2026-11-28 plain connections still succeeded, so it was not on then.
 2. Optional: in the same place, **Download certificate** and compare:
    `openssl x509 -in prod-ca-2021.crt -noout -fingerprint -sha256`.

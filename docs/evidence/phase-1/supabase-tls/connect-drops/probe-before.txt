@@ -1,0 +1,155 @@
+=== run 1 17:33:19
+--- DATABASE_URL | as configured | createPgPool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DATABASE_URL | as configured | createPrismaClient
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DATABASE_URL | as configured | createBoss: pg-boss pool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DATABASE_URL | as configured | createBoss: pg-boss LISTEN client
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | as configured | createPgPool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | as configured | createPrismaClient
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | as configured | createBoss: pg-boss pool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | as configured | createBoss: pg-boss LISTEN client
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+=== run 2 17:33:56
+--- DATABASE_URL | as configured | createPgPool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: failed: Error: Connection terminated unexpectedly
+--- DATABASE_URL | as configured | createPrismaClient
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DATABASE_URL | as configured | createBoss: pg-boss pool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DATABASE_URL | as configured | createBoss: pg-boss LISTEN client
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | as configured | createPgPool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | as configured | createPrismaClient
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | as configured | createBoss: pg-boss pool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | as configured | createBoss: pg-boss LISTEN client
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+=== run 3 17:34:32
+--- DATABASE_URL | as configured | createPgPool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DATABASE_URL | as configured | createPrismaClient
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: failed: Error: Connection terminated unexpectedly
+--- DATABASE_URL | as configured | createBoss: pg-boss pool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DATABASE_URL | as configured | createBoss: pg-boss LISTEN client
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | as configured | createPgPool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | as configured | createPrismaClient
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | as configured | createBoss: pg-boss pool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | as configured | createBoss: pg-boss LISTEN client
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+=== run 4 17:35:05
+--- DATABASE_URL | as configured | createPgPool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DATABASE_URL | as configured | createPrismaClient
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DATABASE_URL | as configured | createBoss: pg-boss pool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DATABASE_URL | as configured | createBoss: pg-boss LISTEN client
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+[pg-boss:worker] Error: LISTEN/NOTIFY connection ended
+    at Client.<anonymous> (file://<repo>/node_modules/.pnpm/pg-boss@12.40.0_@opentelemetry+api@1.10.0/node_modules/pg-boss/dist/db.js:254:51)
+    at Client.emit (node:events:509:20)
+    at <repo>/node_modules/.pnpm/pg@8.23.1/node_modules/pg/lib/client.js:227:14
+    at process.processTicksAndRejections (node:internal/process/task_queues:85:11)
+result: failed: Error: Connection terminated unexpectedly
+--- DIRECT_URL | as configured | createPgPool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | as configured | createPrismaClient
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | as configured | createBoss: pg-boss pool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | as configured | createBoss: pg-boss LISTEN client
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+=== run 5 17:35:41
+--- DATABASE_URL | as configured | createPgPool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DATABASE_URL | as configured | createPrismaClient
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DATABASE_URL | as configured | createBoss: pg-boss pool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DATABASE_URL | as configured | createBoss: pg-boss LISTEN client
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | as configured | createPgPool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | as configured | createPrismaClient
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | as configured | createBoss: pg-boss pool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | as configured | createBoss: pg-boss LISTEN client
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+=== run 6 17:36:10
+--- DATABASE_URL | as configured | createPgPool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DATABASE_URL | as configured | createPrismaClient
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: failed: Error: Connection terminated unexpectedly
+--- DATABASE_URL | as configured | createBoss: pg-boss pool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DATABASE_URL | as configured | createBoss: pg-boss LISTEN client
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | as configured | createPgPool
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | as configured | createPrismaClient
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
+--- DIRECT_URL | as configured | createBoss: pg-boss pool
+[tls] {"tlsFailed":"ECONNRESET","rejectUnauthorized":true,"customCa":true}
+result: failed: Error [ECONNRESET]: read ECONNRESET
+--- DIRECT_URL | as configured | createBoss: pg-boss LISTEN client
+[tls] {"tls":"TLSv1.3","certificateVerified":true,"rejectUnauthorized":true,"customCa":true}
+result: ok
