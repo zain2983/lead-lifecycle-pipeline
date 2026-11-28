@@ -1,0 +1,21 @@
+$ pnpm --filter @repo/crm-hubspot run setup --account eval --dry-run
+$ tsx src/cli/setup.ts --account eval --dry-run
+hs:setup  account eval  (dry run: reads only)
+target    https://api.hubapi.com (HubSpot), key HUBSPOT_SERVICE_KEY_EVAL (redacted)
+group     lead_lifecycle_pipeline (contacts)
+group     lead_lifecycle_pipeline      would be created
+property  triage_disposition           would be created
+property  triage_confidence            would be created
+property  attribution_session_id       would be created
+property  click_gclid                  would be created
+property  click_gbraid                 would be created
+property  click_wbraid                 would be created
+property  click_fbclid                 would be created
+property  click_fbc                    would be created
+property  click_fbp                    would be created
+property  click_msclkid                would be created
+property  consent_ad_user_data         would be created
+property  consent_ad_personalization   would be created
+property  consent_gpc                  would be created
+property  fixture_key                  would be created
+summary   created 15  updated 0  unchanged 0  failed 0  unknown 0  (requests 2, retries 0, rate-limit waits 0)

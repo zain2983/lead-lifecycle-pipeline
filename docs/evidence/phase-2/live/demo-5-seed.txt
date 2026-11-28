@@ -1,0 +1,25 @@
+$ pnpm --filter @repo/crm-hubspot run seed --account demo --seed 42
+$ tsx src/cli/seed.ts --account demo --seed 42
+hs:seed   account demo  seed 42  contacts 20
+target    https://api.hubapi.com (HubSpot), key HUBSPOT_SERVICE_KEY_DEMO (redacted)
+s42-demo-01   id 609031662325 created
+s42-demo-02   id 609031662326 created
+s42-demo-03   id 609031662327 created
+s42-demo-04   id 609031662328 created
+s42-demo-05   id 609031662329 created
+s42-demo-06   id 609031663290 created
+s42-demo-07   id 609031663291 created
+s42-demo-08   id 609031663292 created
+s42-demo-09   id 609031663293 created
+s42-demo-10   id 609031663294 created
+s42-demo-11   id 609031663295 created
+s42-demo-12   id 609031663296 created
+s42-demo-13   id 609031663297 created
+s42-demo-14   id 609031663298 created
+s42-demo-15   id 609031663299 created
+s42-demo-16   id 609031663300 created
+s42-demo-17   id 609031663301 created
+s42-demo-18   id 609031663302 created
+s42-demo-19   id 609031663303 created
+s42-demo-20   id 609031663304 created
+summary   created 20  updated 0  unchanged 0  failed 0  unknown 0  (requests 2: upserts 1; retries 0, rate-limit waits 0)

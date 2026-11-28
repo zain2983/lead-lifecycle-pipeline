@@ -1,0 +1,15 @@
+$ pnpm --filter @repo/crm-hubspot run seed --account eval --seed 42
+$ tsx src/cli/seed.ts --account eval --seed 42
+hs:seed   account eval  seed 42  contacts 10
+target    https://api.hubapi.com (HubSpot), key HUBSPOT_SERVICE_KEY_EVAL (redacted)
+s42-eval-01   id 609063652081 unchanged
+s42-eval-02   id 609063652082 unchanged
+s42-eval-03   id 609063652083 unchanged
+s42-eval-04   id 609063652084 unchanged
+s42-eval-05   id 609063652085 unchanged
+s42-eval-06   id 609063652086 unchanged
+s42-eval-07   id 609063652087 unchanged
+s42-eval-08   id 609063652088 unchanged
+s42-eval-09   id 609063652089 unchanged
+s42-eval-10   id 609063653050 unchanged
+summary   created 0  updated 0  unchanged 10  failed 0  unknown 0  (requests 1: upserts 0; retries 0, rate-limit waits 0)

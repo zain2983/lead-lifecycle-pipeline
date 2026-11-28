@@ -2,12 +2,12 @@
 
 - **Date:** 2026-11-28. **Branch:** `phase/2`. **Machine:** macOS, Node 26.5.0 locally (CI uses 24), pnpm 11.21.0,
   Postgres 17 in `llp-postgres-1`, database `phase2`.
-- **Scope:** the schema, `@repo/synthetic`, and `pnpm hs:setup` / `pnpm hs:seed`. No HubSpot account exists yet, so
-  **no request in this folder went to HubSpot.** Every HubSpot response here came from the in-process fake
+- **Scope:** the schema, `@repo/synthetic`, and `pnpm hs:setup` / `pnpm hs:seed`. Apart from `live/` (added
+  2026-11-28, see "Live runs" below), **no request in this folder went to HubSpot.** Every other HubSpot response here came from the in-process fake
   (`startFakeHubSpot` in `@repo/crm-hubspot/testing`). Its responses carry `x-fake-hubspot: 1`, and the CLIs print
   `NOT HubSpot` whenever `HUBSPOT_API_BASE_URL` points anywhere but `https://api.hubapi.com`. The keys used are
   synthetic strings. Outputs show fixture keys and fake record IDs, never emails.
-- **Result:** offline part done. The live runs in both accounts are **Blocked on Zain** (steps below).
+- **Result:** offline part done. Live runs in both developer test accounts done on 2026-11-28, after one fix (below).
 
 ## Files
 
@@ -101,30 +101,45 @@ pnpm --filter @repo/crm-hubspot exec tsx ../../docs/evidence/phase-2/offline-run
 7. **The default contact properties exist in a developer test account:** `email`, `firstname`, `lastname`, `phone`,
    `company`, `jobtitle`, `city`, `country` and `message`.
 
-## Blocked on Zain
+## Live runs (2026-11-28)
 
-Needs the two developer test accounts (`demo`, `eval`) from Phase 0. Per account:
+Real HubSpot (`https://api.hubapi.com`), two developer test accounts (`demo`, `eval`; account type
+`DEVELOPER_TEST`, data hosting `na2`), one service key each. Raw outputs in `live/`; emails in them are redacted
+to `<redacted>@domain`, keys never appear. Run from branch `fix/live-accounts`.
 
-1. In HubSpot: **Development → Keys → Service keys → Create service key**, with the scopes
-   `crm.schemas.contacts.read`, `crm.schemas.contacts.write`, `crm.objects.contacts.read` and
-   `crm.objects.contacts.write`. Put it in the repo-root `.env` as `HUBSPOT_SERVICE_KEY_DEMO`
-   (or `HUBSPOT_SERVICE_KEY_EVAL`). Leave `HUBSPOT_API_BASE_URL` unset.
-2. Run these, and save each output to `docs/evidence/phase-2/live/<account>-<step>.txt`. The output has no emails or
-   keys; check before committing anyway.
+| Step | demo | eval |
+| --- | --- | --- |
+| `hs:setup --dry-run` (`*-1-*`) | would create 15, 2 requests | same |
+| `hs:setup` (`first-attempt/*-2-*`) | created 15, 17 requests | same |
+| `hs:setup` again (`first-attempt/*-3-*`) | unchanged 15, 2 requests, 0 writes | same |
+| `hs:seed --seed 42` (`first-attempt/*-5-*`, `*-6-*`) | **failed 20**: 400 `INVALID_EMAIL` | **failed 10**, same |
+| after the fix: `hs:seed --seed 42` (`*-5-*`) | created 20, 1 batch upsert | created 10 |
+| `hs:seed` again (`*-6-*`) | unchanged 20, upserts 0 | unchanged 10, upserts 0 |
+| `hs:setup` after seeding (`*-7-*`) | unchanged 15 | unchanged 15 |
 
-   ```sh
-   pnpm hs:setup --account demo --dry-run      # expect 15 "would be created"
-   pnpm hs:setup --account demo                # expect created 15, exit 0
-   pnpm hs:setup --account demo                # expect unchanged 15
-   pnpm hs:seed --account demo --seed 42 --dry-run
-   pnpm hs:seed --account demo --seed 42       # expect created 20
-   pnpm hs:seed --account demo --seed 42       # expect unchanged 20, "upserts 0"
-   ```
+- **What failed, and the fix.** HubSpot rejects every email under `*.test` (RFC 6761) as `INVALID_EMAIL`, and
+  rejects the whole batch with it. The same batch's `example.com`/`example.org` personal addresses were not
+  listed as invalid. A probe (three contacts at `quillmark.example.com`, `pk.saltmarsh.example.com`,
+  `bulk-mailer.example.net`, created then deleted, HTTP 204) showed that subdomains of `example.com`/`.net` are
+  accepted. `@repo/synthetic` moved companies and sites to `<name>.example.com` and bulk mail to `example.net`
+  (`SYNTHETIC_VERSION` 3); a test now fails on any email outside `example.com/org/net`. The `lead` CHECK constraint
+  already allowed these domains, so no migration.
+- **Checked in the accounts through the API** (read-only): the group `lead_lifecycle_pipeline` holds 14 contact
+  properties (15 = group + 14), and `fixture_key` is set on 20 (demo) and 10 (eval) contacts.
+- **Not ours:** each account also holds 2 contacts at `hubspot.com`, created by HubSpot when the account was made
+  (`hs_object_source` API / `INTERNAL_PROCESSING`): HubSpot's sample contacts. Our triage upsert skips non-reserved
+  emails, so they never reach `lead`; delete them from both accounts before Phase 6 counts anything.
+- **The "Assumed" list, live:** 1 held (every call used the 2026-09 paths with a service key). 3 and 4 held (the
+  second seed and the setup runs after it found nothing to update, phone and `consent_gpc` included). 7 held (the
+  seed wrote `email`, `phone` and the other defaults). 6, partly: an invalid email rejects the whole batch with one
+  400 that lists every bad address, and the code marks each contact `failed` with that body. 2 (group PATCH) never
+  ran, and 5 is still unknown (no 429 in 17 requests).
 
-   For `eval`, the same commands with `--account eval`. Expect 10 contacts.
-3. Check the account itself: **Settings → Properties → Contact properties** should show the group "Lead lifecycle
-   pipeline" with 14 properties, and **Contacts** should show 20 (demo) or 10 (eval).
-4. If a second run says `updated (…)`, or a call fails, keep the output exactly as it is. That is assumption 3, 4 or
-   1 failing, and the fix goes in the comparison, not in the evidence.
-5. After `hs:setup` in `demo`, the Phase 3.4 webhook subscription to `triage_disposition` can be enabled.
-6. Re-run both commands after every 90-day test-account renewal (PLAN Phase 2.4).
+## Still to do live
+
+The runbook (service key, the six commands, checking the account) ran on 2026-11-28; see "Live runs". Left:
+
+1. After `hs:setup` in `demo`, the Phase 3.4 webhook subscription to `triage_disposition` can be enabled.
+2. Re-run `hs:setup` and `hs:seed` after every 90-day test-account renewal (PLAN Phase 2.4). If a second run says
+   `updated (…)`, or a call fails, keep the output exactly as it is: the fix goes in the code, not the evidence.
+3. Delete HubSpot's 2 sample contacts from each account (see "Not ours").
