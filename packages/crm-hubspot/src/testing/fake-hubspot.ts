@@ -522,11 +522,11 @@ export async function startFakeHubSpot(options: FakeHubSpotOptions) {
       addProperty(property: Omit<FakeProperty, "createdAt" | "updatedAt">) {
         properties.set(property.name, { ...property, createdAt: start, updatedAt: start });
       },
-      /** A contact typed into HubSpot directly (no validation). Returns its record ID. */
-      addContact(values: Record<string, string>): string {
+      /** A contact typed into HubSpot directly (no validation), optionally with a given record ID. */
+      addContact(values: Record<string, string>, id?: string): string {
         const at = now().toISOString();
         const contact: FakeContact = {
-          id: String(nextId++),
+          id: id ?? String(nextId++),
           properties: { ...values },
           createdAt: at,
           updatedAt: at,
