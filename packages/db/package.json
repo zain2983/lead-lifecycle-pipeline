@@ -5,7 +5,8 @@
   "type": "module",
   "description": "Prisma schema, migrations, client factory and diagnostic SQL",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./tls-cli": "./src/tls-cli.ts"
   },
   "scripts": {
     "generate": "prisma generate",

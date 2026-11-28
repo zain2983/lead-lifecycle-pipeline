@@ -1,6 +1,7 @@
 import { PrismaPg } from "@prisma/adapter-pg";
 import pg from "pg";
 import { PrismaClient } from "./generated/prisma/client.ts";
+import { pgConnectionConfig } from "./tls.ts";
 
 export type { PrismaClient };
 export type PgPool = pg.Pool;
@@ -19,7 +20,7 @@ export interface PgPoolOptions {
  */
 export function createPgPool(connectionString: string, options: PgPoolOptions = {}): pg.Pool {
   return new pg.Pool({
-    connectionString,
+    ...pgConnectionConfig(connectionString),
     max: options.max,
     application_name: options.applicationName,
   });
@@ -32,6 +33,6 @@ export function createPgPool(connectionString: string, options: PgPoolOptions = 
  * disconnects: its owner ends it.
  */
 export function createPrismaClient(source: string | pg.Pool): PrismaClient {
-  const adapter = new PrismaPg(typeof source === "string" ? { connectionString: source } : source);
+  const adapter = new PrismaPg(typeof source === "string" ? pgConnectionConfig(source) : source);
   return new PrismaClient({ adapter });
 }

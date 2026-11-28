@@ -1,4 +1,4 @@
-import type { PgPool } from "@repo/db";
+import { type PgPool, pgConnectionConfig } from "@repo/db";
 import { type ConstructorOptions, type Db, PgBoss } from "pg-boss";
 
 /** Where a pg-boss instance runs. See docs/adr/0002-queue-and-db.md for the connection matrix. */
@@ -80,7 +80,10 @@ export function createBoss(options: CreateBossOptions): PgBoss {
   if (!pool && !connectionString) {
     throw new Error("createBoss: pass connectionString or pool");
   }
-  const connection: ConstructorOptions = pool ? { db: poolDb(pool) } : { connectionString };
+  // pg-boss spreads this into its pool and into its LISTEN client, so both get the same TLS settings.
+  const connection: ConstructorOptions = pool
+    ? { db: poolDb(pool) }
+    : pgConnectionConfig(connectionString as string);
   const boss = new PgBoss({ ...MODE_OPTIONS[mode], ...connection, ...overrides });
   const onError =
     options.onError ?? ((error: unknown) => console.error(`[pg-boss:${mode}]`, error));
