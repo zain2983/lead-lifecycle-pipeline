@@ -1,0 +1,21 @@
+{"target":"direct","check":"pg: 40 unnamed parameterised queries, 8 at a time","ok":true,"ms":6507,"result":{"queries":40}}
+{"target":"direct","check":"pg: named prepared statements (what a statementNameGenerator turns on)","ok":true,"ms":4495,"result":{"queries":40}}
+{"target":"direct","check":"prisma (adapter-pg): 40 queries, 8 at a time","ok":true,"ms":5628,"result":{"queries":40}}
+{"target":"direct","check":"pg-boss vercel mode: start, createQueue, send, fetch, complete","ok":true,"ms":6080,"result":{"sent":"ff1ad0e4-255d-4500-823a-d17af9d8e2f6","fetched":true,"state":"completed"}}
+{"target":"direct","check":"prisma interactive tx + pg-boss send (prismaTxDb): commit, then rollback","ok":true,"ms":9225,"result":{"committedJob":true,"rolledBack":"rollback on purpose","rollbackJobs":0,"heartbeatRows":1}}
+{"target":"direct","check":"pg-boss sweeper mode: start, supervise() (maintenance), stop","ok":true,"ms":7650,"result":{"superviseMs":2229}}
+{"target":"direct","check":"pg-boss LISTEN/NOTIFY: seconds from send to handler (notify queue, 30 s poll backstop)","ok":true,"ms":16341,"result":{"latencySeconds":1.803,"warnings":[]}}
+{"target":"pooler","check":"pg: 40 unnamed parameterised queries, 8 at a time","ok":true,"ms":6372,"result":{"queries":40}}
+{"target":"pooler","check":"pg: named prepared statements (what a statementNameGenerator turns on)","ok":false,"ms":385,"error":{"name":"error","message":"prepared statement \"spike_stmt_1\" already exists","code":"42P05","severity":"ERROR"}}
+{"target":"pooler","check":"prisma (adapter-pg): 40 queries, 8 at a time","ok":true,"ms":7050,"result":{"queries":40}}
+{"target":"pooler","check":"pg-boss vercel mode: start, createQueue, send, fetch, complete","ok":true,"ms":5769,"result":{"sent":"3077c180-c7be-4386-aa35-71569fb8a250","fetched":true,"state":"completed"}}
+{"target":"pooler","check":"prisma interactive tx + pg-boss send (prismaTxDb): commit, then rollback","ok":true,"ms":9417,"result":{"committedJob":true,"rolledBack":"rollback on purpose","rollbackJobs":0,"heartbeatRows":1}}
+{"target":"pooler","check":"pg-boss sweeper mode: start, supervise() (maintenance), stop","ok":true,"ms":9961,"result":{"superviseMs":6334}}
+{"target":"pooler","check":"pg-boss LISTEN/NOTIFY: seconds from send to handler (notify queue, 30 s poll backstop)","ok":true,"ms":15556,"result":{"latencySeconds":0.768,"warnings":[]}}
+{"target":"pooler-pgbouncer","check":"pg: 40 unnamed parameterised queries, 8 at a time","ok":true,"ms":8065,"result":{"queries":40}}
+{"target":"pooler-pgbouncer","check":"pg: named prepared statements (what a statementNameGenerator turns on)","ok":false,"ms":372,"error":{"name":"error","message":"prepared statement \"spike_stmt_1\" already exists","code":"42P05","severity":"ERROR"}}
+{"target":"pooler-pgbouncer","check":"prisma (adapter-pg): 40 queries, 8 at a time","ok":true,"ms":6032,"result":{"queries":40}}
+{"target":"pooler-pgbouncer","check":"pg-boss vercel mode: start, createQueue, send, fetch, complete","ok":true,"ms":7857,"result":{"sent":"3320ef8e-ab20-4a95-be6f-886e0adc6f27","fetched":true,"state":"completed"}}
+{"target":"pooler-pgbouncer","check":"prisma interactive tx + pg-boss send (prismaTxDb): commit, then rollback","ok":true,"ms":12629,"result":{"committedJob":true,"rolledBack":"rollback on purpose","rollbackJobs":0,"heartbeatRows":1}}
+{"target":"pooler-pgbouncer","check":"pg-boss sweeper mode: start, supervise() (maintenance), stop","ok":true,"ms":8309,"result":{"superviseMs":4112}}
+{"target":"pooler-pgbouncer","check":"pg-boss LISTEN/NOTIFY: seconds from send to handler (notify queue, 30 s poll backstop)","ok":true,"ms":19357,"result":{"latencySeconds":0.797,"warnings":[]}}

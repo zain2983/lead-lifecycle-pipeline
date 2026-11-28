@@ -6,6 +6,7 @@ adapter-pg, Next.js 16.4.6, PgBouncer 1.26.1. Decisions and analysis: [ADR 0002]
 
 No file here contains a secret. The only credentials involved are the local container's `app`/`app`,
 which are already in `infra/docker-compose.yml`; connection strings are printed as `<pooler :6433>` or not at all.
+The Supabase files from 2026-11-28 hold no host, user, password or connection string.
 
 ## What was run
 
@@ -60,7 +61,99 @@ behind in `spike_queue`. The test now removes any `triage` queue it creates, and
     fetched.
   - `deleteJob` releases it. The dead-letter copy carries `sourceName`.
 
+## Live on Supabase (2026-11-28)
+
+Produced from the same Mac against the hosted Supabase Free project (US East, already migrated by `migrate.yml`,
+so no migration was run here). `DATABASE_URL` was the transaction pooler `:6543` and `DIRECT_URL` the session pooler
+`:5432`, loaded from an uncommitted env file inside a subshell. In the output, `direct` is the **session pooler** and
+`pooler` / `pooler-pgbouncer` are the **transaction pooler**.
+
+```sh
+# 1. Full spike, script as of c6646f3 -> supabase-pooler.jsonl
+( set -a; . ./.env.supabase; set +a; export DATABASE_URL="$DIRECT_URL";
+  pnpm --filter @repo/queue exec tsx src/spikes/pooler.ts --pooler-port 6543 ) \
+  > docs/evidence/spike-a/supabase-pooler.jsonl
+
+# 2. LISTEN/NOTIFY only, run three times and appended -> supabase-listen.jsonl
+( set -a; . ./.env.supabase; set +a; export DATABASE_URL="$DIRECT_URL";
+  pnpm --silent --filter @repo/queue exec tsx src/spikes/pooler.ts --pooler-port 6543 \
+    --targets direct,pooler --listen-only --listen-settle-ms 10000 ) \
+  >> docs/evidence/spike-a/supabase-listen.jsonl
+```
+
+The first attempt at command 1 ran no check: the worktree had no generated Prisma client (`ERR_MODULE_NOT_FOUND`).
+After `pnpm db:generate` it exited 0 with an empty stderr. So did all three runs of command 2.
+
+**Don't use the LISTEN/NOTIFY rows in `supabase-pooler.jsonl`.** They show pickup in 0.77 s and 0.80 s through the
+transaction pooler (1.80 s on the session pooler). The script waited only 1.5 s for the worker's first poll before
+sending. With a round trip near 0.4 s, the likely explanation is that the first poll was still starting and fetched
+the job itself. `--listen-settle-ms` (default still 1500) and a raw `LISTEN`/`pg_notify` probe without polling were
+added to the script, and command 2 repeats the check with them.
+
+### Results
+
+| Check                                         | Local direct / PgBouncer (`=0`)       | Supabase session `:5432`              | Supabase transaction `:6543` (plain and `?pgbouncer=true`) |
+| --------------------------------------------- | ------------------------------------- | ------------------------------------- | ---------------------------------------------------------- |
+| 40 unnamed queries (`pg`)                     | ok 34 ms / ok 33 ms                   | ok 6507 ms                            | ok 6372 / 8065 ms                                          |
+| 40 **named** prepared statements              | ok 5 ms / `42P05`                     | ok 4495 ms                            | **`42P05`** 385 / 372 ms                                   |
+| 40 Prisma queries                             | ok 88 ms / ok 24 ms                   | ok 5628 ms                            | ok 7050 / 6032 ms                                          |
+| pg-boss `vercel` mode round trip              | ok 41 ms / ok 28 ms                   | ok 6080 ms                            | ok 5769 / 7857 ms                                          |
+| Prisma tx + `prismaTxDb`, commit and rollback | ok 48 ms / ok 31 ms                   | ok 9225 ms                            | ok 9417 / 12629 ms                                         |
+| `supervise()` alone                           | ok 24 ms / ok 19 ms                   | ok 2229 ms                            | ok 6334 / 4112 ms                                          |
+| Raw `NOTIFY` to an idle listener, 3 runs      | not run                               | **delivered 3/3**: 1.94, 1.91, 1.93 s | **delivered 0/3** (gave up about 10 s after the send)      |
+| pg-boss pickup, 10 s settle, 3 runs           | not run (1.5 s settle: 0.01 / 28.5 s) | 2.85, 4.73, 3.90 s                    | 4.99, 20.38, 24.30 s; no warnings                          |
+
+Times are for the whole check (including opening connections), one sample each, except the last two rows. The
+transaction-pooler column of the last two rows has no `?pgbouncer=true` runs.
+
+Latency from this Mac (10 × `SELECT 1` on a warm connection, one run, not saved as a file): typically 391–410 ms on
+both poolers, with outliers of 1.07–1.73 s. Opening a connection took 1.6 s.
+
+### TLS: these connections were not encrypted
+
+Neither URL sets an SSL parameter, node-postgres then uses no TLS, and both poolers accepted that. All the runs above
+were made that way (synthetic data only). [`supabase-tls.jsonl`](supabase-tls.jsonl) is a `SELECT 1` on each URL
+under three settings:
+
+| URL parameters                        | Result on both poolers                                               |
+| ------------------------------------- | -------------------------------------------------------------------- |
+| none                                  | connects, **no TLS**                                                 |
+| `sslmode=require`                     | fails, `SELF_SIGNED_CERT_IN_CHAIN` (pg 8 treats it as `verify-full`) |
+| `uselibpqcompat=true&sslmode=require` | connects with TLS, certificate **not verified**                      |
+
+Verifying the certificate against Supabase's CA was not tested. No code or setting was changed.
+
+### Cleanup
+
+A read-only transaction on the session pooler, after both commands:
+
+```text
+queues like spike-pooler-% / spike-listen-% : none
+all rows in pgboss.queue                    : __pgboss__send-it
+jobs in those queues                        : 0
+heartbeat rows with source like pooler:%    : 0
+tables named like %spike%                   : none
+```
+
+Nothing had to be deleted.
+
+### Verified
+
+- Supavisor's transaction pooler gives the same pass/fail verdicts as PgBouncer with `max_prepared_statements=0`:
+  unnamed statements, Prisma, pg-boss send/fetch/complete/supervise and transactional enqueue work; named prepared
+  statements fail with `42P05`; `?pgbouncer=true` changes no verdict.
+- An idle `LISTEN` through `:6543` received nothing (0/3), while `:5432` received every notification. pg-boss raised
+  no warning. ADR 0002's rule (the local worker's pg-boss uses the session pooler) holds on Supabase.
+
+### Assumed or not measured
+
+- Why one transaction-pooler pg-boss run picked the job up in 4.99 s. The 20 s and 24 s runs fit the 30 s poll.
+- Timings from inside Vercel or GitHub Actions. The numbers here are dominated by this Mac's distance to US East.
+- Behaviour under load, or with more clients than the pooler's pool size.
+
 ## Assumed (not measured here)
+
+These are from the local run; the Supavisor and latency points are answered above.
 
 - **`attachDatabasePool` behaviour on Vercel.** It is read from the `@vercel/functions` 3.11.4 source;
   locally it's a no-op because `VERCEL_URL`/`VERCEL_REGION` are unset.
@@ -73,23 +166,21 @@ behind in `spike_queue`. The test now removes any `triage` queue it creates, and
 
 ## Blocked on Zain
 
-1. **Re-run the pooler checks against Supabase.** This needs a Supabase account and a Free project
-   (no card).
-   1. In the project, open _Connect_ and copy the **Session pooler** URI (`…pooler.supabase.com:5432`)
-      and the **Transaction pooler** URI (same host, `:6543`).
-   2. In a local, uncommitted `.env`, set `DATABASE_URL` and `DIRECT_URL` to the session-pooler URI.
-   3. Run `pnpm db:deploy && pnpm --filter @repo/queue migrate`.
-   4. Run `pnpm --filter @repo/queue exec tsx src/spikes/pooler.ts --pooler-port 6543 >
-      docs/evidence/spike-a/supabase-pooler.jsonl`. Target `direct` is then the session pooler, and
-      `pooler`/`pooler-pgbouncer` are the transaction pooler.
-   5. Check that the file has no host or user name before committing it; the script never prints URLs.
-2. **Verify `after()` and `attachDatabasePool` on Vercel.** This needs a Vercel login and a Hobby project
-   for `apps/web`.
-   1. On one deployment, set `DATABASE_URL` to the Supabase transaction-pooler URI and `SPIKE_ROUTES=1`.
-   2. `curl -X POST https://<deployment>/api/spikes/queue -d '{"key":"vercel-1"}'`, wait 2 s, then
-      `curl "https://<deployment>/api/spikes/queue?id=<jobId>"`. Expect `completed` and
-      `handledBy: "after()"`.
-   3. Save the function log lines containing `"spike":"queue"`.
-   4. Remove `SPIKE_ROUTES` and redeploy.
-   5. Preview deployments are protected: use the production URL of a throwaway project, or a protection
-      bypass token. Never commit that token.
+1. ~~**Re-run the pooler checks against Supabase.**~~ **Done 2026-11-28**, see "Live on Supabase".
+2. **Verify `after()` and `attachDatabasePool` on Vercel.** The project and production URL exist
+   (`https://lead-lifecycle-pipeline.vercel.app`). The function needs the database password, which only Zain adds.
+   1. In the Vercel project, under _Settings → Environment Variables_, add for **Production** only:
+      - `DATABASE_URL`: the Supabase **transaction pooler** URI (`:6543`), marked Sensitive. To encrypt the
+        connection, end it with `?uselibpqcompat=true&sslmode=require` (certificate not verified; tested here only
+        with `SELECT 1` from a laptop, see "TLS").
+      - `SPIKE_ROUTES`: `1`.
+   2. Redeploy production, so the deployment picks the variables up. While `SPIKE_ROUTES=1`, anyone who knows the URL
+      can enqueue spike jobs, so do steps 3 to 5 in one sitting.
+   3. `curl -i -X POST https://lead-lifecycle-pipeline.vercel.app/api/spikes/queue -d '{"key":"vercel-1"}'`.
+      Expect `202` and a `jobId`.
+   4. Wait a few seconds, then
+      `curl "https://lead-lifecycle-pipeline.vercel.app/api/spikes/queue?id=<jobId>"`. Expect `"state":"completed"`
+      and `handledBy` `after()` in `output`.
+   5. From the project's runtime logs, save the lines containing `"spike":"queue"` (`enqueued`, `after-drain`).
+   6. Remove `SPIKE_ROUTES`, redeploy, and check that the POST now answers `404`. `DATABASE_URL` can stay.
+   7. The check leaves the `spike-echo` queues in `pgboss` and heartbeat rows with source `web:spike-queue`.
